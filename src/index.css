@@ -1,3 +1,61 @@
 * {
     font-family: "Inter", sans-serif !important;
 }
+
+button:active {
+    transform: scale(0.95);
+    transition-property: 'transform, box-shadow';
+    transition-duration: .2s;
+}
+
+input,
+textarea {
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    outline: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #96969691;
+}
+
+input:focus,
+input:focus-visible,
+input.filled:focus,
+input.filled:focus-visible,
+select:focus,
+textarea:focus,
+textarea:focus-visible,
+textarea.filled:focus,
+textarea.filled:focus-visible {
+    transition: 200ms !important;
+    border-color: #38B2AC !important;
+    box-shadow: 0 0 0 2px var(--p500) !important;
+}
+
+.drawer {
+    /* transition: all 2s ease-in; */
+}
+
+.heading-navbar,
+.label-navbar {
+    display: none;
+}
+
+.drawer:hover .label-navbar {
+    display: block;
+}
+
+.drawer:hover .heading-navbar {
+    display: block;
+}
+
+.nav-button-link {
+    text-decoration: none;
+}
+
+.nav-button-link:hover {
+    background-color: #38B2AC;
+    text-decoration: none !important;
+}

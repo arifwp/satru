@@ -1,25 +1,18 @@
 import {
-  Image,
-  Heading,
-  SimpleGrid,
-  VStack,
+  Link as ChakraLink,
   HStack,
+  Heading,
+  Image,
+  SimpleGrid,
   Text,
-  FormLabel,
-  FormControl,
-  Input,
-  Button,
-  FormErrorMessage,
-  useColorMode,
-  useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import useScreenWidth from "../lib/useScreenWidth";
-import { ColorModeSwitcher } from "../ColorModeSwitcher";
-import { LoginForm } from "../components/forms/LoginForm";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { ColorModeSwitcher } from "../../ColorModeSwitcher";
+import { RegisterForm } from "../../components/forms/RegisterForm";
+import useScreenWidth from "../../lib/useScreenWidth";
 
-export const LoginPage = () => {
+export const RegisterPage = () => {
   const sw = useScreenWidth();
 
   return (
@@ -77,7 +70,25 @@ export const LoginPage = () => {
             Masuk untuk bisa memanajemen usaha anda
           </Text>
 
-          <LoginForm />
+          <RegisterForm />
+
+          <HStack mt={8}>
+            <Text>Sudah mempunyai akun? </Text>
+            <ChakraLink
+              as={ReactRouterLink}
+              to={"/login"}
+              variant={"linkPrimary"}
+            >
+              Login
+            </ChakraLink>
+          </HStack>
+
+          <ColorModeSwitcher
+            position={"absolute"}
+            bottom={0}
+            right={0}
+            fontSize={"36px"}
+          />
         </VStack>
       </SimpleGrid>
     </VStack>

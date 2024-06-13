@@ -1,5 +1,11 @@
-import { Link as ChakraLink, HStack, LinkProps } from "@chakra-ui/react";
-import { Link as ReactLink } from "react-router-dom";
+import {
+  Link as ChakraLink,
+  HStack,
+  LinkProps,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { NavLink as ReactLink } from "react-router-dom";
+import useScreenWidth from "../lib/useScreenWidth";
 
 interface Props extends LinkProps {
   children?: any;
@@ -7,17 +13,28 @@ interface Props extends LinkProps {
 }
 
 export default function NavButton({ children, to, ...rest }: Props) {
+  const bg = useColorModeValue("#E2E8F060", "#2D374860");
+  const sw = useScreenWidth();
+
   return (
     <ChakraLink
+      className="nav-button-link"
       as={ReactLink}
       to={to}
       p={2}
       borderRadius={"xl"}
-      className="nav-button-link"
       w={"100%"}
+      textDecoration={"none"}
+      _hover={{ bgColor: bg }}
+      _activeLink={{
+        bg: "teal.400",
+        color: "white",
+      }}
+      display={"flex"}
+      flexDirection={"column"}
       {...rest}
     >
-      <HStack color={"white"}>{children}</HStack>
+      {children}
     </ChakraLink>
   );
 }

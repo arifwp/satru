@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/react';
+import { MenuButton, extendTheme } from '@chakra-ui/react';
 
 const customTheme = extendTheme({
   config: {
@@ -41,8 +41,8 @@ const customTheme = extendTheme({
         fontWeight: 'semibold',
         p: 6,
         borderRadius: '8px',
-      })
-    }
+      }),
+    },
   },
 });
 

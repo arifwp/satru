@@ -31,7 +31,7 @@ export const NavbarList = ({ ...props }) => {
 
   return (
     <Stack direction={sw >= 640 ? "column" : "row"} w={"100%"}>
-      <NavButton to="/home">
+      {/* <NavButton to="/home">
         <HStack justify={"start"}>
           <Icon as={RiHome3Line} w={"100%"} maxW={"24px"} fontSize={"18px"} />
           <Text
@@ -46,7 +46,7 @@ export const NavbarList = ({ ...props }) => {
             Home
           </Text>
         </HStack>
-      </NavButton>
+      </NavButton> */}
 
       <NavButton to="/product">
         <HStack justify={"start"}>

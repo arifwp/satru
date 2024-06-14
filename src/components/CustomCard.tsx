@@ -1,37 +1,64 @@
-import { HStack, Icon, StackProps, Text, VStack } from "@chakra-ui/react";
 import {
-  RiMoneyDollarBoxLine,
-  RiMoneyDollarCircleLine,
-} from "@remixicon/react";
+  HStack,
+  Icon,
+  IconProps,
+  Stack,
+  StackProps,
+  Text,
+  Tooltip,
+  VStack,
+} from "@chakra-ui/react";
+import { RemixiconComponentType } from "@remixicon/react";
+import useScreenWidth from "../lib/useScreenWidth";
 
 interface Props extends StackProps {
   label: string;
   cardValue: string;
 }
+interface ICProps extends IconProps {
+  bgIc: string;
+  asIc: RemixiconComponentType;
+}
 
-export const CustomCard = ({ label, cardValue, ...rest }: Props) => {
+export const CustomCard = ({
+  label,
+  cardValue,
+  bgIc,
+  asIc,
+  ...rest
+}: Props & ICProps) => {
+  const sw = useScreenWidth();
+
   return (
-    <HStack
+    <Stack
       className="card"
-      bgColor={"teal.400"}
+      direction={sw >= 640 ? "row" : "column"}
       p={4}
       borderRadius={"md"}
       align={"stretch"}
       spacing={4}
+      color={"black"}
       {...rest}
     >
       <Icon
-        as={RiMoneyDollarCircleLine}
-        bgColor={"white"}
-        borderRadius={"sm"}
+        bgColor={bgIc}
+        as={asIc}
+        borderRadius={"lg"}
         fontSize={"36px"}
+        p={2}
+        alignSelf={sw >= 640 ? "" : "center"}
       />
-      <VStack align={"start"}>
-        <Text fontSize={"12px"}>{label}</Text>
-        <Text fontWeight={"semibold"} fontSize={"20px"}>
-          {`Rp ${cardValue}`}
+
+      <VStack
+        align={sw >= 640 ? "start" : "center"}
+        justify={"space-between"}
+        textAlign={sw >= 640 ? "start" : "center"}
+      >
+        <Text fontSize={["sm", "md", "lg", "xl"]}>{label}</Text>
+        <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight={"bold"}>
+          {cardValue}
         </Text>
       </VStack>
-    </HStack>
+    </Stack>
   );
 };

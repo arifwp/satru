@@ -1,11 +1,12 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ContentContainer } from "./components/containers/ContentContainer";
 import customTheme from "./customTheme";
 import "./index.css";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { HomePage } from "./pages/dashboard/HomePage";
-import { BusinessPage } from "./pages/business/BusinessPage";
+import { ProductPage } from "./pages/dashboard/ProductPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -15,9 +16,23 @@ export const App = () => (
 
         <Route path="/register" element={<RegisterPage />} />
 
-        <Route path="/home" element={<HomePage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ContentContainer label="Dashboard">
+              <HomePage />
+            </ContentContainer>
+          }
+        />
 
-        <Route path="/fill-business-data" element={<BusinessPage />} />
+        <Route
+          path="/product"
+          element={
+            <ContentContainer label="Produk">
+              <ProductPage />
+            </ContentContainer>
+          }
+        />
       </Routes>
     </BrowserRouter>
   </ChakraProvider>

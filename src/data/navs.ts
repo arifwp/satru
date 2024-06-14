@@ -7,7 +7,7 @@ interface NavProps {
 }
 
 export const navs: Array<NavProps> = [
-    { icon: RiHome3Line, label: 'Home', to:'/home' },
+    { icon: RiHome3Line, label: 'Dashboard', to:'/Dashboard' },
     { icon: RiProductHuntLine, label: 'Produk', to:'/product' },
     {icon: RiExchangeDollarLine, label:'Tranksasi', to:'/transaction'},
     {icon: RiHistoryLine, label:'Riwayat Tranksasi', to:'/history-transaction'},

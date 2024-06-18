@@ -23,7 +23,7 @@ ChartJS.register(
   Legend
 );
 
-export const LineChart = () => {
+export const LineChart = ({ ...rest }) => {
   const bgComponent = useColorModeValue("#F5F7F8", "#222831");
 
   const data = {
@@ -39,15 +39,26 @@ export const LineChart = () => {
     ],
   };
 
+  const options: any = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
+
   return (
     <VStack
-      className="chart"
+      className="line-chart"
+      w={"100%"}
+      h={"100%"}
       bg={bgComponent}
       borderRadius={"lg"}
       p={4}
-      w={"100%"}
+      justify={"center"}
+      {...rest}
     >
-      <Line data={data} />
+      <Line data={data} options={options} />
     </VStack>
   );
 };

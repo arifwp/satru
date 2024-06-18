@@ -1,11 +1,9 @@
 import {
-  HStack,
   Icon,
   IconProps,
   Stack,
   StackProps,
   Text,
-  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import { RemixiconComponentType } from "@remixicon/react";

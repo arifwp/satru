@@ -1,5 +1,7 @@
 import {
   Divider,
+  Grid,
+  GridItem,
   HStack,
   Icon,
   SimpleGrid,
@@ -19,7 +21,7 @@ import {
 import { CustomCard } from "../../components/CustomCard";
 import { CustomTooltip } from "../../components/CustomToolTip";
 import { LineChart } from "../../components/chart/LineChart";
-import { PieChart } from "../../components/chart/PieChart";
+import { DoughnutChart } from "../../components/chart/DoughnutChart";
 
 export const HomePage = () => {
   const bgComponent = useColorModeValue("#F5F7F8", "#222831");
@@ -62,17 +64,26 @@ export const HomePage = () => {
         />
       </SimpleGrid>
 
-      <Wrap className="chart-container" w={"100%"} spacing={"30px"} mt={4}>
-        <WrapItem flex={1}>
+      <Grid templateColumns={"repeat(12,1fr)"} gap={4} w={"100%"} mt={4}>
+        <GridItem colSpan={[12, 12, 6, 6]}>
+          <LineChart />
+        </GridItem>
+        <GridItem colSpan={[12, 12, 6, 6]}>
+          <DoughnutChart />
+        </GridItem>
+      </Grid>
+
+      {/* <Wrap className="chart-container" w={"100%"} mt={4}>
+        <WrapItem>
           <LineChart />
         </WrapItem>
 
         <WrapItem>
-          <PieChart />
+          <DoughnutChart />
         </WrapItem>
-      </Wrap>
+      </Wrap> */}
 
-      <HStack w={"100%"} flexWrap={"wrap"} mt={4} align={"start"}>
+      <HStack w={"100%"} flexWrap={"wrap"} spacing={4} mt={4} align={"start"}>
         <VStack
           p={4}
           borderRadius={"lg"}

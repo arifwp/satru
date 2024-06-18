@@ -17,6 +17,7 @@ import {
   RiLogoutBoxLine,
   RiMenuFill,
   RiMoonLine,
+  RiStoreFill,
   RiSunLine,
 } from "@remixicon/react";
 
@@ -50,7 +51,10 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
         />
         <MenuList>
           {label === "Dashboard" && (
-            <MenuItem icon={<Icon as={RiFilter3Fill} />}>Filter</MenuItem>
+            <>
+              <MenuItem icon={<Icon as={RiFilter3Fill} />}>Filter</MenuItem>
+              <MenuItem icon={<Icon as={RiStoreFill} />}>Outlet</MenuItem>
+            </>
           )}
 
           <MenuItem

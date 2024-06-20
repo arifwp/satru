@@ -22,7 +22,7 @@ interface Props extends ModalProps {
   onClose: () => void;
 }
 
-export const CustomModal = (
+export const ModalWithButton = (
   {
     children,
     modalTitle,

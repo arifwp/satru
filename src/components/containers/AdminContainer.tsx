@@ -32,7 +32,7 @@ const fadeText = keyframes`
 
 export const AdminContainer = ({ children, ...props }: Props) => {
   const ref = useRef<any>(null);
-  const bg = useColorModeValue("#F5F7F8", "#222831");
+  const bg = useColorModeValue("#F5F7F8", "#161618");
 
   return (
     <HStack w={"100%"} h={"100%"} minH={"100vh"} {...props} spacing={0}>

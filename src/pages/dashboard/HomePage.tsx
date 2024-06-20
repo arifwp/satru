@@ -7,8 +7,6 @@ import {
   SimpleGrid,
   Text,
   VStack,
-  Wrap,
-  WrapItem,
   useColorModeValue,
 } from "@chakra-ui/react";
 import {
@@ -20,11 +18,13 @@ import {
 } from "@remixicon/react";
 import { CustomCard } from "../../components/CustomCard";
 import { CustomTooltip } from "../../components/CustomToolTip";
-import { LineChart } from "../../components/chart/LineChart";
 import { DoughnutChart } from "../../components/chart/DoughnutChart";
+import { LineChart } from "../../components/chart/LineChart";
+import useScreenWidth from "../../lib/useScreenWidth";
 
 export const HomePage = () => {
-  const bgComponent = useColorModeValue("#F5F7F8", "#222831");
+  const bgComponent = useColorModeValue("#F5F7F8", "#161618");
+  const sw = useScreenWidth();
 
   return (
     <VStack className="home-container" w={"100%"} h={"100%"} p={4}>

@@ -49,11 +49,31 @@ export const CustomCard = ({
 
       <VStack
         align={sw >= 640 ? "start" : "center"}
-        justify={"space-between"}
+        // justify={"space-between"}
         textAlign={sw >= 640 ? "start" : "center"}
       >
-        <Text fontSize={["sm", "md", "lg", "xl"]}>{label}</Text>
-        <Text fontSize={["sm", "md", "lg", "xl"]} fontWeight={"bold"}>
+        <Text
+          fontSize={{
+            base: "12px",
+            sm: "14px",
+            md: "14px",
+            lg: "14px",
+            xl: "16px",
+          }}
+        >
+          {label}
+        </Text>
+        <Text
+          fontSize={{
+            base: "14px",
+            sm: "16px",
+            md: "16px",
+            lg: "16px",
+            xl: "18px",
+          }}
+          fontWeight={"bold"}
+          // whiteSpace={"nowrap"}
+        >
           {cardValue}
         </Text>
       </VStack>

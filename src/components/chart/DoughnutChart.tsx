@@ -5,7 +5,7 @@ import { Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const DoughnutChart = ({ ...rest }) => {
-  const bgComponent = useColorModeValue("#F5F7F8", "#222831");
+  const bgComponent = useColorModeValue("#F5F7F8", "#161618");
 
   const data = {
     labels: ["Red", "Blue"],

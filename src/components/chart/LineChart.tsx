@@ -24,7 +24,7 @@ ChartJS.register(
 );
 
 export const LineChart = ({ ...rest }) => {
-  const bgComponent = useColorModeValue("#F5F7F8", "#222831");
+  const bgComponent = useColorModeValue("#F5F7F8", "#161618");
 
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],

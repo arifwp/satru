@@ -1,4 +1,5 @@
 import {
+  Button,
   HStack,
   Icon,
   IconButton,
@@ -7,9 +8,11 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  ModalBody,
   StackProps,
   Text,
   useColorMode,
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
   RiAccountCircleFill,
@@ -20,6 +23,9 @@ import {
   RiStoreFill,
   RiSunLine,
 } from "@remixicon/react";
+import { CModal } from "../modal/CModal";
+import { RangeDatePicker } from "../RangeDatePicker";
+import { OutletPicker } from "../OutletPicker";
 
 interface Props extends StackProps {
   children?: any;
@@ -28,6 +34,25 @@ interface Props extends StackProps {
 
 export const MenuHeaderShrink = ({ children, label }: Props) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const {
+    isOpen: outletModalIsOpen,
+    onOpen: outletModalOnOpen,
+    onClose: outletModalOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: dateModalIsOpen,
+    onOpen: dateModalOnOpen,
+    onClose: dateModalOnClose,
+  } = useDisclosure();
+
+  const openFilterModal = () => {
+    alert("filter modal");
+  };
+
+  const openOutletModal = () => {
+    outletModalOnOpen();
+  };
 
   return (
     <HStack
@@ -52,8 +77,18 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
         <MenuList>
           {label === "Dashboard" && (
             <>
-              <MenuItem icon={<Icon as={RiFilter3Fill} />}>Filter</MenuItem>
-              <MenuItem icon={<Icon as={RiStoreFill} />}>Outlet</MenuItem>
+              <MenuItem
+                icon={<Icon as={RiFilter3Fill} />}
+                onClick={openFilterModal}
+              >
+                Filter
+              </MenuItem>
+              <MenuItem
+                icon={<Icon as={RiStoreFill} />}
+                onClick={openOutletModal}
+              >
+                Outlet
+              </MenuItem>
             </>
           )}
 
@@ -70,6 +105,36 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
           </MenuItem>
         </MenuList>
       </Menu>
+
+      {/* OUTLET MODAL */}
+      <CModal
+        size="sm"
+        modalTitle="Outlet"
+        isOpen={outletModalIsOpen}
+        onOpen={outletModalOnOpen}
+        onClose={outletModalOnClose}
+      >
+        <OutletPicker
+          isOpen={outletModalIsOpen}
+          onOpen={outletModalOnOpen}
+          onClose={outletModalOnClose}
+        >
+          <Button onClick={outletModalOnClose}>Close</Button>
+        </OutletPicker>
+      </CModal>
+
+      {/* FILTER MODAL */}
+      <CModal
+        size="sm"
+        modalTitle="Outlet"
+        isOpen={dateModalIsOpen}
+        onOpen={dateModalOnOpen}
+        onClose={dateModalOnClose}
+      >
+        <ModalBody>
+          <RangeDatePicker />
+        </ModalBody>
+      </CModal>
     </HStack>
   );
 };

@@ -3,14 +3,12 @@ import {
   Button,
   HStack,
   Icon,
-  Input,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
-  ModalBody,
-  ModalFooter,
+  ModalProps,
   StackProps,
   Text,
   VStack,
@@ -22,22 +20,44 @@ import {
 import {
   RiAccountCircleFill,
   RiArrowDownSFill,
-  RiCalendarEventFill,
   RiLogoutBoxLine,
-  RiStoreFill,
 } from "@remixicon/react";
+import { useState } from "react";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
-import { CustomModal } from "../CustomModal";
-import { RadioCard } from "./RadioCard";
+import { DashboardMenu } from "./DashboardMenu";
 
 interface Props extends StackProps {
   children?: any;
   label: string;
 }
 
+// interface MProps extends ModalProps {
+//   dateModalIsOpen: boolean;
+//   dateModalOnOpen: () => void;
+//   dateModalOnClose: () => void;
+//   outletModalIsOpen: boolean;
+//   outletModal
+// }
+
 export const MenuHeader = ({ children, label }: Props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const bgComponent = useColorModeValue("gray.100", "gray.800");
+  const [selectedDates, setSelectedDates] = useState<{
+    start: Date | null;
+    end: Date | null;
+  }>({ start: null, end: null });
+
+  const {
+    isOpen: outletModalIsOpen,
+    onOpen: outletModalOnOpen,
+    onClose: outletModalOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: dateModalIsOpen,
+    onOpen: dateModalOnOpen,
+    onClose: dateModalOnClose,
+  } = useDisclosure();
+
+  const bgComponent = useColorModeValue("gray.100", "#161618");
   const toast = useToast();
 
   const avatars = [
@@ -77,91 +97,13 @@ export const MenuHeader = ({ children, label }: Props) => {
       </VStack>
 
       <HStack>
-        {label === "Dashboard" && (
-          <>
-            <Button
-              size={"xs"}
-              py={5}
-              px={7}
-              bg={bgComponent}
-              leftIcon={<Icon as={RiCalendarEventFill} />}
-              onClick={onOpen}
-            >
-              Filter
-            </Button>
-
-            <Button
-              size={"xs"}
-              py={5}
-              px={7}
-              bg={bgComponent}
-              leftIcon={<Icon as={RiStoreFill} />}
-              onClick={onOpen}
-            >
-              Pusat
-            </Button>
-
-            <CustomModal
-              title="Filter Tanggal"
-              isOpen={isOpen}
-              onClose={onClose}
-            >
-              <ModalBody>
-                <Input size={"md"} type="date" />
-              </ModalBody>
-              <ModalFooter>
-                <Button size={"xs"} p={4} onClick={onClose}>
-                  Close
-                </Button>
-                <Button
-                  variant={"primaryButton"}
-                  size={"xs"}
-                  p={4}
-                  ml={4}
-                  onClick={onClose}
-                >
-                  Terapkan
-                </Button>
-              </ModalFooter>
-            </CustomModal>
-
-            <CustomModal title="Outlet" isOpen={isOpen} onClose={onClose}>
-              <ModalBody>
-                <VStack {...getRootProps()}>
-                  {avatars.map((avatar, i) => (
-                    <RadioCard
-                      key={i}
-                      isChecked={true}
-                      outletName={avatar.name}
-                      {...getRadioProps({ value: avatar.name })}
-                    />
-                  ))}
-                </VStack>
-              </ModalBody>
-              <ModalFooter>
-                <Button size={"xs"} p={4} onClick={onClose}>
-                  Close
-                </Button>
-                <Button
-                  variant={"primaryButton"}
-                  size={"xs"}
-                  p={4}
-                  ml={4}
-                  onClick={onClose}
-                >
-                  Terapkan
-                </Button>
-              </ModalFooter>
-            </CustomModal>
-          </>
-        )}
+        {label === "Dashboard" && <DashboardMenu />}
 
         <ColorModeSwitcher bg={bgComponent} />
 
         <Menu>
           <MenuButton
             as={Button}
-            bgColor={bgComponent}
             p={4}
             rightIcon={<Icon as={RiArrowDownSFill} />}
           >

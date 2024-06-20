@@ -8,7 +8,8 @@ const customTheme = extendTheme({
   colors: {
     w: "white",
     wt: "#eeeeee",
-    dark: '#191919'
+    // dark: '#191919'
+    dark: '#000000'
   },
   styles: {
     global: (props: any) => ({
@@ -25,6 +26,23 @@ const customTheme = extendTheme({
           opacity: 0.6
         }
       }
+    },
+    Modal: {
+      baseStyle: (props: any) => ({
+        dialog: {
+          bg:props.colorMode === 'dark'?'#161618':'white'
+        }
+      })
+    },
+    Menu: {
+      baseStyle: (props: any) => ({
+        list: {
+          bg: props.colorMode === 'dark' ? '#161618' : 'white'
+        },
+        item: {
+          bg: props.colorMode === 'dark' ? '#161618' : 'white'
+        }
+      })
     },
     Link: {
       variants: {

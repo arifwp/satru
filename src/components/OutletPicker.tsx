@@ -71,7 +71,7 @@ export const OutletPicker = ({ children, isOpen, onOpen, onClose }: Props) => {
         </Text>
       )}
 
-      <HStack justify={"end"} mb={4}>
+      <HStack justify={"end"} mt={4} mb={4}>
         {children}
         <Button
           size={"xs"}

@@ -9,6 +9,7 @@ import {
   Icon,
   IconButton,
   Input,
+  ModalProps,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -44,9 +45,20 @@ interface RangeDatePickerProps {
   onChange?: (dates: { start: Date | null; end: Date | null }) => void;
 }
 
-export const RangeDatePicker: React.FC<RangeDatePickerProps> = ({
+interface Props extends ModalProps {
+  children: any;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+export const RangeDatePicker = ({
   onChange,
-}) => {
+  children,
+  isOpen,
+  onOpen,
+  onClose,
+}: RangeDatePickerProps & Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -80,6 +92,8 @@ export const RangeDatePicker: React.FC<RangeDatePickerProps> = ({
         // TODO ADD API
 
         setLoading(false);
+
+        onClose();
       }, 1000);
     },
   });
@@ -382,13 +396,15 @@ export const RangeDatePicker: React.FC<RangeDatePickerProps> = ({
           mt={2}
           mb={4}
         >
-          <Button
+          {children}
+
+          {/* <Button
             size={"xs"}
             p={4}
-            // onClick={dateModalOnClose}
+            onClick={dateModalOnClose}
           >
             Close
-          </Button>
+          </Button> */}
           <Button
             size={"xs"}
             p={4}

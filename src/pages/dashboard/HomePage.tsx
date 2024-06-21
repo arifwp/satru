@@ -20,14 +20,12 @@ import { CustomCard } from "../../components/CustomCard";
 import { CustomTooltip } from "../../components/CustomToolTip";
 import { DoughnutChart } from "../../components/chart/DoughnutChart";
 import { LineChart } from "../../components/chart/LineChart";
-import useScreenWidth from "../../lib/useScreenWidth";
 
 export const HomePage = () => {
-  const bgComponent = useColorModeValue("#F5F7F8", "#161618");
-  const sw = useScreenWidth();
+  const bgComponent = useColorModeValue("#F8F9FA", "#1C1C1E");
 
   return (
-    <VStack className="home-container" w={"100%"} h={"100%"} p={4}>
+    <VStack className="home-container" w={"100%"} p={4}>
       <SimpleGrid
         className="card-container"
         columns={[2, null, null, 4]}
@@ -66,24 +64,26 @@ export const HomePage = () => {
 
       <Grid templateColumns={"repeat(12,1fr)"} gap={4} w={"100%"} mt={4}>
         <GridItem colSpan={[12, 12, 6, 6]}>
-          <LineChart />
+          <LineChart bg={bgComponent} />
         </GridItem>
         <GridItem colSpan={[12, 12, 6, 6]}>
-          <DoughnutChart />
+          <DoughnutChart bg={bgComponent} />
         </GridItem>
       </Grid>
 
-      {/* <Wrap className="chart-container" w={"100%"} mt={4}>
-        <WrapItem>
-          <LineChart />
-        </WrapItem>
-
-        <WrapItem>
-          <DoughnutChart />
-        </WrapItem>
-      </Wrap> */}
-
-      <HStack w={"100%"} flexWrap={"wrap"} spacing={4} mt={4} align={"start"}>
+      <SimpleGrid
+        columns={[1, 1, 2, 2, 2]}
+        w={"100%"}
+        spacing={4}
+        mt={4}
+        fontSize={{
+          base: "12px",
+          sm: "14px",
+          md: "14px",
+          lg: "14px",
+          xl: "16px",
+        }}
+      >
         <VStack
           p={4}
           borderRadius={"lg"}
@@ -127,7 +127,6 @@ export const HomePage = () => {
           flex={1}
           align={"stretch"}
           bg={bgComponent}
-          fontSize={["sm", "md", "lg", "xl"]}
         >
           <HStack>
             <Text as={"b"}>Kasbon</Text>
@@ -158,7 +157,7 @@ export const HomePage = () => {
             <Text>3</Text>
           </HStack>
         </VStack>
-      </HStack>
+      </SimpleGrid>
     </VStack>
   );
 };

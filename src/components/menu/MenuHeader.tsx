@@ -8,14 +8,10 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  ModalProps,
   StackProps,
   Text,
   VStack,
   useColorModeValue,
-  useDisclosure,
-  useRadioGroup,
-  useToast,
 } from "@chakra-ui/react";
 import {
   RiAccountCircleFill,
@@ -31,55 +27,13 @@ interface Props extends StackProps {
   label: string;
 }
 
-// interface MProps extends ModalProps {
-//   dateModalIsOpen: boolean;
-//   dateModalOnOpen: () => void;
-//   dateModalOnClose: () => void;
-//   outletModalIsOpen: boolean;
-//   outletModal
-// }
-
 export const MenuHeader = ({ children, label }: Props) => {
   const [selectedDates, setSelectedDates] = useState<{
     start: Date | null;
     end: Date | null;
   }>({ start: null, end: null });
 
-  const {
-    isOpen: outletModalIsOpen,
-    onOpen: outletModalOnOpen,
-    onClose: outletModalOnClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: dateModalIsOpen,
-    onOpen: dateModalOnOpen,
-    onClose: dateModalOnClose,
-  } = useDisclosure();
-
-  const bgComponent = useColorModeValue("gray.100", "#161618");
-  const toast = useToast();
-
-  const avatars = [
-    { id: "OUTLET-1", name: "Pusat" },
-    { id: "OUTLET-2", name: "Cabang Margonda" },
-    { id: "OUTLET-3", name: "Cabang Semarang" },
-    { id: "OUTLET-4", name: "Cabang Solo" },
-  ];
-
-  const handleChange = (value: any) => {
-    toast({
-      id: value,
-      title: `The value got changed to ${value}`,
-      status: "success",
-      duration: 2000,
-    });
-  };
-
-  const { value, getRadioProps, getRootProps } = useRadioGroup({
-    defaultValue: "Pusat",
-    onChange: handleChange,
-  });
+  const bgComponent = useColorModeValue("#F8F9FA", "#1C1C1E");
 
   return (
     <HStack
@@ -104,6 +58,7 @@ export const MenuHeader = ({ children, label }: Props) => {
         <Menu>
           <MenuButton
             as={Button}
+            bg={bgComponent}
             p={4}
             rightIcon={<Icon as={RiArrowDownSFill} />}
           >

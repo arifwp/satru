@@ -16,16 +16,16 @@ import {
 } from "@chakra-ui/react";
 import {
   RiAccountCircleFill,
-  RiFilter3Fill,
+  RiCalendar2Fill,
   RiLogoutBoxLine,
   RiMenuFill,
   RiMoonLine,
-  RiStoreFill,
+  RiShoppingBag4Line,
   RiSunLine,
 } from "@remixicon/react";
-import { CModal } from "../modal/CModal";
-import { RangeDatePicker } from "../RangeDatePicker";
 import { OutletPicker } from "../OutletPicker";
+import { RangeDatePicker } from "../RangeDatePicker";
+import { CModal } from "../modal/CModal";
 
 interface Props extends StackProps {
   children?: any;
@@ -47,7 +47,7 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
   } = useDisclosure();
 
   const openFilterModal = () => {
-    alert("filter modal");
+    dateModalOnOpen();
   };
 
   const openOutletModal = () => {
@@ -63,6 +63,7 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
       align={"end"}
       w={"100%"}
       h={"72px"}
+      fontSize={"sm"}
     >
       <Text as={"b"} fontSize={"18px"}>
         {label}
@@ -78,13 +79,13 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
           {label === "Dashboard" && (
             <>
               <MenuItem
-                icon={<Icon as={RiFilter3Fill} />}
+                icon={<Icon as={RiCalendar2Fill} />}
                 onClick={openFilterModal}
               >
                 Filter
               </MenuItem>
               <MenuItem
-                icon={<Icon as={RiStoreFill} />}
+                icon={<Icon as={RiShoppingBag4Line} />}
                 onClick={openOutletModal}
               >
                 Outlet
@@ -108,19 +109,21 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
 
       {/* OUTLET MODAL */}
       <CModal
-        size="sm"
+        size="xs"
         modalTitle="Outlet"
         isOpen={outletModalIsOpen}
         onOpen={outletModalOnOpen}
         onClose={outletModalOnClose}
       >
-        <OutletPicker
-          isOpen={outletModalIsOpen}
-          onOpen={outletModalOnOpen}
-          onClose={outletModalOnClose}
-        >
-          <Button onClick={outletModalOnClose}>Close</Button>
-        </OutletPicker>
+        <ModalBody>
+          <OutletPicker
+            isOpen={outletModalIsOpen}
+            onOpen={outletModalOnOpen}
+            onClose={outletModalOnClose}
+          >
+            <Button onClick={outletModalOnClose}>Close</Button>
+          </OutletPicker>
+        </ModalBody>
       </CModal>
 
       {/* FILTER MODAL */}
@@ -132,7 +135,15 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
         onClose={dateModalOnClose}
       >
         <ModalBody>
-          <RangeDatePicker />
+          <RangeDatePicker
+            onOpen={dateModalOnOpen}
+            isOpen={dateModalIsOpen}
+            onClose={dateModalOnClose}
+          >
+            <Button p={4} size={"xs"} onClick={dateModalOnClose}>
+              Close
+            </Button>
+          </RangeDatePicker>
         </ModalBody>
       </CModal>
     </HStack>

@@ -1,4 +1,4 @@
-import { VStack, useColorModeValue } from "@chakra-ui/react";
+import { ColorModeProviderProps, VStack } from "@chakra-ui/react";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -23,9 +23,11 @@ ChartJS.register(
   Legend
 );
 
-export const LineChart = ({ ...rest }) => {
-  const bgComponent = useColorModeValue("#F5F7F8", "#161618");
+interface Props extends ColorModeProviderProps {
+  bg: string;
+}
 
+export const LineChart = ({ bg, ...rest }: Props) => {
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
@@ -52,7 +54,7 @@ export const LineChart = ({ ...rest }) => {
       className="line-chart"
       w={"100%"}
       h={"100%"}
-      bg={bgComponent}
+      bg={bg}
       borderRadius={"lg"}
       p={4}
       justify={"center"}

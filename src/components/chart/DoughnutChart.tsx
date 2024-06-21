@@ -1,12 +1,21 @@
-import { Box, HStack, VStack, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  VStack,
+  Text,
+  useColorModeValue,
+  ColorModeProviderProps,
+} from "@chakra-ui/react";
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const DoughnutChart = ({ ...rest }) => {
-  const bgComponent = useColorModeValue("#F5F7F8", "#161618");
+interface Props extends ColorModeProviderProps {
+  bg: string;
+}
 
+export const DoughnutChart = ({ bg, ...rest }: Props) => {
   const data = {
     labels: ["Red", "Blue"],
     datasets: [
@@ -36,7 +45,7 @@ export const DoughnutChart = ({ ...rest }) => {
       maxH={"320px"}
       h={"100%"}
       justify={"center"}
-      bg={bgComponent}
+      bg={bg}
       borderRadius={"lg"}
       p={8}
       {...rest}

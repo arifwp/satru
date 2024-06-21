@@ -32,7 +32,7 @@ const fadeText = keyframes`
 
 export const AdminContainer = ({ children, ...props }: Props) => {
   const ref = useRef<any>(null);
-  const bg = useColorModeValue("#F5F7F8", "#161618");
+  const bg = useColorModeValue("#F8F9FA", "#1C1C1E");
 
   return (
     <HStack w={"100%"} h={"100%"} minH={"100vh"} {...props} spacing={0}>
@@ -47,7 +47,6 @@ export const AdminContainer = ({ children, ...props }: Props) => {
         _hover={{ width: "170px" }}
         spacing={6}
         zIndex={99}
-        sx={{}}
         position={"fixed"}
         role="group"
       >

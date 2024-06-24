@@ -1,8 +1,8 @@
 import { StackProps, VStack } from "@chakra-ui/react";
-import useScreenWidth from "../../lib/useScreenWidth";
 import { MenuHeader } from "../menu/MenuHeader";
-import { MenuHeaderShrink } from "../menu/MenuHeaderShrink";
 import { AdminContainer } from "./AdminContainer";
+import { MenuHeaderShrink } from "../menu/MenuHeaderShrink";
+import useScreenWidth from "../../lib/useScreenWidth";
 
 interface Props extends StackProps {
   children?: any;
@@ -23,6 +23,7 @@ export const ContentContainer = ({ children, label }: Props) => {
         spacing={0}
         justify={"start"}
       >
+        {/* <MenuHeader label={label} /> */}
         {sw >= 600 ? (
           <MenuHeader label={label} />
         ) : (

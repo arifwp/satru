@@ -20,7 +20,6 @@ import {
 } from "@remixicon/react";
 import { useState } from "react";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
-import { DashboardMenu } from "./DashboardMenu";
 
 interface Props extends StackProps {
   children?: any;
@@ -51,8 +50,6 @@ export const MenuHeader = ({ children, label }: Props) => {
       </VStack>
 
       <HStack>
-        {label === "Dashboard" && <DashboardMenu />}
-
         <ColorModeSwitcher bg={bgComponent} />
 
         <Menu>

@@ -39,9 +39,50 @@ export const product: Array<ProductProps> = [
         haveVariant: false,
         variantItem: undefined
     },
-
     {
         id: '2',
+        productCode: 'STR-021',
+        img: 'https://placehold.co/600x400',
+        name: 'Asus Pro Art Jelek',
+        price: 12000,
+        category: {
+            id: '4',
+            name:'Laptop'
+        },
+        brand: {
+            id: '2',
+            name: 'Asus'
+        },
+        stock: 12,
+        haveVariant: true,
+        variantItem: [
+            { variantName: 'Macbook Pro M3 Pro', variantPrice: 32000000, variantStock: 12 },
+            {variantName: 'Asus Pro Art jelek', variantPrice: 12000000, variantStock: 9}
+        ],
+    },
+    {
+        id: '3',
+        productCode: 'STR-021',
+        img: 'https://placehold.co/600x400',
+        name: 'Asus Pro Art Jelek',
+        price: 12000,
+        category: {
+            id: '4',
+            name:'Laptop'
+        },
+        brand: {
+            id: '2',
+            name: 'Asus'
+        },
+        stock: 12,
+        haveVariant: true,
+        variantItem: [
+            { variantName: 'Macbook Pro M3 Pro', variantPrice: 32000000, variantStock: 12 },
+            {variantName: 'Asus Pro Art jelek', variantPrice: 12000000, variantStock: 9}
+        ],
+    },
+    {
+        id: '4',
         productCode: 'STR-021',
         img: 'https://placehold.co/600x400',
         name: 'Asus Pro Art Jelek',

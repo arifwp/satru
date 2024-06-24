@@ -1,4 +1,7 @@
-import { extendTheme } from '@chakra-ui/react';
+import { createMultiStyleConfigHelpers, extendTheme } from '@chakra-ui/react';
+import { tableAnatomy } from "@chakra-ui/anatomy";
+
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(tableAnatomy.keys);
 
 const customTheme = extendTheme({
   config: {
@@ -57,7 +60,6 @@ const customTheme = extendTheme({
     Button: {
       baseStyle: (props: any) => ({
         fontWeight: 'semibold',
-        p: 6,
         borderRadius: '8px',
       }),
       variants: {
@@ -67,6 +69,32 @@ const customTheme = extendTheme({
         },
       }
     },
+    Table: {
+      variants: {
+        primary: definePartsStyle((props) => {
+          const { colorMode } = props;
+          return {
+            tbody: {
+              tr: {
+                '&:nth-of-type(odd)': {
+                  bg: colorMode === 'dark' ? 'dark' : 'white',
+                },
+                '&:nth-of-type(even)': {
+                  bg: colorMode === 'dark' ? '#1C1C1E' : '#F8F9FA',
+                },
+              },
+            },
+            tfoot: {
+              tr: {
+                '&:last-of-type': {
+                  th: { borderBottomWidth: 0 },
+                },
+              },
+            },
+          };
+        })
+      }
+    }
   },
 });
 

@@ -1,4 +1,4 @@
-import { ColorModeProviderProps, VStack } from "@chakra-ui/react";
+import { AspectRatio, ColorModeProviderProps, VStack } from "@chakra-ui/react";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -42,6 +42,7 @@ export const LineChart = ({ bg, ...rest }: Props) => {
   };
 
   const options: any = {
+    responsive: true,
     plugins: {
       legend: {
         display: false,
@@ -53,14 +54,21 @@ export const LineChart = ({ bg, ...rest }: Props) => {
     <VStack
       className="line-chart"
       w={"100%"}
-      h={"100%"}
-      bg={bg}
-      borderRadius={"lg"}
-      p={4}
       justify={"center"}
+      bg={bg}
+      borderRadius={"md"}
+      p={8}
       {...rest}
     >
-      <Line data={data} options={options} />
+      <Line
+        data={data}
+        options={options}
+        style={{
+          height: "100%",
+          minHeight: "300px",
+          maxHeight: "320px",
+        }}
+      />
     </VStack>
   );
 };

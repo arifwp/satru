@@ -45,20 +45,14 @@ interface RangeDatePickerProps {
   onChange?: (dates: { start: Date | null; end: Date | null }) => void;
 }
 
-interface Props extends ModalProps {
-  children: any;
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
-}
+// interface Props extends ModalProps {
+//   children: any;
+//   isOpen: boolean;
+//   onOpen: () => void;
+//   onClose: () => void;
+// }
 
-export const RangeDatePicker = ({
-  onChange,
-  children,
-  isOpen,
-  onOpen,
-  onClose,
-}: RangeDatePickerProps & Props) => {
+export const RangeDatePicker = ({ onChange }: RangeDatePickerProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -93,7 +87,7 @@ export const RangeDatePicker = ({
 
         setLoading(false);
 
-        onClose();
+        // onClose();
       }, 1000);
     },
   });
@@ -389,7 +383,7 @@ export const RangeDatePicker = ({
           </VStack>
         </HStack>
 
-        <HStack
+        {/* <HStack
           className="modal-custom-footer"
           w={"100%"}
           justify={"end"}
@@ -398,13 +392,6 @@ export const RangeDatePicker = ({
         >
           {children}
 
-          {/* <Button
-            size={"xs"}
-            p={4}
-            onClick={dateModalOnClose}
-          >
-            Close
-          </Button> */}
           <Button
             size={"xs"}
             p={4}
@@ -417,7 +404,7 @@ export const RangeDatePicker = ({
           >
             Terapkan
           </Button>
-        </HStack>
+        </HStack> */}
       </VStack>
     </form>
   );

@@ -20,7 +20,7 @@ export const SearchInput = ({ placeholder, ...rest }: Props) => {
   const reset = () => setData("");
 
   return (
-    <InputGroup minW={"150px"} size={"sm"} borderRadius={"xs"} {...rest}>
+    <InputGroup size={"sm"} borderRadius={"xs"} {...rest}>
       <InputLeftElement pointerEvents="none">
         <Icon as={RiSearch2Line} />
       </InputLeftElement>

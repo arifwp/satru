@@ -1,8 +1,5 @@
 import {
   Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
   Grid,
   GridItem,
   HStack,
@@ -52,10 +49,8 @@ interface RangeDatePickerProps {
   onChange?: (dates: { start: Date | null; end: Date | null }) => void;
 }
 
-export const DateRangeModal = ({ onChange }: RangeDatePickerProps) => {
+export const DateRangeModal = ({ onChange, ...rest }: RangeDatePickerProps) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [yearMsg, setYearMsg] = useState<string>("");
-  const [monthMsg, setMonthMsg] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [currentMonth, setCurrentMonth] = useState<number | null>(null);
@@ -196,16 +191,23 @@ export const DateRangeModal = ({ onChange }: RangeDatePickerProps) => {
   const handleSubmit = () => {
     console.log(startDate);
     console.log(endDate);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      onClose();
+
+      // TODO ADD API
+    }, 2000);
   };
 
   return (
     <>
       <CButton
-        borderRadius={"md"}
         variant={"outline"}
         colorScheme="teal"
         icon={RiCalendar2Line}
         onClick={onOpen}
+        {...rest}
       >
         Filter
       </CButton>
@@ -242,12 +244,6 @@ export const DateRangeModal = ({ onChange }: RangeDatePickerProps) => {
                     placeholder="Year"
                     min={0}
                   />
-
-                  {yearMsg !== "" && (
-                    <Text color={"red.400"} fontSize={"xs"}>
-                      {yearMsg}
-                    </Text>
-                  )}
                 </VStack>
               </HStack>
 
@@ -364,7 +360,7 @@ export const DateRangeModal = ({ onChange }: RangeDatePickerProps) => {
           </ModalBody>
           <ModalFooter>
             <CButton variant="solid" onClick={onClose}>
-              Close
+              Tutup
             </CButton>
 
             <CButton
@@ -376,7 +372,7 @@ export const DateRangeModal = ({ onChange }: RangeDatePickerProps) => {
               ml={4}
               onClick={handleSubmit}
             >
-              Close
+              Terapkan
             </CButton>
           </ModalFooter>
         </ModalContent>

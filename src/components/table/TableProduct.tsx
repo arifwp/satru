@@ -12,8 +12,11 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { product } from "../../data/product";
+import { useEffect, useState } from "react";
+import { TableSkeleton } from "./TableSkeleton";
 
 export const TableProduct = ({ ...rest }) => {
+  const [loaded, setLoaded] = useState<boolean>(false);
   const columnHeader = [
     { key: "foto", label: "Foto" },
     { key: "name", label: "Nama Produk" },
@@ -21,6 +24,16 @@ export const TableProduct = ({ ...rest }) => {
     { key: "brand", label: "Merk" },
     { key: "stock", label: "Stock" },
   ];
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoaded(true);
+    }, 2000);
+  }, []);
+
+  if (!loaded) {
+    return <TableSkeleton row={5} column={10} />;
+  }
 
   return (
     <TableContainer

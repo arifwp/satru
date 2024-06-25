@@ -24,10 +24,12 @@ export const CButton = ({
     <Button
       size={size !== undefined ? size : "sm"}
       variant={variant}
+      borderRadius={"md"}
       bg={btnColor !== undefined ? btnColor : undefined}
       leftIcon={icon !== undefined ? <Icon as={icon} /> : undefined}
       // pl={icon !== undefined ? 2 : 2}
       onClick={onClick}
+      fontSize={"xs"}
       {...rest}
     >
       {children}

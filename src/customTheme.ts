@@ -33,17 +33,17 @@ const customTheme = extendTheme({
     Modal: {
       baseStyle: (props: any) => ({
         dialog: {
-          bg:props.colorMode === 'dark'?'#1C1C1E':'white'
+          bg:props.colorMode === 'dark'?'dark':'white'
         }
       })
     },
     Menu: {
       baseStyle: (props: any) => ({
         list: {
-          bg: props.colorMode === 'dark' ? '#1C1C1E' : 'white'
+          bg: props.colorMode === 'dark' ? 'dark' : 'white'
         },
         item: {
-          bg: props.colorMode === 'dark' ? '#1C1C1E' : 'white'
+          bg: props.colorMode === 'dark' ? 'dark' : 'white'
         }
       })
     },

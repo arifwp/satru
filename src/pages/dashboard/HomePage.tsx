@@ -1,10 +1,9 @@
 import {
   Divider,
-  Grid,
-  GridItem,
   HStack,
   Icon,
   SimpleGrid,
+  Stack,
   Text,
   VStack,
   useColorModeValue,
@@ -20,17 +19,30 @@ import { CustomCard } from "../../components/CustomCard";
 import { CustomTooltip } from "../../components/CustomToolTip";
 import { DoughnutChart } from "../../components/chart/DoughnutChart";
 import { LineChart } from "../../components/chart/LineChart";
+import { DateRangeModal } from "../../components/modal/DateRangeModal";
+import { OutletPickerModal } from "../../components/modal/OutletPickerModal";
 
 export const HomePage = () => {
   const bgComponent = useColorModeValue("#F8F9FA", "#1C1C1E");
 
   return (
     <VStack className="home-container" w={"100%"} p={4}>
+      <Stack
+        w={"100%"}
+        direction={["column", "row"]}
+        alignSelf={{ sm: "stretch", md: "start" }}
+      >
+        <DateRangeModal />
+
+        <OutletPickerModal />
+      </Stack>
+
       <SimpleGrid
         className="card-container"
         columns={[2, null, null, 4]}
         w={"100%"}
         spacing={4}
+        mt={4}
       >
         <CustomCard
           label="Total Penjualan"
@@ -62,14 +74,19 @@ export const HomePage = () => {
         />
       </SimpleGrid>
 
-      <Grid templateColumns={"repeat(12,1fr)"} gap={4} w={"100%"} mt={4}>
+      {/* <Grid templateColumns={"repeat(12,1fr)"} gap={4} w={"100%"} mt={4}>
         <GridItem colSpan={[12, 12, 6, 6]}>
           <LineChart bg={bgComponent} />
         </GridItem>
         <GridItem colSpan={[12, 12, 6, 6]}>
           <DoughnutChart bg={bgComponent} />
         </GridItem>
-      </Grid>
+      </Grid> */}
+
+      <SimpleGrid w={"100%"} columns={[1, 1, 1, 2, 2]} spacing={4} mt={4}>
+        <LineChart bg={bgComponent} />
+        <DoughnutChart bg={bgComponent} />
+      </SimpleGrid>
 
       <SimpleGrid
         columns={[1, 1, 2, 2, 2]}

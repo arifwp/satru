@@ -1,16 +1,17 @@
 import {
-  Button,
+  Link as ChakraLink,
+  HStack,
   Heading,
-  Icon,
   Image,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Select,
   Stack,
   VStack,
 } from "@chakra-ui/react";
-import { RiAddCircleFill, RiSearch2Line } from "@remixicon/react";
+import { RiAddCircleLine } from "@remixicon/react";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { CButton } from "../../components/CButton";
+import { SearchInput } from "../../components/input/SearchInput";
+import { CategoryPickerModal } from "../../components/modal/CategoryPickerModal";
+import { SortPickerModal } from "../../components/modal/SortPickerModal";
 import { TableProduct } from "../../components/table/TableProduct";
 import { product } from "../../data/product";
 
@@ -18,66 +19,34 @@ export const ProductPage = () => {
   return (
     <VStack className="product-container" w={"100%"} p={4}>
       <Stack
-        direction={["column", "row"]}
-        alignSelf={{ sm: "stretch", md: "start" }}
+        w={"100%"}
+        direction={{
+          base: "column",
+          sm: "row",
+          md: "row",
+          lg: "row",
+          xl: "row",
+        }}
+        align={{ base: "stretch", md: "start" }}
+        flexWrap={"wrap"}
       >
-        <InputGroup
-          size={{ base: "sm", sm: "sm", md: "md" }}
-          borderRadius={"md"}
-        >
-          <InputLeftElement pointerEvents="none">
-            <Icon as={RiSearch2Line} />
-          </InputLeftElement>
-          <Input type="tel" placeholder="Phone number" />
-        </InputGroup>
+        <HStack>
+          <SearchInput placeholder="Cari nama..." />
+        </HStack>
 
-        <Select
-          size={{ base: "sm", sm: "sm", md: "md" }}
-          borderRadius={"md"}
-          placeholder="Kategori"
-          fontSize={{
-            base: "12px",
-            sm: "14px",
-            md: "14px",
-            lg: "14px",
-            xl: "16px",
-          }}
-        >
-          <option value="name">Nama</option>
-          <option value="smallestStock">Stok Terkecil</option>
-          <option value="biggestStock">Stok Terbesar</option>
-        </Select>
+        <CategoryPickerModal />
 
-        <Select
-          size={{ base: "sm", sm: "sm", md: "md" }}
-          borderRadius={"md"}
-          placeholder="Urutkan berdasarkan"
-          fontSize={{
-            base: "12px",
-            sm: "14px",
-            md: "14px",
-            lg: "14px",
-            xl: "16px",
-          }}
-        >
-          <option value="name">Nama</option>
-          <option value="smallestStock">Stok Terkecil</option>
-          <option value="biggestStock">Stok Terbesar</option>
-          <option value="Terbaru">Terbaru</option>
-          <option value="Terlama">Terlama</option>
-        </Select>
+        <SortPickerModal />
 
-        <Button
-          w={"100%"}
-          p={4}
-          borderRadius={"md"}
-          size={{ base: "sm", sm: "sm", md: "md" }}
-          variant={"solid"}
-          colorScheme="teal"
-          leftIcon={<Icon as={RiAddCircleFill} />}
-        >
-          Tambah Produk
-        </Button>
+        <ChakraLink as={ReactRouterLink} to={"/product/add-product"}>
+          <CButton
+            variant={"outline"}
+            colorScheme="teal"
+            icon={RiAddCircleLine}
+          >
+            Tambah Produk
+          </CButton>
+        </ChakraLink>
       </Stack>
 
       {product.length === 0 ? (

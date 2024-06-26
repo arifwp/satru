@@ -1,5 +1,4 @@
 import {
-  Button,
   HStack,
   Icon,
   IconButton,
@@ -8,50 +7,30 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  ModalBody,
   StackProps,
   Text,
   useColorMode,
-  useDisclosure,
 } from "@chakra-ui/react";
 import {
   RiAccountCircleFill,
-  RiCalendar2Fill,
+  RiArrowLeftSLine,
   RiLogoutBoxLine,
   RiMenuFill,
   RiMoonLine,
-  RiShoppingBag4Line,
   RiSunLine,
 } from "@remixicon/react";
-import { OutletPicker } from "../OutletPicker";
-import { RangeDatePicker } from "../RangeDatePicker";
-import { CModal } from "../modal/CModal";
 
 interface Props extends StackProps {
   children?: any;
   label: string;
+  isSubPage: boolean;
 }
 
-export const MenuHeaderShrink = ({ children, label }: Props) => {
+export const MenuHeaderShrink = ({ children, label, isSubPage }: Props) => {
   const { colorMode, toggleColorMode } = useColorMode();
-  const {
-    isOpen: outletModalIsOpen,
-    onOpen: outletModalOnOpen,
-    onClose: outletModalOnClose,
-  } = useDisclosure();
 
-  const {
-    isOpen: dateModalIsOpen,
-    onOpen: dateModalOnOpen,
-    onClose: dateModalOnClose,
-  } = useDisclosure();
-
-  const openFilterModal = () => {
-    dateModalOnOpen();
-  };
-
-  const openOutletModal = () => {
-    outletModalOnOpen();
+  const handleBack = () => {
+    window.history.back();
   };
 
   return (
@@ -65,9 +44,25 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
       h={"72px"}
       fontSize={"sm"}
     >
-      <Text as={"b"} fontSize={"18px"}>
-        {label}
-      </Text>
+      <HStack>
+        {isSubPage && (
+          <IconButton
+            size="xs"
+            variant="ghost"
+            color="current"
+            onClick={handleBack}
+            icon={<Icon as={RiArrowLeftSLine} />}
+            fontSize={"2xl"}
+            aria-label={`Back to previous page`}
+            mr={1}
+          />
+        )}
+
+        <Text as={"b"} fontSize={"18px"}>
+          {label}
+        </Text>
+      </HStack>
+
       <Menu>
         <MenuButton
           as={IconButton}
@@ -76,23 +71,6 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
           variant="outline"
         />
         <MenuList>
-          {label === "Dashboard" && (
-            <>
-              <MenuItem
-                icon={<Icon as={RiCalendar2Fill} />}
-                onClick={openFilterModal}
-              >
-                Filter
-              </MenuItem>
-              <MenuItem
-                icon={<Icon as={RiShoppingBag4Line} />}
-                onClick={openOutletModal}
-              >
-                Outlet
-              </MenuItem>
-            </>
-          )}
-
           <MenuItem
             icon={<Icon as={colorMode === "light" ? RiMoonLine : RiSunLine} />}
             onClick={toggleColorMode}
@@ -106,46 +84,6 @@ export const MenuHeaderShrink = ({ children, label }: Props) => {
           </MenuItem>
         </MenuList>
       </Menu>
-
-      {/* OUTLET MODAL */}
-      <CModal
-        size="xs"
-        modalTitle="Outlet"
-        isOpen={outletModalIsOpen}
-        onOpen={outletModalOnOpen}
-        onClose={outletModalOnClose}
-      >
-        <ModalBody>
-          <OutletPicker
-            isOpen={outletModalIsOpen}
-            onOpen={outletModalOnOpen}
-            onClose={outletModalOnClose}
-          >
-            <Button onClick={outletModalOnClose}>Close</Button>
-          </OutletPicker>
-        </ModalBody>
-      </CModal>
-
-      {/* FILTER MODAL */}
-      <CModal
-        size="sm"
-        modalTitle="Outlet"
-        isOpen={dateModalIsOpen}
-        onOpen={dateModalOnOpen}
-        onClose={dateModalOnClose}
-      >
-        <ModalBody>
-          <RangeDatePicker
-            onOpen={dateModalOnOpen}
-            isOpen={dateModalIsOpen}
-            onClose={dateModalOnClose}
-          >
-            <Button p={4} size={"xs"} onClick={dateModalOnClose}>
-              Close
-            </Button>
-          </RangeDatePicker>
-        </ModalBody>
-      </CModal>
     </HStack>
   );
 };

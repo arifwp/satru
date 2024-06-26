@@ -1,5 +1,4 @@
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -19,19 +18,50 @@ export const SortPickerModal = ({ ...rest }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selected, setSelected] = useState<
-    { value: any; label: string } | undefined
+    { id: any; name: string } | undefined
   >();
 
-  const handleSubmit = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      onClose();
+  const handleReset = () => {
+    setSelected(undefined);
+  };
 
+  const handleSelect = (val: any) => {
+    val.id === selected?.id
+      ? setSelected(undefined)
+      : setSelected({ id: val.id, name: val.name });
+  };
+
+  const handleSubmit = () => {
+    console.log(selected);
+
+    setLoading(true);
+
+    if (selected === undefined) {
+      localStorage.removeItem("sortProduct");
+    } else {
+      localStorage.setItem(
+        "sortProduct",
+        JSON.stringify({ id: selected?.id, name: selected?.name })
+      );
+    }
+    setTimeout(() => {
       // TODO ADD API
+      setLoading(false);
+
+      onClose();
     }, 2000);
   };
 
+  const sortLabel = () => {
+    if (localStorage.hasOwnProperty("sortProduct")) {
+      const getSort = localStorage.getItem("sortProduct") as string;
+      const arr = JSON.parse(getSort);
+      const label = arr.name;
+      return label;
+    } else {
+      return "Urutkan";
+    }
+  };
   return (
     <>
       <CButton
@@ -41,7 +71,7 @@ export const SortPickerModal = ({ ...rest }) => {
         onClick={onOpen}
         {...rest}
       >
-        Urutkan
+        {sortLabel()}
       </CButton>
 
       <Modal isCentered size={"xs"} isOpen={isOpen} onClose={onClose}>
@@ -52,22 +82,19 @@ export const SortPickerModal = ({ ...rest }) => {
           <ModalBody>
             <VStack spacing={2}>
               {sort.map((item, i) => (
-                <Button
+                <CButton
                   key={i}
                   w={"100%"}
                   variant={"outline"}
                   justifyContent={"start"}
+                  fontSize={"xs"}
                   borderColor={
-                    selected && selected.value === item.key
-                      ? "teal.400"
-                      : undefined
+                    selected && selected.id === item.id ? "teal.400" : undefined
                   }
-                  onClick={() => {
-                    setSelected({ value: item.key, label: item.label });
-                  }}
+                  onClick={() => handleSelect(item)}
                 >
-                  {item.label}
-                </Button>
+                  {item.name}
+                </CButton>
               ))}
             </VStack>
           </ModalBody>
@@ -77,12 +104,21 @@ export const SortPickerModal = ({ ...rest }) => {
             </CButton>
 
             <CButton
+              ml={2}
+              variant="solid"
+              colorScheme="teal"
+              onClick={handleReset}
+            >
+              Reset
+            </CButton>
+
+            <CButton
               variant="solid"
               type="submit"
               isLoading={loading}
               loadingText="Loading"
               spinnerPlacement="start"
-              ml={4}
+              ml={2}
               onClick={handleSubmit}
               colorScheme="teal"
             >

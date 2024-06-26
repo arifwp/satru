@@ -1,5 +1,5 @@
 import {
-  Button,
+  Box,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -8,7 +8,9 @@ import {
   ModalHeader,
   ModalOverlay,
   Skeleton,
-  VStack,
+  Wrap,
+  WrapItem,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import { RiBox3Line } from "@remixicon/react";
@@ -23,6 +25,8 @@ export const CategoryPickerModal = ({ ...rest }) => {
   const [selected, setSelected] = useState<
     { id: any; name: string } | undefined
   >();
+
+  const bgHover = useColorModeValue("#ebedf0", "#ebedf020");
 
   useEffect(() => {
     if (isOpen) {
@@ -73,7 +77,7 @@ export const CategoryPickerModal = ({ ...rest }) => {
       const getCategory = localStorage.getItem("categoryProduct") as string;
       const arr = JSON.parse(getCategory);
       const label = arr.name;
-      console.log(label);
+
       return label;
     } else {
       return "Kategori";
@@ -83,10 +87,13 @@ export const CategoryPickerModal = ({ ...rest }) => {
   return (
     <>
       <CButton
+        w={"100%"}
+        maxW={"150px"}
         variant={"outline"}
         colorScheme="teal"
         icon={RiBox3Line}
         onClick={onOpen}
+        noOfLines={0}
         {...rest}
       >
         {categoryLabel()}
@@ -98,31 +105,38 @@ export const CategoryPickerModal = ({ ...rest }) => {
           <ModalHeader>Kategori</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <VStack spacing={2}>
+            <Wrap spacing={2}>
               {category.map((item, i) => (
-                <Skeleton
-                  height={"40px"}
-                  w={"100%"}
-                  isLoaded={loaded}
-                  key={i}
-                  fadeDuration={1}
-                >
-                  <Button
-                    w={"100%"}
-                    variant={"outline"}
-                    justifyContent={"start"}
-                    borderColor={
-                      selected && selected.id === item.id
-                        ? "teal.400"
-                        : undefined
-                    }
-                    onClick={() => handleSelect(item)}
+                <WrapItem key={i}>
+                  <Skeleton
+                    height={!loaded ? "20px" : ""}
+                    isLoaded={loaded}
+                    fadeDuration={1}
                   >
-                    {item.name}
-                  </Button>
-                </Skeleton>
+                    <Box
+                      as="button"
+                      px={2}
+                      py={1}
+                      textAlign={"start"}
+                      lineHeight="1.2"
+                      transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
+                      borderWidth={"1px"}
+                      borderRadius={"md"}
+                      fontSize="xs"
+                      _hover={{ bg: bgHover }}
+                      borderColor={
+                        selected && selected.id === item.id
+                          ? "teal.400"
+                          : undefined
+                      }
+                      onClick={() => handleSelect(item)}
+                    >
+                      {item.name}
+                    </Box>
+                  </Skeleton>
+                </WrapItem>
               ))}
-            </VStack>
+            </Wrap>
           </ModalBody>
           <ModalFooter>
             <CButton variant="solid" onClick={onClose}>

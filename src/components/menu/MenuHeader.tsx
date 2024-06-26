@@ -3,6 +3,7 @@ import {
   Button,
   HStack,
   Icon,
+  IconButton,
   Menu,
   MenuButton,
   MenuDivider,
@@ -10,12 +11,12 @@ import {
   MenuList,
   StackProps,
   Text,
-  VStack,
   useColorModeValue,
 } from "@chakra-ui/react";
 import {
   RiAccountCircleFill,
   RiArrowDownSFill,
+  RiArrowLeftSLine,
   RiLogoutBoxLine,
 } from "@remixicon/react";
 import { useState } from "react";
@@ -24,15 +25,20 @@ import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 interface Props extends StackProps {
   children?: any;
   label: string;
+  isSubPage: boolean;
 }
 
-export const MenuHeader = ({ children, label }: Props) => {
+export const MenuHeader = ({ children, label, isSubPage }: Props) => {
   const [selectedDates, setSelectedDates] = useState<{
     start: Date | null;
     end: Date | null;
   }>({ start: null, end: null });
 
   const bgComponent = useColorModeValue("#F8F9FA", "#1C1C1E");
+
+  const handleBack = () => {
+    window.history.back();
+  };
 
   return (
     <HStack
@@ -43,11 +49,24 @@ export const MenuHeader = ({ children, label }: Props) => {
       h={"72px"}
       justify={"space-between"}
     >
-      <VStack>
+      <HStack>
+        {isSubPage && (
+          <IconButton
+            size="xs"
+            variant="ghost"
+            color="current"
+            onClick={handleBack}
+            icon={<Icon as={RiArrowLeftSLine} />}
+            fontSize={"2xl"}
+            aria-label={`Back to previous page`}
+            mr={1}
+          />
+        )}
+
         <Text as={"b"} fontSize={"18px"}>
           {label}
         </Text>
-      </VStack>
+      </HStack>
 
       <HStack>
         <ColorModeSwitcher bg={bgComponent} />

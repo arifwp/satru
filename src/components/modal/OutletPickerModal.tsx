@@ -9,6 +9,8 @@ import {
   ModalOverlay,
   Skeleton,
   VStack,
+  Wrap,
+  WrapItem,
   useDisclosure,
 } from "@chakra-ui/react";
 import { RiShoppingBag4Line } from "@remixicon/react";
@@ -83,48 +85,50 @@ export const OutletPickerModal = ({ ...rest }) => {
           <ModalHeader>Outlet</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <VStack spacing={2}>
+            <Wrap spacing={2}>
               {outlet.map((item, i) => (
-                <Skeleton
-                  height={"40px"}
-                  w={"100%"}
-                  isLoaded={loaded}
-                  key={i}
-                  fadeDuration={1}
-                >
-                  <Button
+                <WrapItem key={i}>
+                  <Skeleton
+                    height={!loaded ? "20px" : ""}
                     w={"100%"}
-                    variant={"outline"}
-                    justifyContent={"start"}
-                    // borderColor={
-                    //   selected && selected.value === item.id ? "red" : undefined
-                    // }
-                    // onClick={() => {
-                    //   setSelected({ value: item.id, label: item.outletName });
-                    // }}
-                    // borderColor={
-                    //   selected && selected[i].value === item.id
-                    //     ? "red"
-                    //     : undefined
-                    // }
-                    borderColor={
-                      selected &&
-                      selected.find(
-                        (selectedItem) => selectedItem.value === item.id
-                      )
-                        ? "teal.400"
-                        : undefined
-                    }
-                    onClick={() => {
-                      handleToggleSelect({
-                        value: item.id,
-                        label: item.outletName,
-                      });
-                    }}
+                    isLoaded={loaded}
+                    fadeDuration={1}
                   >
-                    {item.outletName}
-                  </Button>
-                </Skeleton>
+                    <CButton
+                      px={2}
+                      py={1}
+                      variant={"outline"}
+                      fontSize={"xs"}
+                      // borderColor={
+                      //   selected && selected.value === item.id ? "red" : undefined
+                      // }
+                      // onClick={() => {
+                      //   setSelected({ value: item.id, label: item.outletName });
+                      // }}
+                      // borderColor={
+                      //   selected && selected[i].value === item.id
+                      //     ? "red"
+                      //     : undefined
+                      // }
+                      borderColor={
+                        selected &&
+                        selected.find(
+                          (selectedItem) => selectedItem.value === item.id
+                        )
+                          ? "teal.400"
+                          : undefined
+                      }
+                      onClick={() => {
+                        handleToggleSelect({
+                          value: item.id,
+                          label: item.outletName,
+                        });
+                      }}
+                    >
+                      {item.outletName}
+                    </CButton>
+                  </Skeleton>
+                </WrapItem>
               ))}
               {/* {memoizedOutlet.map((item, i) => (
                 <Skeleton
@@ -156,7 +160,7 @@ export const OutletPickerModal = ({ ...rest }) => {
                   </Button>
                 </Skeleton>
               ))} */}
-            </VStack>
+            </Wrap>
           </ModalBody>
           <ModalFooter>
             <CButton variant="solid" onClick={onClose}>

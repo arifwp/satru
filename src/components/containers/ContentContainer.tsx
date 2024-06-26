@@ -7,9 +7,10 @@ import useScreenWidth from "../../lib/useScreenWidth";
 interface Props extends StackProps {
   children?: any;
   label: string;
+  isSubPage: boolean;
 }
 
-export const ContentContainer = ({ children, label }: Props) => {
+export const ContentContainer = ({ children, label, isSubPage }: Props) => {
   const sw = useScreenWidth();
 
   return (
@@ -25,9 +26,9 @@ export const ContentContainer = ({ children, label }: Props) => {
       >
         {/* <MenuHeader label={label} /> */}
         {sw >= 600 ? (
-          <MenuHeader label={label} />
+          <MenuHeader label={label} isSubPage={isSubPage} />
         ) : (
-          <MenuHeaderShrink label={label} />
+          <MenuHeaderShrink label={label} isSubPage={isSubPage} />
         )}
 
         {children}

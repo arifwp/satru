@@ -50,37 +50,3 @@ textarea.filled:focus-visible {
         opacity: 1;
     }
 }
-
-/* datepicker.css */
-/* .custom-calendar {
-    background-color: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.custom-day {
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 2px;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.custom-day:hover {
-    background-color: #e2e8f0;
-    color: #2d3748;
-}
-
-.react-datepicker__day--selected {
-    background-color: #3182ce;
-    color: #fff;
-}
-
-.react-datepicker__day--keyboard-selected {
-    background-color: #63b3ed;
-    color: #fff;
-} */

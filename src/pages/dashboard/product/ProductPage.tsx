@@ -8,12 +8,12 @@ import {
 } from "@chakra-ui/react";
 import { RiAddCircleLine } from "@remixicon/react";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { CButton } from "../../components/CButton";
-import { SearchInput } from "../../components/input/SearchInput";
-import { CategoryPickerModal } from "../../components/modal/CategoryPickerModal";
-import { SortPickerModal } from "../../components/modal/SortPickerModal";
-import { TableProduct } from "../../components/table/TableProduct";
-import { product } from "../../data/product";
+import { CButton } from "../../../components/CButton";
+import { SearchInput } from "../../../components/input/SearchInput";
+import { CategoryPickerModal } from "../../../components/modal/CategoryPickerModal";
+import { SortPickerModal } from "../../../components/modal/SortPickerModal";
+import { TableProduct } from "../../../components/table/TableProduct";
+import { product } from "../../../data/product";
 
 export const ProductPage = () => {
   return (
@@ -38,7 +38,12 @@ export const ProductPage = () => {
 
         <SortPickerModal />
 
-        <ChakraLink as={ReactRouterLink} to={"/product/add-product"}>
+        <ChakraLink
+          as={ReactRouterLink}
+          to={"/product/add-product"}
+          textDecoration={"none"}
+          _hover={{ textDecoration: "none" }}
+        >
           <CButton
             variant={"outline"}
             colorScheme="teal"

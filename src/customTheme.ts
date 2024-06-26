@@ -1,5 +1,5 @@
-import { createMultiStyleConfigHelpers, extendTheme } from '@chakra-ui/react';
 import { tableAnatomy } from "@chakra-ui/anatomy";
+import { createMultiStyleConfigHelpers, extendTheme } from '@chakra-ui/react';
 
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(tableAnatomy.keys);
 
@@ -94,6 +94,16 @@ const customTheme = extendTheme({
           };
         })
       }
+    },
+    Form: {
+      parts: ['container', 'requiredIndicator', 'helperText'],
+      baseStyle: {
+        container: {
+          label: {
+            fontSize: '12px',
+          },
+        },
+      },
     }
   },
 });

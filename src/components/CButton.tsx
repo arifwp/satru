@@ -7,6 +7,7 @@ interface BtnProps extends ButtonProps {
   variant?: string;
   btnColor?: any;
   icon?: RemixiconComponentType;
+  rIcon?: RemixiconComponentType;
   size?: any;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
@@ -16,6 +17,7 @@ export const CButton = ({
   variant,
   btnColor,
   icon,
+  rIcon,
   onClick,
   size,
   ...rest
@@ -27,6 +29,7 @@ export const CButton = ({
       borderRadius={"md"}
       bg={btnColor !== undefined ? btnColor : undefined}
       leftIcon={icon !== undefined ? <Icon as={icon} /> : undefined}
+      rightIcon={rIcon !== undefined ? <Icon as={rIcon} /> : undefined}
       // pl={icon !== undefined ? 2 : 2}
       onClick={onClick}
       fontSize={"xs"}

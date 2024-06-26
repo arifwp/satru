@@ -6,7 +6,8 @@ import "./index.css";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { HomePage } from "./pages/dashboard/HomePage";
-import { ProductPage } from "./pages/dashboard/ProductPage";
+import { ProductPage } from "./pages/dashboard/product/ProductPage";
+import { AddProductPage } from "./pages/dashboard/product/AddProductPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -19,7 +20,7 @@ export const App = () => (
         <Route
           path="/dashboard"
           element={
-            <ContentContainer label="Dashboard">
+            <ContentContainer label="Dashboard" isSubPage={false}>
               <HomePage />
             </ContentContainer>
           }
@@ -28,8 +29,17 @@ export const App = () => (
         <Route
           path="/product"
           element={
-            <ContentContainer label="Produk">
+            <ContentContainer label="Produk" isSubPage={false}>
               <ProductPage />
+            </ContentContainer>
+          }
+        />
+
+        <Route
+          path="/product/add-product"
+          element={
+            <ContentContainer label="Tambah Produk" isSubPage={true}>
+              <AddProductPage />
             </ContentContainer>
           }
         />

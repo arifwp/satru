@@ -1,12 +1,12 @@
 interface SortProps {
-    key: string;
-    label: string;
+    id: string;
+    name: string;
 }
 
 export const sort: Array<SortProps> = [
-    { key: 'name', label: 'Nama' },
-    { key: 'smallestStock', label: 'Stok Terkecil' },
-    { key: 'biggestStock', label: 'Stok Terbesar' },
-    { key: 'newest', label: 'Terbaru' },
-    {key: 'oldest', label: 'Terlama'},
+    { id: 'name', name: 'Nama' },
+    { id: 'smallestStock', name: 'Stok Terkecil' },
+    { id: 'biggestStock', name: 'Stok Terbesar' },
+    { id: 'newest', name: 'Terbaru' },
+    {id: 'oldest', name: 'Terlama'},
 ];

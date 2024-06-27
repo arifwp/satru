@@ -1,14 +1,10 @@
 import {
-  Box,
-  Button,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
   HStack,
-  Image,
   Input,
-  SimpleGrid,
   Stack,
   Text,
   Textarea,
@@ -17,13 +13,16 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import * as Yup from "yup";
 import { CButton } from "../../../components/CButton";
-import { SelectCategory } from "../../../components/SelectCategory";
-import useScreenWidth from "../../../lib/useScreenWidth";
 import { SelectBrand } from "../../../components/SelectBrand";
+import { SelectCategory } from "../../../components/SelectCategory";
+import { PriceInput } from "../../../components/input/PriceInput";
 import { FileInput } from "../../../components/input/dedicated/FileInput";
+import useScreenWidth from "../../../lib/useScreenWidth";
+import { useBgComponentBaseColor } from "../../../constant/colors";
+import { AddProductForm } from "../../../components/forms/AddProductForm";
 
 const initialValues = {
   img: undefined,
@@ -31,6 +30,7 @@ const initialValues = {
   name: undefined,
   description: undefined,
   price: undefined,
+  discount: undefined,
   category: undefined,
   brand: undefined,
   stock: undefined,
@@ -48,60 +48,32 @@ const initialValues = {
 
 export const AddProductPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [previewImage, setPreviewImage] = useState<string>("");
   const toast = useToast();
   const sw = useScreenWidth();
 
-  const bgComponent = useColorModeValue("#F8F9FA", "#1C1C1E");
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const bgHover = useColorModeValue("#ebedf0", "#ebedf020");
+  const bgComponent = useBgComponentBaseColor();
 
   const formik = useFormik({
     validateOnChange: false,
     initialValues: initialValues,
     validationSchema: Yup.object().shape({
       name: Yup.string().required("Nama harus diisi"),
-      price: Yup.number().required("Harga harus diisi"),
+      price: Yup.number()
+        .required("Harga harus diisi")
+        .typeError("Harga harus berupa angka"),
       category: Yup.object().required("Kategori harus diisi"),
       stock: Yup.number().required("Stok harus diisi"),
     }),
     onSubmit: (values) => {
-      console.log(JSON.stringify(values));
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        // navigate("/product");
-      }, 1000);
+      console.log("submit!");
+      // console.log(JSON.stringify(values));
+      // setLoading(true);
+      // setTimeout(() => {
+      //   setLoading(false);
+      //   // navigate("/product");
+      // }, 500);
     },
   });
-
-  console.log(formik.values);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.currentTarget.files?.[0];
-    if (file) {
-      formik.setFieldValue("img", file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files?.[0];
-    if (file) {
-      formik.setFieldValue("img", file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleBack = () => {
     window.history.back();
@@ -109,7 +81,8 @@ export const AddProductPage = () => {
 
   return (
     <VStack className="add-product-container" w={"100%"} p={4}>
-      <form
+      <AddProductForm />
+      {/* <form
         id="addProductForm"
         onSubmit={formik.handleSubmit}
         style={{ width: "100%" }}
@@ -136,7 +109,7 @@ export const AddProductPage = () => {
               <Text as={"b"}>Informasi umum</Text>
               <FormControl>
                 <FormLabel htmlFor="code">
-                  Kode Produk{" "}
+                  Kode Produk
                   <Text variant={"secondary"} as={"i"} fontSize={"xs"}>
                     (Opsional)
                   </Text>
@@ -169,6 +142,26 @@ export const AddProductPage = () => {
                 </FormErrorMessage>
               </FormControl>
 
+              <FormControl
+                isInvalid={
+                  formik.errors.price && formik.touched.price ? true : false
+                }
+              >
+                <FormLabel htmlFor="price" className="form-label">
+                  Harga Jual
+                </FormLabel>
+                <PriceInput
+                  name="price"
+                  onChange={(inputValue) => {
+                    formik.setFieldValue("price", inputValue);
+                  }}
+                  inputValue={formik.values.price}
+                  placeholder="1.650.000"
+                  isError={!!formik.errors.price}
+                />
+                <FormErrorMessage>{formik.errors.price}</FormErrorMessage>
+              </FormControl>
+
               <FormControl>
                 <FormLabel htmlFor="description">Deskripsi Produk</FormLabel>
                 <Textarea
@@ -191,7 +184,7 @@ export const AddProductPage = () => {
               align={"stretch"}
             >
               <VStack className="category" align={"stretch"} spacing={6}>
-                <Text as={"b"}>Label</Text>
+                <Text as={"b"}>Kelola Label</Text>
 
                 <FormControl isInvalid={formik.errors.category ? true : false}>
                   <FormLabel htmlFor="category">Kategori</FormLabel>
@@ -204,7 +197,6 @@ export const AddProductPage = () => {
                     placeholder="Pilih Kategori"
                     isError={!!formik.errors.category}
                     withSearch={true}
-                    // maxW={"calc(307.6px - 16px)"}
                   />
                   <FormErrorMessage>
                     {formik.errors.category as string}
@@ -213,8 +205,8 @@ export const AddProductPage = () => {
               </VStack>
 
               <VStack className="brand">
-                <FormControl isInvalid={formik.errors.category ? true : false}>
-                  <FormLabel htmlFor="brand">Brand</FormLabel>
+                <FormControl isInvalid={formik.errors.brand ? true : false}>
+                  <FormLabel htmlFor="brand">Merk</FormLabel>
                   <SelectBrand
                     name="brand"
                     onConfirm={(inputValue) => {
@@ -224,7 +216,6 @@ export const AddProductPage = () => {
                     placeholder="Pilih Kategori"
                     isError={!!formik.errors.brand}
                     withSearch={true}
-                    // maxW={"calc(307.6px - 16px)"}
                   />
                   <FormErrorMessage>
                     {formik.errors.brand as string}
@@ -243,7 +234,7 @@ export const AddProductPage = () => {
               align={"stretch"}
             >
               <VStack className="stock-form" align={"stretch"} spacing={6}>
-                <Text as={"b"}>Label</Text>
+                <Text as={"b"}>Manajemen Stok</Text>
 
                 <FormControl isInvalid={formik.errors.stock ? true : false}>
                   <FormLabel htmlFor="stock">Stok</FormLabel>
@@ -253,9 +244,7 @@ export const AddProductPage = () => {
                     placeholder="69"
                     onChange={formik.handleChange}
                   />
-                  <FormErrorMessage>
-                    {formik.errors.stock as string}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{formik.errors.stock}</FormErrorMessage>
                 </FormControl>
               </VStack>
 
@@ -275,7 +264,7 @@ export const AddProductPage = () => {
                     minimal stok
                   </FormHelperText>
                   <FormErrorMessage>
-                    {formik.errors.minimumStock as string}
+                    {formik.errors.minimumStock}
                   </FormErrorMessage>
                 </FormControl>
               </VStack>
@@ -330,67 +319,10 @@ export const AddProductPage = () => {
                   formik.setFieldValue("img", inputValue);
                 }}
               />
-
-              {/* <FormControl>
-                <FormLabel htmlFor="img">Foto</FormLabel>
-                <Box
-                  p={2}
-                  border={"1px dashed"}
-                  borderColor={"gray.400"}
-                  borderRadius={"md"}
-                  display={"flex"}
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                  flexDirection={"column"}
-                  cursor={"pointer"}
-                  _hover={{ bg: bgHover }}
-                  onClick={() => inputRef.current?.click()}
-                  onDrop={handleDrop}
-                  onDragOver={(e) => e.preventDefault()}
-                >
-                  {previewImage ? (
-                    <Image
-                      src={previewImage}
-                      alt="Product Preview"
-                      // boxSize="200px"
-                      objectFit="contain"
-                    />
-                  ) : (
-                    <>
-                      <Image
-                        src="/assets/svg/ic_upload.svg"
-                        w={"100%"}
-                        maxW={"100px"}
-                      />
-                      <Text fontSize={"xs"}>
-                        Geser foto anda disini atau klik untuk memilih
-                      </Text>
-                      <Text fontSize={"xs"} color="gray.500">
-                        (JPG, JPEG, PNG)
-                      </Text>
-                    </>
-                  )}
-                </Box>
-                <Input
-                  ref={inputRef}
-                  id="imgInput"
-                  type="file"
-                  name="img"
-                  accept="image/jpeg, image/png"
-                  onChange={(event) => {
-                    handleFileChange(event);
-                    formik.handleChange(event);
-                  }}
-                  display={"none"}
-                />
-                <CButton mt={4} variant="outline" colorScheme="red">
-                  Reset
-                </CButton>
-              </FormControl> */}
             </VStack>
           </VStack>
         </Stack>
-      </form>
+      </form> */}
     </VStack>
   );
 };

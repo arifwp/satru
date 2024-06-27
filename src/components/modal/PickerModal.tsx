@@ -59,7 +59,7 @@ export const PickerModal = ({
     if (isOpen) {
       const timer = setTimeout(() => {
         setLoaded(true);
-      }, 2000);
+      }, 1000);
 
       return () => {
         clearTimeout(timer);
@@ -91,7 +91,7 @@ export const PickerModal = ({
       setLoading(false);
 
       onClose();
-    }, 2000);
+    }, 1000);
   };
 
   const limitedTextDisplay =

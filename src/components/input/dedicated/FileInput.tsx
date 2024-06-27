@@ -1,26 +1,17 @@
 import {
   Box,
-  Button,
   FormControl,
-  FormErrorMessage,
-  FormHelperText,
   FormLabel,
-  HStack,
+  Icon,
   Image,
   Input,
-  SimpleGrid,
-  Stack,
   Text,
-  Textarea,
   VStack,
-  useColorModeValue,
-  useToast,
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
+import { RiFileUploadLine } from "@remixicon/react";
 import { useRef, useState } from "react";
-import * as Yup from "yup";
+import { useBgHover } from "../../../constant/colors";
 import { CButton } from "../../CButton";
-import { useBgComponentBaseColor, useBgHover } from "../../../constant/colors";
 
 interface Props {
   onFileChange: (file: any | undefined) => void;
@@ -30,14 +21,12 @@ interface Props {
 export const FileInput = ({ onFileChange, onHandleDrop }: Props) => {
   const [previewImage, setPreviewImage] = useState<string>("");
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const bgComponent = useBgComponentBaseColor();
   const bgHover = useBgHover();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.currentTarget.files?.[0];
     if (file) {
       onFileChange(file);
-      // formik.setFieldValue("img", file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewImage(reader.result as string);
@@ -50,7 +39,6 @@ export const FileInput = ({ onFileChange, onHandleDrop }: Props) => {
     event.preventDefault();
     const file = event.dataTransfer.files?.[0];
     if (file) {
-      // formik.setFieldValue("img", file);
       onHandleDrop(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -64,7 +52,8 @@ export const FileInput = ({ onFileChange, onHandleDrop }: Props) => {
     <FormControl>
       <FormLabel htmlFor="img">Foto</FormLabel>
       <Box
-        p={2}
+        px={4}
+        py={10}
         border={"1px dashed"}
         borderColor={"gray.400"}
         borderRadius={"md"}
@@ -81,19 +70,25 @@ export const FileInput = ({ onFileChange, onHandleDrop }: Props) => {
         {previewImage ? (
           <Image
             src={previewImage}
+            w={"100%"}
+            maxW={"200px"}
             alt="Product Preview"
-            // boxSize="200px"
             objectFit="contain"
+            style={{ aspectRatio: 1 / 1 }}
           />
         ) : (
           <>
-            <Image src="/assets/svg/ic_upload.svg" w={"100%"} maxW={"100px"} />
-            <Text fontSize={"xs"}>
-              Geser foto anda disini atau klik untuk memilih
-            </Text>
-            <Text fontSize={"xs"} color="gray.500">
-              (JPG, JPEG, PNG)
-            </Text>
+            <VStack fontSize={"xs"}>
+              <Icon
+                as={RiFileUploadLine}
+                color={"teal.400"}
+                fontSize={"72px"}
+              />
+              <Text textAlign={"center"}>
+                Geser foto anda disini atau klik untuk memilih
+              </Text>
+              <Text color="gray.500">(JPG, JPEG, PNG)</Text>
+            </VStack>
           </>
         )}
       </Box>
@@ -105,11 +100,17 @@ export const FileInput = ({ onFileChange, onHandleDrop }: Props) => {
         accept="image/jpeg, image/png"
         onChange={(event) => {
           handleFileChange(event);
-          // formik.handleChange(event);
         }}
         display={"none"}
       />
-      <CButton mt={4} variant="outline" colorScheme="red">
+      <CButton
+        mt={4}
+        variant="outline"
+        colorScheme="red"
+        onClick={() => {
+          setPreviewImage("");
+        }}
+      >
         Reset
       </CButton>
     </FormControl>

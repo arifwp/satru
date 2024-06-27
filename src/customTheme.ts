@@ -104,7 +104,14 @@ const customTheme = extendTheme({
           },
         },
       },
-    }
+    },
+    FormError: {
+      baseStyle: {
+        text: {
+          fontSize: 'xs',
+        },
+      },
+    },
   },
 });
 

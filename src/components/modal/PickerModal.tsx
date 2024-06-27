@@ -1,12 +1,7 @@
 import {
   Box,
-  Button,
   HStack,
   Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,21 +9,26 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Skeleton,
   Text,
-  VStack,
+  Wrap,
+  WrapItem,
   useDisclosure,
 } from "@chakra-ui/react";
-import { RiArrowDownDoubleLine, RiArrowDownSLine } from "@remixicon/react";
-import { useState } from "react";
-import { sort } from "../../data/general";
-import { CButton } from "../CButton";
+import { RiArrowDownSLine } from "@remixicon/react";
+import { useEffect, useState } from "react";
 import { SelectOption } from "../../constant/SelectOption";
-import { useBgComponentBaseColor } from "../../constant/colors";
+import {
+  useBgComponentBaseColor,
+  useBgHover,
+  useErrorColor,
+} from "../../constant/colors";
+import { CButton } from "../CButton";
 
 interface Props {
   name: string;
   placeholder: string;
-  required?: boolean;
+
   withSearch: boolean;
   isError?: boolean;
   options: SelectOption[];
@@ -39,7 +39,7 @@ interface Props {
 export const PickerModal = ({
   name,
   placeholder,
-  required,
+
   withSearch,
   isError,
   options,
@@ -48,45 +48,70 @@ export const PickerModal = ({
   ...rest
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [loaded, setLoaded] = useState<boolean>(false);
   const [selected, setSelected] = useState<SelectOption | undefined>(
     inputValue
   );
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        setLoaded(true);
+      }, 2000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [isOpen]);
+
   const bgComponent = useBgComponentBaseColor();
+  const bgHover = useBgHover();
+
+  const handleSelect = (val: any) => {
+    val.id === selected?.id ? setSelected(undefined) : setSelected(val);
+  };
+
+  const handleSubmit = () => {
+    console.log(selected);
+
+    setLoading(true);
+
+    if (selected) {
+      onConfirm(selected);
+    } else {
+      onConfirm(undefined);
+    }
+
+    setTimeout(() => {
+      // TODO ADD API
+
+      setLoading(false);
+
+      onClose();
+    }, 2000);
+  };
+
+  const limitedTextDisplay =
+    inputValue && inputValue.name.length > 20
+      ? `${inputValue.name.slice(0, 20)}...`
+      : inputValue && inputValue.name;
 
   return (
     <>
-      <Button
-        className="btn-clear"
-        border={"1px solid var(--divider3)"}
-        // borderColor={isError ? errorColor : ""}
-        borderRadius={8}
-        gap={3}
-        _focus={{
-          border: "1px solid var(--p500)",
-          boxShadow: "none !important",
-        }}
-        cursor={"pointer"}
-        onClick={() => {
-          onOpen();
-          setSelected(inputValue);
-        }}
-        justifyContent={"space-between"}
+      <CButton
         w={"100%"}
-        role="group"
-        px={"16px !important"}
+        onClick={onOpen}
+        justifyContent={"space-between"}
         {...rest}
       >
-        <HStack>
-          <Text
-            opacity={inputValue ? 1 : 0.3}
-            fontWeight={400}
-            overflow={"hidden"}
-            whiteSpace={"nowrap"}
-            textOverflow={"ellipsis"}
-          >
-            {inputValue ? inputValue.name : placeholder || "Pilih Salah Satu"}
+        <HStack fontSize={"xs"} fontWeight={"normal"} overflow={"hidden"}>
+          <Text opacity={inputValue ? 1 : 0.3} isTruncated>
+            {inputValue
+              ? limitedTextDisplay?.toString()
+              : placeholder || "Pilih Salah Satu"}
           </Text>
 
           <Text fontWeight={400} opacity={0.4}>
@@ -95,27 +120,62 @@ export const PickerModal = ({
         </HStack>
 
         <Icon as={RiArrowDownSLine} fontSize={18} />
-      </Button>
+      </CButton>
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="5px" />
         <ModalContent bg={bgComponent}>
           <ModalHeader>{placeholder}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>{/*add body */}</ModalBody>
+          <ModalBody>
+            {/*add body */}
+            <Wrap spacing={2}>
+              {options.map((item, i) => (
+                <WrapItem key={item.id}>
+                  <Skeleton
+                    height={!loaded ? "20px" : ""}
+                    isLoaded={loaded}
+                    fadeDuration={1}
+                  >
+                    <Box
+                      as="button"
+                      px={2}
+                      py={1}
+                      textAlign={"start"}
+                      lineHeight="1.2"
+                      transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
+                      borderWidth={"1px"}
+                      borderRadius={"md"}
+                      fontSize="xs"
+                      _hover={{ bg: bgHover }}
+                      borderColor={
+                        selected && selected.id === item.id
+                          ? "teal.400"
+                          : undefined
+                      }
+                      onClick={() => handleSelect(item)}
+                    >
+                      {item.name}
+                    </Box>
+                  </Skeleton>
+                </WrapItem>
+              ))}
+            </Wrap>
+          </ModalBody>
           <ModalFooter>
             <CButton variant="solid" onClick={onClose}>
               Close
             </CButton>
 
             <CButton
+              ml={4}
               variant="solid"
               isLoading={loading}
               loadingText="Loading"
               spinnerPlacement="start"
-              //   onClick={btnOnClick}
+              onClick={handleSubmit}
             >
-              Close
+              Terapkan
             </CButton>
           </ModalFooter>
         </ModalContent>

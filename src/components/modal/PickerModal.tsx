@@ -18,11 +18,7 @@ import {
 import { RiArrowDownSLine } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { SelectOption } from "../../constant/SelectOption";
-import {
-  useBgComponentBaseColor,
-  useBgHover,
-  useErrorColor,
-} from "../../constant/colors";
+import { useBgComponentBaseColor, useBgHover } from "../../constant/colors";
 import { CButton } from "../CButton";
 
 interface Props {
@@ -59,13 +55,17 @@ export const PickerModal = ({
     if (isOpen) {
       const timer = setTimeout(() => {
         setLoaded(true);
-      }, 1000);
+      }, 200);
 
       return () => {
         clearTimeout(timer);
       };
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    setSelected(inputValue);
+  }, [inputValue]);
 
   const bgComponent = useBgComponentBaseColor();
   const bgHover = useBgHover();
@@ -75,8 +75,6 @@ export const PickerModal = ({
   };
 
   const handleSubmit = () => {
-    console.log(selected);
-
     setLoading(true);
 
     if (selected) {
@@ -89,7 +87,7 @@ export const PickerModal = ({
       // TODO ADD API
 
       setLoading(false);
-
+      setSelected(undefined);
       onClose();
     }, 1000);
   };

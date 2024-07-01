@@ -17,8 +17,8 @@ import * as Yup from "yup";
 import { useBgComponentBaseColor } from "../../constant/colors";
 import useScreenWidth from "../../lib/useScreenWidth";
 import { CButton } from "../CButton";
-import { SelectBrand } from "../SelectBrand";
-import { SelectCategory } from "../SelectCategory";
+import { SelectBrand } from "../modal/dedicated/SelectBrand";
+import { SelectCategory } from "../modal/dedicated/SelectCategory";
 import { NumberInput } from "../input/NumberInput";
 import { FileInput } from "../input/dedicated/FileInput";
 
@@ -209,6 +209,7 @@ export const AddProductForm = () => {
                   placeholder="Pilih Kategori"
                   isError={!!formik.errors.category}
                   withSearch={true}
+                  w={"100%"}
                 />
                 <FormErrorMessage>
                   {formik.errors.category as string}
@@ -228,6 +229,7 @@ export const AddProductForm = () => {
                   placeholder="Pilih Merk"
                   isError={!!formik.errors.brand}
                   withSearch={true}
+                  w={"100%"}
                 />
               </FormControl>
             </VStack>

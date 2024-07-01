@@ -1,13 +1,16 @@
-import { ButtonProps } from "@chakra-ui/react";
+import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { RemixiconComponentType } from "@remixicon/react";
 import { SelectOption } from "../../../constant/SelectOption";
 import { PickerButton } from "../PickerButton";
+import { useEffect, useState } from "react";
+import { category } from "../../../constant/Category";
 
 interface Props extends ButtonProps {
   name: string;
   withSearch: boolean;
   icon: RemixiconComponentType;
   onConfirm: (inputValue: SelectOption | undefined) => void;
+  placeholder: string;
 }
 
 export const SelectButtonCategory = ({
@@ -15,25 +18,40 @@ export const SelectButtonCategory = ({
   withSearch,
   icon,
   onConfirm,
+  placeholder,
   ...rest
 }: Props) => {
-  const category = [
-    { id: 1, name: "Laptop" },
-    { id: 2, name: "Komputer" },
-    { id: 3, name: "Smartphone" },
-    { id: 4, name: "Laptop" },
-    { id: 5, name: "Tablet" },
-  ];
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [data, setData] = useState<SelectOption[] | undefined>(undefined);
+
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        setLoaded(true);
+        // hit api
+        setData(category);
+      }, 2000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [isOpen]);
 
   return (
     <PickerButton
       name={name}
-      options={category}
+      options={data}
       icon={icon}
-      placeholder={"Kategori"}
+      placeholder={placeholder}
       withSearch={withSearch}
       withSkeleton={true}
       onConfirm={onConfirm}
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+      loaded={loaded}
       {...rest}
     />
   );

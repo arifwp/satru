@@ -1,32 +1,34 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react";
-import { RemixiconComponentType } from "@remixicon/react";
-import { PickerButton } from "../PickerButton";
-import { SelectOption } from "../../../constant/SelectOption";
 import { useEffect, useState } from "react";
+import { SelectOption } from "../../../constant/SelectOption";
+import { PickerModal } from "../PickerModal";
 
 interface Props extends ButtonProps {
   name: string;
-  withSearch: boolean;
-  icon: RemixiconComponentType;
-  onConfirm: (inputValue: SelectOption | undefined) => void;
   placeholder: string;
+  required?: boolean;
+  withSearch: boolean;
+  isError?: boolean;
+  inputValue: SelectOption | undefined;
+  onConfirm: (inputValue: SelectOption | undefined) => void;
 }
 
-const outlet = [
-  { id: 1, name: "Semua Outlet" },
-  { id: 2, name: "Pusat" },
-  { id: 3, name: "Cabang Semarang" },
-  { id: 4, name: "Cabang Yogyakarta" },
-  { id: 5, name: "Cabang Depok" },
-  { id: 6, name: "Cabang Boyolali" },
+const brand = [
+  { id: 1, name: "Apple" },
+  { id: 2, name: "Asus" },
+  { id: 3, name: "Toshiba" },
+  { id: 4, name: "HP" },
+  { id: 5, name: "MSI" },
+  { id: 6, name: "Dell" },
 ];
 
-export const SelectOutlet = ({
+export const SelectInputBrand = ({
   name,
-  withSearch,
-  icon,
-  onConfirm,
   placeholder,
+  withSearch,
+  isError,
+  inputValue,
+  onConfirm,
   ...rest
 }: Props) => {
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -38,7 +40,7 @@ export const SelectOutlet = ({
       const timer = setTimeout(() => {
         setLoaded(true);
         // hit api
-        setData(outlet);
+        setData(brand);
       }, 2000);
 
       return () => {
@@ -48,13 +50,13 @@ export const SelectOutlet = ({
   }, [isOpen]);
 
   return (
-    <PickerButton
+    <PickerModal
       name={name}
       options={data}
-      icon={icon}
       placeholder={placeholder}
       withSearch={withSearch}
-      withSkeleton={true}
+      isError={isError}
+      inputValue={inputValue}
       onConfirm={onConfirm}
       isOpen={isOpen}
       onOpen={onOpen}

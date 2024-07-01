@@ -6,10 +6,10 @@ import {
   Stack,
   Text,
   VStack,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import {
   RiArchiveStackFill,
+  RiBox3Line,
   RiExchangeDollarFill,
   RiFileChartFill,
   RiQuestionLine,
@@ -19,11 +19,16 @@ import { CustomCard } from "../../components/CustomCard";
 import { CustomTooltip } from "../../components/CustomToolTip";
 import { DoughnutChart } from "../../components/chart/DoughnutChart";
 import { LineChart } from "../../components/chart/LineChart";
-import { DateRangeModal } from "../../components/modal/DateRangeModal";
-import { OutletPickerModal } from "../../components/modal/OutletPickerModal";
+import { SelectDateRange } from "../../components/modal/dedicated/SelectDateRange";
+import { SelectOutlet } from "../../components/modal/dedicated/SelectOutlet";
+import { useBgComponentBaseColor } from "../../constant/colors";
 
 export const HomePage = () => {
-  const bgComponent = useColorModeValue("#F8F9FA", "#1C1C1E");
+  const bgComponent = useBgComponentBaseColor();
+
+  const now = new Date();
+  const initialStartDate = new Date(now.getFullYear(), now.getMonth(), 1);
+  const initialEndDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
   return (
     <VStack className="home-container" w={"100%"} p={4}>
@@ -32,9 +37,27 @@ export const HomePage = () => {
         direction={["column", "row"]}
         alignSelf={{ sm: "stretch", md: "start" }}
       >
-        <DateRangeModal />
-
-        <OutletPickerModal />
+        <SelectDateRange
+          initialStartDate={initialStartDate}
+          initialEndDate={initialEndDate}
+          onConfirmStart={(inputValue) => {
+            // ADD TODO
+            // console.log(inputValue);
+          }}
+          onConfirmEnd={(inputValue) => {
+            // ADD TODO
+            // console.log(inputValue);
+          }}
+        />
+        <SelectOutlet
+          name="outlet"
+          withSearch={true}
+          icon={RiBox3Line}
+          onConfirm={(inputValue) => {
+            // ADD TODO
+            // console.log(inputValue);
+          }}
+        />
       </Stack>
 
       <SimpleGrid
@@ -46,44 +69,35 @@ export const HomePage = () => {
       >
         <CustomCard
           label="Total Penjualan"
-          cardValue="Rp 1.820.000"
+          value="Rp 1.820.000"
           bgIc="yellow.300"
           bgColor={"yellow.200"}
           asIc={RiShoppingBag2Fill}
         />
         <CustomCard
           label="Total Keuntungan"
-          cardValue="Rp 1.820.000"
+          value="Rp 1.820.000"
           bgIc="green.300"
           bgColor={"green.200"}
           asIc={RiExchangeDollarFill}
         />
         <CustomCard
           label="Total Tranksasi"
-          cardValue="Rp 1.820.000"
+          value="Rp 1.820.000"
           bgIc="blue.300"
           bgColor={"blue.200"}
           asIc={RiArchiveStackFill}
         />
         <CustomCard
           label="Produk Terjual"
-          cardValue="13"
+          value="13"
           bgIc="red.300"
           bgColor={"red.200"}
           asIc={RiFileChartFill}
         />
       </SimpleGrid>
 
-      {/* <Grid templateColumns={"repeat(12,1fr)"} gap={4} w={"100%"} mt={4}>
-        <GridItem colSpan={[12, 12, 6, 6]}>
-          <LineChart bg={bgComponent} />
-        </GridItem>
-        <GridItem colSpan={[12, 12, 6, 6]}>
-          <DoughnutChart bg={bgComponent} />
-        </GridItem>
-      </Grid> */}
-
-      <SimpleGrid w={"100%"} columns={[1, 1, 1, 2, 2]} spacing={4} mt={4}>
+      <SimpleGrid w={"100%"} columns={[1, 1, 1, 2, 2]} spacing={4} mt={2}>
         <LineChart bg={bgComponent} />
         <DoughnutChart bg={bgComponent} />
       </SimpleGrid>
@@ -92,7 +106,7 @@ export const HomePage = () => {
         columns={[1, 1, 2, 2, 2]}
         w={"100%"}
         spacing={4}
-        mt={4}
+        mt={2}
         fontSize={{
           base: "12px",
           sm: "14px",

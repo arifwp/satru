@@ -6,16 +6,26 @@ import {
   Stack,
   VStack,
 } from "@chakra-ui/react";
-import { RiAddCircleLine } from "@remixicon/react";
+import { RiAddCircleLine, RiBox3Line } from "@remixicon/react";
+import { useState } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { CButton } from "../../../components/CButton";
 import { SearchInput } from "../../../components/input/SearchInput";
-import { CategoryPickerModal } from "../../../components/modal/CategoryPickerModal";
-import { SortPickerModal } from "../../../components/modal/SortPickerModal";
-import { TableProduct } from "../../../components/table/TableProduct";
+import { SelectButtonCategory } from "../../../components/modal/dedicated/SelectButtonCategory";
+import { SelectButtonSort } from "../../../components/modal/dedicated/SelectButtonSort";
+import { TableProduct } from "../../../components/table/dedicated/TableProduct";
+import { SelectOption } from "../../../constant/SelectOption";
 import { product } from "../../../data/product";
 
 export const ProductPage = () => {
+  const [filterCategory, setFilterCategory] = useState<
+    SelectOption | undefined
+  >(undefined);
+  const [filterSort, setfilterSort] = useState<SelectOption | undefined>(
+    undefined
+  );
+  const [filterSearch, setfilterSearch] = useState<string>("");
+
   return (
     <VStack className="product-container" w={"100%"} p={4}>
       <Stack
@@ -31,12 +41,36 @@ export const ProductPage = () => {
         flexWrap={"wrap"}
       >
         <HStack>
-          <SearchInput placeholder="Cari nama..." />
+          <SearchInput
+            placeholder="Cari nama..."
+            onConfirm={(inputValue) => {
+              // ADD TODO
+              // console.log(inputValue);
+              setfilterSearch(inputValue);
+            }}
+          />
         </HStack>
+        <SelectButtonCategory
+          name="outlet"
+          withSearch={true}
+          icon={RiBox3Line}
+          onConfirm={(inputValue) => {
+            // ADD TODO
+            // console.log(inputValue);
+            setFilterCategory(inputValue);
+          }}
+        />
 
-        <CategoryPickerModal />
-
-        <SortPickerModal />
+        <SelectButtonSort
+          name="outlet"
+          withSearch={true}
+          icon={RiBox3Line}
+          onConfirm={(inputValue) => {
+            // ADD TODO
+            // console.log(inputValue);
+            setfilterSort(inputValue);
+          }}
+        />
 
         <ChakraLink
           as={ReactRouterLink}
@@ -66,7 +100,12 @@ export const ProductPage = () => {
           <Heading as={"h6"}>Tidak ada Produk</Heading>
         </VStack>
       ) : (
-        <TableProduct mt={4} />
+        <TableProduct
+          filterSort={filterSort}
+          filterCategory={filterCategory}
+          filterSearch={filterSearch}
+          mt={4}
+        />
       )}
     </VStack>
   );

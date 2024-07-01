@@ -50,3 +50,17 @@ textarea.filled:focus-visible {
         opacity: 1;
     }
 }
+
+
+.scrollX::-webkit-scrollbar {
+    height: 4px;
+}
+
+.scrollX::-webkit-scrollbar-track {
+    background: #F8F9FA20;
+}
+
+.scrollX::-webkit-scrollbar-thumb {
+    background: RGBA(0, 0, 0, 0.64);
+    border-radius: 100px;
+}

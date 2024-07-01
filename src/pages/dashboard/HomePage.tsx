@@ -51,6 +51,7 @@ export const HomePage = () => {
         />
         <SelectOutlet
           name="outlet"
+          placeholder="Filter Outlet"
           withSearch={true}
           icon={RiBox3Line}
           onConfirm={(inputValue) => {

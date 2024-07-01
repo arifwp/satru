@@ -16,6 +16,7 @@ import { SelectButtonSort } from "../../../components/modal/dedicated/SelectButt
 import { TableProduct } from "../../../components/table/dedicated/TableProduct";
 import { SelectOption } from "../../../constant/SelectOption";
 import { product } from "../../../data/product";
+import { PickerButton } from "../../../components/modal/PickerButton";
 
 export const ProductPage = () => {
   const [filterCategory, setFilterCategory] = useState<
@@ -50,20 +51,21 @@ export const ProductPage = () => {
             }}
           />
         </HStack>
+
         <SelectButtonCategory
           name="outlet"
+          placeholder="Filter Kategori"
           withSearch={true}
           icon={RiBox3Line}
           onConfirm={(inputValue) => {
-            // ADD TODO
-            // console.log(inputValue);
             setFilterCategory(inputValue);
           }}
         />
 
         <SelectButtonSort
           name="outlet"
-          withSearch={true}
+          placeholder="Urutkan"
+          withSearch={false}
           icon={RiBox3Line}
           onConfirm={(inputValue) => {
             // ADD TODO

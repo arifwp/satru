@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { navs } from "../../data/navs";
-import NavButton from "../NavButton";
+import NavButton from "../navbar/NavButton";
 
 interface Props extends StackProps {
   children?: any;

@@ -12,17 +12,26 @@ import { useState } from "react";
 
 interface Props extends InputProps {
   placeholder: string;
+  onConfirm: (inputValue: string) => void;
 }
 
-export const SearchInput = ({ placeholder, ...rest }: Props) => {
+export const SearchInput = ({ placeholder, onConfirm, ...rest }: Props) => {
   const [data, setData] = useState<string>("");
-  const handleChange = (event: any) => setData(event.target.value);
-  const reset = () => setData("");
+
+  const handleChange = (event: any) => {
+    setData(event.target.value);
+    onConfirm(data);
+  };
+
+  const reset = () => {
+    setData("");
+    onConfirm(data);
+  };
 
   return (
     <InputGroup size={"sm"} borderRadius={"xs"} {...rest}>
       <InputLeftElement pointerEvents="none">
-        <Icon as={RiSearch2Line} />
+        <Icon as={RiSearch2Line} color={"teal.400"} />
       </InputLeftElement>
       <Input
         type="text"
@@ -30,15 +39,18 @@ export const SearchInput = ({ placeholder, ...rest }: Props) => {
         onChange={handleChange}
         placeholder={placeholder}
       />
-      <InputRightElement>
-        <IconButton
-          size="sm"
-          variant="ghost"
-          icon={<Icon as={RiCloseCircleLine} />}
-          aria-label="Reset input"
-          onClick={reset}
-        />
-      </InputRightElement>
+      {data && (
+        <InputRightElement>
+          <IconButton
+            size="sm"
+            variant="ghost"
+            icon={<Icon as={RiCloseCircleLine} />}
+            aria-label="Reset input"
+            _hover={{ bg: "transparent" }}
+            onClick={reset}
+          />
+        </InputRightElement>
+      )}
     </InputGroup>
   );
 };

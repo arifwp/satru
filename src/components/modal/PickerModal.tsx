@@ -24,7 +24,6 @@ import { CButton } from "../CButton";
 interface Props {
   name: string;
   placeholder: string;
-
   withSearch: boolean;
   isError?: boolean;
   options: SelectOption[];
@@ -35,7 +34,6 @@ interface Props {
 export const PickerModal = ({
   name,
   placeholder,
-
   withSearch,
   isError,
   options,
@@ -48,7 +46,6 @@ export const PickerModal = ({
   const [selected, setSelected] = useState<SelectOption | undefined>(
     inputValue
   );
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -89,7 +86,7 @@ export const PickerModal = ({
       setLoading(false);
       setSelected(undefined);
       onClose();
-    }, 1000);
+    }, 500);
   };
 
   const limitedTextDisplay =
@@ -100,7 +97,7 @@ export const PickerModal = ({
   return (
     <>
       <CButton
-        w={"100%"}
+        variant="outline"
         onClick={onOpen}
         justifyContent={"space-between"}
         {...rest}
@@ -126,7 +123,6 @@ export const PickerModal = ({
           <ModalHeader>{placeholder}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {/*add body */}
             <Wrap spacing={2}>
               {options.map((item, i) => (
                 <WrapItem key={item.id}>
@@ -137,8 +133,8 @@ export const PickerModal = ({
                   >
                     <Box
                       as="button"
-                      px={2}
-                      py={1}
+                      px={4}
+                      py={2}
                       textAlign={"start"}
                       lineHeight="1.2"
                       transition="all 0.2s cubic-bezier(.08,.52,.52,1)"

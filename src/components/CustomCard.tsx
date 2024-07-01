@@ -1,6 +1,7 @@
 import {
   Icon,
   IconProps,
+  SkeletonText,
   Stack,
   StackProps,
   Text,
@@ -8,10 +9,11 @@ import {
 } from "@chakra-ui/react";
 import { RemixiconComponentType } from "@remixicon/react";
 import useScreenWidth from "../lib/useScreenWidth";
+import { useEffect, useState } from "react";
 
 interface Props extends StackProps {
   label: string;
-  cardValue: string;
+  value: string;
 }
 interface ICProps extends IconProps {
   bgIc: string;
@@ -20,12 +22,20 @@ interface ICProps extends IconProps {
 
 export const CustomCard = ({
   label,
-  cardValue,
+  value,
   bgIc,
   asIc,
   ...rest
 }: Props & ICProps) => {
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [data, setData] = useState<string | undefined>(undefined);
   const sw = useScreenWidth();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoaded(true);
+    }, 2000);
+  }, []);
 
   return (
     <Stack
@@ -49,7 +59,6 @@ export const CustomCard = ({
 
       <VStack
         align={sw >= 640 ? "start" : "center"}
-        // justify={"space-between"}
         textAlign={sw >= 640 ? "start" : "center"}
       >
         <Text
@@ -63,19 +72,24 @@ export const CustomCard = ({
         >
           {label}
         </Text>
-        <Text
-          fontSize={{
-            base: "14px",
-            sm: "16px",
-            md: "16px",
-            lg: "16px",
-            xl: "18px",
-          }}
-          fontWeight={"bold"}
-          // whiteSpace={"nowrap"}
+        <SkeletonText
+          isLoaded={loaded}
+          noOfLines={1}
+          height={!loaded ? "20px" : ""}
         >
-          {cardValue}
-        </Text>
+          <Text
+            fontSize={{
+              base: "14px",
+              sm: "16px",
+              md: "16px",
+              lg: "16px",
+              xl: "18px",
+            }}
+            fontWeight={"bold"}
+          >
+            {value}
+          </Text>
+        </SkeletonText>
       </VStack>
     </Stack>
   );

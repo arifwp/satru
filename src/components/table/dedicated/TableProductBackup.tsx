@@ -12,7 +12,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { TableSkeleton } from "../TableSkeleton";
+import { TableSkeleton } from "../../TableSkeleton";
 import { ProductInterface } from "../../../constant/Product";
 
 const product: Array<ProductInterface> = [

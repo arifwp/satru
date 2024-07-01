@@ -7,17 +7,17 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Skeleton,
   Text,
   Wrap,
   WrapItem,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { RemixiconComponentType } from "@remixicon/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SelectOption } from "../../constant/SelectOption";
 import { useBgComponentBaseColor, useBgHover } from "../../constant/colors";
 import { CButton } from "../CButton";
+import { TableSkeleton } from "../TableSkeleton";
+import { SearchInput } from "../input/SearchInput";
 
 interface Props {
   name: string;
@@ -25,8 +25,12 @@ interface Props {
   withSearch: boolean;
   withSkeleton: boolean;
   icon: RemixiconComponentType;
-  options: SelectOption[];
+  options: SelectOption[] | undefined;
   onConfirm: (inputValue: SelectOption | undefined) => void;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  loaded: boolean;
 }
 
 export const PickerButton = ({
@@ -37,27 +41,17 @@ export const PickerButton = ({
   options,
   icon,
   onConfirm,
+  isOpen,
+  onOpen,
+  onClose,
+  loaded,
   ...rest
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [loaded, setLoaded] = useState<boolean>(false);
   const [selected, setSelected] = useState<SelectOption | undefined>(undefined);
   const [displayText, setDisplayText] = useState<string>(placeholder);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const bgComponent = useBgComponentBaseColor();
   const bgHover = useBgHover();
-
-  useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        setLoaded(true);
-      }, 200);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [isOpen]);
 
   const handleSelect = (val: any) => {
     val.id === selected?.id ? setSelected(undefined) : setSelected(val);
@@ -75,8 +69,6 @@ export const PickerButton = ({
     }
 
     setTimeout(() => {
-      // TODO ADD API
-
       setLoading(false);
       onClose();
     }, 1000);
@@ -87,15 +79,13 @@ export const PickerButton = ({
       ? `${displayText.slice(0, 20)}...`
       : selected && displayText;
 
-  const compWithSkeleton = () => (
+  const skeleton = () => <TableSkeleton row={3} column={3} />;
+
+  const component = () => (
     <Wrap spacing={2}>
-      {options.map((item, i) => (
-        <WrapItem key={item.id}>
-          <Skeleton
-            height={!loaded ? "20px" : ""}
-            isLoaded={loaded}
-            fadeDuration={1}
-          >
+      {options &&
+        options.map((item, i) => (
+          <WrapItem key={item.id}>
             <Box
               as="button"
               px={4}
@@ -114,36 +104,8 @@ export const PickerButton = ({
             >
               {item.name}
             </Box>
-          </Skeleton>
-        </WrapItem>
-      ))}
-    </Wrap>
-  );
-
-  const compBasic = () => (
-    <Wrap spacing={2}>
-      {options.map((item, i) => (
-        <WrapItem key={item.id}>
-          <Box
-            as="button"
-            px={4}
-            py={2}
-            textAlign={"start"}
-            lineHeight="1.2"
-            transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
-            borderWidth={"1px"}
-            borderRadius={"md"}
-            fontSize="xs"
-            _hover={{ bg: bgHover }}
-            borderColor={
-              selected && selected.id === item.id ? "teal.400" : undefined
-            }
-            onClick={() => handleSelect(item)}
-          >
-            {item.name}
-          </Box>
-        </WrapItem>
-      ))}
+          </WrapItem>
+        ))}
     </Wrap>
   );
 
@@ -165,7 +127,18 @@ export const PickerButton = ({
           <ModalHeader>{placeholder}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {withSkeleton ? compWithSkeleton() : compBasic()}
+            {withSearch && (
+              <SearchInput
+                placeholder="Cari nama..."
+                onConfirm={(inputValue) => {
+                  // ADD TODO
+                  console.log(inputValue);
+                  // setfilterSearch(inputValue);
+                }}
+                mb={4}
+              />
+            )}
+            {loaded ? component() : skeleton()}
           </ModalBody>
           <ModalFooter>
             <CButton variant="outline" onClick={onClose}>
@@ -175,6 +148,7 @@ export const PickerButton = ({
             <CButton
               ml={4}
               variant="solid"
+              colorScheme="teal"
               isLoading={loading}
               loadingText="Loading"
               spinnerPlacement="start"

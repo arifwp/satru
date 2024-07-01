@@ -17,8 +17,8 @@ import * as Yup from "yup";
 import { useBgComponentBaseColor } from "../../constant/colors";
 import useScreenWidth from "../../lib/useScreenWidth";
 import { CButton } from "../CButton";
-import { SelectBrand } from "../modal/dedicated/SelectBrand";
-import { SelectCategory } from "../modal/dedicated/SelectCategory";
+import { SelectInputBrand } from "../modal/dedicated/SelectInputBrand";
+import { SelectInputCategory } from "../modal/dedicated/SelectInputCategory";
 import { NumberInput } from "../input/NumberInput";
 import { FileInput } from "../input/dedicated/FileInput";
 
@@ -200,7 +200,7 @@ export const AddProductForm = () => {
                 }
               >
                 <FormLabel htmlFor="category">Kategori</FormLabel>
-                <SelectCategory
+                <SelectInputCategory
                   name="category"
                   onConfirm={(inputValue) => {
                     formik.setFieldValue("category", inputValue);
@@ -220,7 +220,7 @@ export const AddProductForm = () => {
             <VStack className="brand">
               <FormControl>
                 <FormLabel htmlFor="brand">Merk</FormLabel>
-                <SelectBrand
+                <SelectInputBrand
                   name="brand"
                   onConfirm={(inputValue) => {
                     formik.setFieldValue("brand", inputValue);

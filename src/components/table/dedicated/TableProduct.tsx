@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ProductInterface } from "../../../constant/Product";
 import { SelectOption } from "../../../constant/SelectOption";
 import { CTable } from "../CTable";
-import { TableSkeleton } from "../TableSkeleton";
+import { TableSkeleton } from "../../TableSkeleton";
 
 const product: Array<ProductInterface> = [
   {
@@ -144,8 +144,6 @@ export const TableProduct = ({
       setLoaded(true);
     }, 2000);
   }, [data, filterSort, filterCategory, filterSearch]);
-
-  console.log("filtersearch", filterSearch);
 
   useEffect(() => {
     if (data && data?.length > 0) {

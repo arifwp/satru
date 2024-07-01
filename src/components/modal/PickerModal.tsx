@@ -9,26 +9,30 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Skeleton,
   Text,
   Wrap,
   WrapItem,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { RiArrowDownSLine } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { SelectOption } from "../../constant/SelectOption";
 import { useBgComponentBaseColor, useBgHover } from "../../constant/colors";
 import { CButton } from "../CButton";
+import { TableSkeleton } from "../TableSkeleton";
+import { SearchInput } from "../input/SearchInput";
 
 interface Props {
   name: string;
   placeholder: string;
   withSearch: boolean;
   isError?: boolean;
-  options: SelectOption[];
+  options: SelectOption[] | undefined;
   inputValue: SelectOption | undefined;
   onConfirm: (inputValue: SelectOption | undefined) => void;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  loaded: boolean;
 }
 
 export const PickerModal = ({
@@ -39,26 +43,16 @@ export const PickerModal = ({
   options,
   inputValue,
   onConfirm,
+  isOpen,
+  onOpen,
+  onClose,
+  loaded,
   ...rest
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [loaded, setLoaded] = useState<boolean>(false);
   const [selected, setSelected] = useState<SelectOption | undefined>(
     inputValue
   );
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        setLoaded(true);
-      }, 200);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [isOpen]);
 
   useEffect(() => {
     setSelected(inputValue);
@@ -94,6 +88,36 @@ export const PickerModal = ({
       ? `${inputValue.name.slice(0, 20)}...`
       : inputValue && inputValue.name;
 
+  const skeleton = () => <TableSkeleton row={3} column={3} />;
+
+  const component = () => (
+    <Wrap spacing={2}>
+      {options &&
+        options.map((item, i) => (
+          <WrapItem key={item.id}>
+            <Box
+              as="button"
+              px={4}
+              py={2}
+              textAlign={"start"}
+              lineHeight="1.2"
+              transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
+              borderWidth={"1px"}
+              borderRadius={"md"}
+              fontSize="xs"
+              _hover={{ bg: bgHover }}
+              borderColor={
+                selected && selected.id === item.id ? "teal.400" : undefined
+              }
+              onClick={() => handleSelect(item)}
+            >
+              {item.name}
+            </Box>
+          </WrapItem>
+        ))}
+    </Wrap>
+  );
+
   return (
     <>
       <CButton
@@ -123,38 +147,18 @@ export const PickerModal = ({
           <ModalHeader>{placeholder}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Wrap spacing={2}>
-              {options.map((item, i) => (
-                <WrapItem key={item.id}>
-                  <Skeleton
-                    height={!loaded ? "20px" : ""}
-                    isLoaded={loaded}
-                    fadeDuration={1}
-                  >
-                    <Box
-                      as="button"
-                      px={4}
-                      py={2}
-                      textAlign={"start"}
-                      lineHeight="1.2"
-                      transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
-                      borderWidth={"1px"}
-                      borderRadius={"md"}
-                      fontSize="xs"
-                      _hover={{ bg: bgHover }}
-                      borderColor={
-                        selected && selected.id === item.id
-                          ? "teal.400"
-                          : undefined
-                      }
-                      onClick={() => handleSelect(item)}
-                    >
-                      {item.name}
-                    </Box>
-                  </Skeleton>
-                </WrapItem>
-              ))}
-            </Wrap>
+            {withSearch && (
+              <SearchInput
+                placeholder="Cari nama..."
+                onConfirm={(inputValue) => {
+                  // ADD TODO
+                  console.log(inputValue);
+                  // setfilterSearch(inputValue);
+                }}
+                mb={4}
+              />
+            )}
+            {loaded ? component() : skeleton()}
           </ModalBody>
           <ModalFooter>
             <CButton variant="solid" onClick={onClose}>

@@ -1,5 +1,6 @@
 import {
   Box,
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -8,6 +9,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  VStack,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
@@ -49,9 +51,18 @@ export const PickerButton = ({
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<SelectOption | undefined>(undefined);
-  const [displayText, setDisplayText] = useState<string>(placeholder);
   const bgComponent = useBgComponentBaseColor();
   const bgHover = useBgHover();
+  const [search, setSearch] = useState<string>("");
+
+  const finalData =
+    options &&
+    options.filter((item) => {
+      const searchTerm = search.toLowerCase();
+      const nameTerm = item.name.toLowerCase();
+
+      return nameTerm.includes(searchTerm);
+    });
 
   const handleSelect = (val: any) => {
     val.id === selected?.id ? setSelected(undefined) : setSelected(val);
@@ -62,10 +73,8 @@ export const PickerButton = ({
 
     if (selected) {
       onConfirm(selected);
-      setDisplayText(selected.name);
     } else {
       onConfirm(undefined);
-      setDisplayText(placeholder);
     }
 
     setTimeout(() => {
@@ -74,25 +83,18 @@ export const PickerButton = ({
     }, 1000);
   };
 
-  const limitedTextDisplay =
-    selected && displayText.length > 20
-      ? `${displayText.slice(0, 20)}...`
-      : selected && displayText;
-
   const skeleton = () => <TableSkeleton row={3} column={3} />;
 
   const component = () => (
     <Wrap spacing={2}>
-      {options &&
-        options.map((item, i) => (
+      {finalData &&
+        finalData.map((item, i) => (
           <WrapItem key={item.id}>
             <Box
               as="button"
               px={4}
               py={2}
               textAlign={"start"}
-              lineHeight="1.2"
-              transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
               borderWidth={"1px"}
               borderRadius={"md"}
               fontSize="xs"
@@ -109,6 +111,17 @@ export const PickerButton = ({
     </Wrap>
   );
 
+  const empty = () => (
+    <VStack>
+      <Image
+        src="/assets/svg/illustration_empty.svg"
+        w={"100%"}
+        maxW={"100px"}
+      />
+      <Text>Data tidak ada</Text>
+    </VStack>
+  );
+
   return (
     <>
       <CButton
@@ -118,7 +131,9 @@ export const PickerButton = ({
         onClick={onOpen}
         {...rest}
       >
-        <Text>{selected ? limitedTextDisplay : placeholder}</Text>
+        <Text overflow={"hidden"} textOverflow={"ellipsis"} maxW={"100px"}>
+          {selected ? selected.name : placeholder}
+        </Text>
       </CButton>
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -132,13 +147,17 @@ export const PickerButton = ({
                 placeholder="Cari nama..."
                 onConfirm={(inputValue) => {
                   // ADD TODO
-                  console.log(inputValue);
-                  // setfilterSearch(inputValue);
+                  // console.log(inputValue);
+                  setSearch(inputValue);
                 }}
                 mb={4}
               />
             )}
-            {loaded ? component() : skeleton()}
+            {loaded
+              ? finalData?.length === 0
+                ? empty()
+                : component()
+              : skeleton()}
           </ModalBody>
           <ModalFooter>
             <CButton variant="outline" onClick={onClose}>

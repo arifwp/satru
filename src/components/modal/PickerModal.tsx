@@ -55,13 +55,22 @@ export const PickerModal = ({
   const [selected, setSelected] = useState<SelectOption | undefined>(
     inputValue
   );
+  const [search, setSearch] = useState<string>("");
+  const bgComponent = useBgComponentBaseColor();
+  const bgHover = useBgHover();
 
   useEffect(() => {
     setSelected(inputValue);
   }, [inputValue]);
 
-  const bgComponent = useBgComponentBaseColor();
-  const bgHover = useBgHover();
+  const finalData =
+    options &&
+    options.filter((item) => {
+      const searchTerm = search.toLowerCase();
+      const nameTerm = item.name.toLowerCase();
+
+      return nameTerm.includes(searchTerm);
+    });
 
   const handleSelect = (val: any) => {
     val.id === selected?.id ? setSelected(undefined) : setSelected(val);
@@ -89,8 +98,8 @@ export const PickerModal = ({
 
   const component = () => (
     <Wrap spacing={2}>
-      {options &&
-        options.map((item, i) => (
+      {finalData &&
+        finalData.map((item, i) => (
           <WrapItem key={item.id}>
             <Box
               as="button"
@@ -164,15 +173,13 @@ export const PickerModal = ({
               <SearchInput
                 placeholder="Cari nama..."
                 onConfirm={(inputValue) => {
-                  // ADD TODO
-                  console.log(inputValue);
-                  // setfilterSearch(inputValue);
+                  setSearch(inputValue);
                 }}
                 mb={4}
               />
             )}
             {loaded
-              ? options?.length === 0
+              ? finalData?.length === 0
                 ? empty()
                 : component()
               : skeleton()}

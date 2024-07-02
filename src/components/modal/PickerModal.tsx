@@ -80,15 +80,10 @@ export const PickerModal = ({
       // TODO ADD API
 
       setLoading(false);
-      setSelected(undefined);
+      // setSelected(undefined);
       onClose();
     }, 500);
   };
-
-  const limitedTextDisplay =
-    inputValue && inputValue.name.length > 20
-      ? `${inputValue.name.slice(0, 20)}...`
-      : inputValue && inputValue.name;
 
   const skeleton = () => <TableSkeleton row={3} column={3} />;
 
@@ -142,10 +137,13 @@ export const PickerModal = ({
         {...rest}
       >
         <HStack fontSize={"xs"} fontWeight={"normal"} overflow={"hidden"}>
-          <Text opacity={inputValue ? 1 : 0.3} isTruncated>
-            {inputValue
-              ? limitedTextDisplay?.toString()
-              : placeholder || "Pilih Salah Satu"}
+          <Text
+            opacity={inputValue ? 1 : 0.3}
+            overflow={"hidden"}
+            textOverflow={"ellipsis"}
+            maxW={"100px"}
+          >
+            {inputValue ? inputValue.name : placeholder}
           </Text>
 
           <Text fontWeight={400} opacity={0.4}>

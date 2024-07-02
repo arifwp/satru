@@ -104,7 +104,39 @@ export const DateRangeModal = ({
     }
   }, [initialStartDate, initialEndDate, onChange]);
 
+  // const handleDateClick = (date: Date) => {
+  //   if (!startDate || (startDate && endDate)) {
+  //     setStartDate(date);
+  //     setEndDate(null);
+  //     onChange && onChange({ start: date, end: null });
+  //   } else if (startDate && !endDate) {
+  //     if (date < startDate) {
+  //       setEndDate(startDate);
+  //       setStartDate(date);
+  //       onChange && onChange({ start: date, end: startDate });
+  //     } else {
+  //       setEndDate(date);
+  //       onChange && onChange({ start: startDate, end: date });
+  //     }
+  //   }
+  // };
+
   const handleDateClick = (date: Date) => {
+    // Check if the clicked date is within this week range
+    const now = new Date();
+    const firstDayOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+    const lastDayOfWeek = new Date(now.setDate(firstDayOfWeek.getDate() + 6));
+
+    if (date >= firstDayOfWeek && date <= lastDayOfWeek) {
+      setStartDate(firstDayOfWeek);
+      setEndDate(lastDayOfWeek);
+      setCurrentMonth(firstDayOfWeek.getMonth());
+      setCurrentYear(firstDayOfWeek.getFullYear());
+      onChange && onChange({ start: firstDayOfWeek, end: lastDayOfWeek });
+      return; // Exit early after setting week range
+    }
+
+    // Default logic for selecting dates
     if (!startDate || (startDate && endDate)) {
       setStartDate(date);
       setEndDate(null);
@@ -126,16 +158,110 @@ export const DateRangeModal = ({
     return date >= startDate && date <= endDate;
   };
 
+  // const renderCalendar = () => {
+  //   if (currentMonth === null || currentYear === null) return null;
+  //   const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+  //   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+  //   const dates = [];
+  //   for (let i = 0; i < firstDayOfMonth; i++) {
+  //     dates.push(<GridItem key={`empty-${i}`} />);
+  //   }
+
+  //   for (let i = 1; i <= daysInMonth; i++) {
+  //     const date = new Date(currentYear, currentMonth, i);
+  //     dates.push(
+  //       <GridItem key={i}>
+  //         <Button
+  //           size="sm"
+  //           onClick={() => handleDateClick(date)}
+  //           fontSize="xs"
+  //           lineHeight="1"
+  //           p={1}
+  //           minW="24px"
+  //           bg={
+  //             (startDate && date.toDateString() === startDate.toDateString()) ||
+  //             (endDate && date.toDateString() === endDate.toDateString())
+  //               ? "teal.400"
+  //               : isInRange(date)
+  //               ? "teal.400"
+  //               : ""
+  //           }
+  //           color={
+  //             (startDate && date.toDateString() === startDate.toDateString()) ||
+  //             (endDate && date.toDateString() === endDate.toDateString())
+  //               ? "white"
+  //               : isInRange(date)
+  //               ? "white"
+  //               : ""
+  //           }
+  //         >
+  //           {i}
+  //         </Button>
+  //       </GridItem>
+  //     );
+  //   }
+
+  //   return dates;
+  // };
+
   const renderCalendar = () => {
     if (currentMonth === null || currentYear === null) return null;
     const daysInMonth = getDaysInMonth(currentMonth, currentYear);
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
+    // Calculate the number of days from the previous month to display
+    const previousMonthDays = firstDayOfMonth > 0 ? firstDayOfMonth : 0;
+    const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const previousMonthYear =
+      currentMonth === 0 ? currentYear - 1 : currentYear;
+    const daysInPreviousMonth = getDaysInMonth(
+      previousMonth,
+      previousMonthYear
+    );
+
     const dates = [];
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      dates.push(<GridItem key={`empty-${i}`} />);
+
+    // Add dates from the previous month
+    for (let i = previousMonthDays - 1; i >= 0; i--) {
+      const date = new Date(
+        previousMonthYear,
+        previousMonth,
+        daysInPreviousMonth - i
+      );
+      dates.push(
+        <GridItem key={`prev-${i}`}>
+          <Button
+            size="sm"
+            onClick={() => handleDateClick(date)}
+            fontSize="xs"
+            lineHeight="1"
+            p={1}
+            minW="24px"
+            bg={
+              (startDate && date.toDateString() === startDate.toDateString()) ||
+              (endDate && date.toDateString() === endDate.toDateString())
+                ? "teal.400"
+                : isInRange(date)
+                ? "teal.400"
+                : "transparent"
+            }
+            color={
+              (startDate && date.toDateString() === startDate.toDateString()) ||
+              (endDate && date.toDateString() === endDate.toDateString())
+                ? "white"
+                : isInRange(date)
+                ? "white"
+                : "gray.500"
+            }
+          >
+            {daysInPreviousMonth - i}
+          </Button>
+        </GridItem>
+      );
     }
 
+    // Add dates from the current month
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(currentYear, currentMonth, i);
       dates.push(
@@ -144,7 +270,6 @@ export const DateRangeModal = ({
             size="sm"
             onClick={() => handleDateClick(date)}
             fontSize="xs"
-            lineHeight="1"
             p={1}
             minW="24px"
             bg={
@@ -161,6 +286,50 @@ export const DateRangeModal = ({
                 ? "white"
                 : isInRange(date)
                 ? "white"
+                : ""
+            }
+          >
+            {i}
+          </Button>
+        </GridItem>
+      );
+    }
+
+    // Add dates from the next month with reduced opacity
+    const totalDaysDisplayed = dates.length;
+    const remainingGridItems = 42 - totalDaysDisplayed; // Assuming 6 rows of 7 days
+    const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+    const nextMonthYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+    const daysInNextMonth = getDaysInMonth(nextMonth, nextMonthYear);
+
+    for (let i = 1; i <= remainingGridItems; i++) {
+      const date = new Date(nextMonthYear, nextMonth, i);
+      dates.push(
+        <GridItem key={`next-${i}`}>
+          <Button
+            size="sm"
+            onClick={() => handleDateClick(date)}
+            fontSize="xs"
+            p={1}
+            minW="24px"
+            bg={
+              (startDate && date.toDateString() === startDate.toDateString()) ||
+              (endDate && date.toDateString() === endDate.toDateString())
+                ? "teal.400"
+                : isInRange(date)
+                ? "teal.400"
+                : currentMonth === date.getMonth()
+                ? ""
+                : "transparent"
+            }
+            color={
+              (startDate && date.toDateString() === startDate.toDateString()) ||
+              (endDate && date.toDateString() === endDate.toDateString())
+                ? "white"
+                : isInRange(date)
+                ? "white"
+                : currentMonth === date.getMonth()
+                ? "gray.500"
                 : ""
             }
           >
@@ -206,16 +375,28 @@ export const DateRangeModal = ({
     onChange && onChange({ start, end });
   };
 
+  // const handleThisWeekClick = () => {
+  //   const now = new Date();
+  //   const first = now.getDate() - now.getDay();
+  //   const start = new Date(now.setDate(first));
+  //   const end = new Date(now.setDate(first + 6));
+  //   setStartDate(start);
+  //   setEndDate(end);
+  //   setCurrentMonth(start.getMonth());
+  //   setCurrentYear(start.getFullYear());
+  //   onChange && onChange({ start, end });
+  // };
+
   const handleThisWeekClick = () => {
     const now = new Date();
-    const first = now.getDate() - now.getDay();
-    const start = new Date(now.setDate(first));
-    const end = new Date(now.setDate(first + 6));
-    setStartDate(start);
-    setEndDate(end);
-    setCurrentMonth(start.getMonth());
-    setCurrentYear(start.getFullYear());
-    onChange && onChange({ start, end });
+    const firstDayOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+    const lastDayOfWeek = new Date(now.setDate(firstDayOfWeek.getDate() + 6));
+
+    setStartDate(new Date(firstDayOfWeek));
+    setEndDate(new Date(lastDayOfWeek));
+    setCurrentMonth(firstDayOfWeek.getMonth());
+    setCurrentYear(firstDayOfWeek.getFullYear());
+    onChange && onChange({ start: firstDayOfWeek, end: lastDayOfWeek });
   };
 
   const handleSubmit = () => {
@@ -243,7 +424,6 @@ export const DateRangeModal = ({
         onClick={onOpen}
         {...rest}
       >
-        {/* Filter */}
         {selectedDates.start
           ? `${selectedDates.start} - ${selectedDates.end}`
           : placeholder}

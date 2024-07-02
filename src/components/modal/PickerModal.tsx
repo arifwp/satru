@@ -2,6 +2,7 @@ import {
   Box,
   HStack,
   Icon,
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,6 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  VStack,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
@@ -118,10 +120,23 @@ export const PickerModal = ({
     </Wrap>
   );
 
+  const empty = () => (
+    <VStack>
+      <Image
+        src="/assets/svg/illustration_empty.svg"
+        w={"100%"}
+        maxW={"100px"}
+      />
+      <Text>Data tidak ada</Text>
+    </VStack>
+  );
+
   return (
     <>
       <CButton
         variant="outline"
+        borderColor={isError ? "red.300" : ""}
+        borderWidth={isError ? "2px" : ""}
         onClick={onOpen}
         justifyContent={"space-between"}
         {...rest}
@@ -158,7 +173,11 @@ export const PickerModal = ({
                 mb={4}
               />
             )}
-            {loaded ? component() : skeleton()}
+            {loaded
+              ? options?.length === 0
+                ? empty()
+                : component()
+              : skeleton()}
           </ModalBody>
           <ModalFooter>
             <CButton variant="solid" onClick={onClose}>

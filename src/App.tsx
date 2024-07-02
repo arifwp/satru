@@ -8,6 +8,7 @@ import { RegisterPage } from "./pages/auth/RegisterPage";
 import { HomePage } from "./pages/dashboard/HomePage";
 import { ProductPage } from "./pages/dashboard/product/ProductPage";
 import { AddProductPage } from "./pages/dashboard/product/AddProductPage";
+import { FillData } from "./pages/FillDataPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -16,6 +17,8 @@ export const App = () => (
         <Route path="/login" element={<LoginPage />} />
 
         <Route path="/register" element={<RegisterPage />} />
+
+        <Route path="/fill-data" element={<FillData />} />
 
         <Route
           path="/dashboard"

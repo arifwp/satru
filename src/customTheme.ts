@@ -26,7 +26,7 @@ const customTheme = extendTheme({
     Text: {
       variants: {
         secondary: {
-          opacity: 0.6
+          opacity: 0.8
         }
       }
     },
@@ -108,7 +108,7 @@ const customTheme = extendTheme({
     FormError: {
       baseStyle: {
         text: {
-          fontSize: 'xs',
+          fontSize: '14px',
         },
       },
     },

@@ -51,6 +51,7 @@ export const CustomCard = ({
       <Icon
         bgColor={bgIc}
         as={asIc}
+        color={"white"}
         borderRadius={"lg"}
         fontSize={"36px"}
         p={2}

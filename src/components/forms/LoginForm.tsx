@@ -33,7 +33,7 @@ export const LoginForm = () => {
       setLoading(true);
       setTimeout(() => {
         setLoading(false);
-        navigate("/dashboard");
+        navigate("/fill-data");
       }, 1000);
     },
   });

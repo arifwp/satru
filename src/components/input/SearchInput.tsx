@@ -20,12 +20,12 @@ export const SearchInput = ({ placeholder, onConfirm, ...rest }: Props) => {
 
   const handleChange = (event: any) => {
     setData(event.target.value);
-    onConfirm(data);
+    onConfirm(event.target.value);
   };
 
   const reset = () => {
     setData("");
-    onConfirm(data);
+    onConfirm("");
   };
 
   return (

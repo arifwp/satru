@@ -29,9 +29,10 @@ export const SelectButtonCategory = ({
     if (isOpen) {
       const timer = setTimeout(() => {
         setLoaded(true);
-        // hit api
+
+        // HIT API
         setData(category);
-      }, 2000);
+      }, 500);
 
       return () => {
         clearTimeout(timer);

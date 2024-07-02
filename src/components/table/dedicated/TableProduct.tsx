@@ -137,7 +137,6 @@ export const TableProduct = ({
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  console.log(filterSearch);
   useEffect(() => {
     setData(product);
     setTimeout(() => {
@@ -148,12 +147,10 @@ export const TableProduct = ({
   useEffect(() => {
     if (data && data?.length > 0) {
       const formattedData = data.map((item) => [
-        { id: "id", name: item.id, display: "none", dataType: "string" },
         {
           id: "productCode",
           name: item.productCode,
-          display: "visible",
-          dataType: "string",
+          props: { display: "table-cell" },
         },
         {
           id: "img",
@@ -162,44 +159,32 @@ export const TableProduct = ({
               <Image src={item.img} objectFit={"cover"} />
             </AspectRatio>
           ),
-          display: "table-cell",
-          dataType: "image",
+          props: { display: "table-cell" },
         },
         {
           id: "name",
           name: item.name,
-          display: "table-cell",
-          dataType: "string",
+          props: { display: "table-cell" },
         },
         {
           id: "category",
           name: item.category.name,
-          display: "table-cell",
-          dataType: "string",
+          props: { display: "table-cell" },
         },
         {
           id: "brand",
           name: item.brand.name,
-          display: "table-cell",
-          dataType: "string",
+          props: { display: "table-cell" },
         },
         {
           id: "price",
           name: item.price,
-          display: "table-cell",
-          dataType: "number",
+          props: { display: "table-cell" },
         },
         {
           id: "stock",
           name: item.stock,
-          display: "table-cell",
-          dataType: "number",
-        },
-        {
-          id: "haveVariant",
-          name: item.haveVariant,
-          display: "none",
-          dataType: "boolean",
+          props: { display: "table-cell" },
         },
       ]);
 

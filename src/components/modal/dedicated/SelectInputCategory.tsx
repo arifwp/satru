@@ -2,7 +2,7 @@ import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { category } from "../../../constant/Category";
 import { SelectOption } from "../../../constant/SelectOption";
-import { PickerModal } from "../PickerModal";
+import { PickerInput } from "../PickerInput";
 
 interface Props extends ButtonProps {
   name: string;
@@ -42,7 +42,7 @@ export const SelectInputCategory = ({
   }, [isOpen]);
 
   return (
-    <PickerModal
+    <PickerInput
       name={name}
       options={data}
       placeholder={placeholder}

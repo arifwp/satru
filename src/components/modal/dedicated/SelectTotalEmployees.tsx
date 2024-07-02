@@ -1,5 +1,6 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { category } from "../../../constant/Category";
 import { SelectOption } from "../../../constant/SelectOption";
 import { PickerInput } from "../PickerInput";
 
@@ -13,16 +14,14 @@ interface Props extends ButtonProps {
   onConfirm: (inputValue: SelectOption | undefined) => void;
 }
 
-const brand = [
-  { id: 1, name: "Apple" },
-  { id: 2, name: "Asus" },
-  { id: 3, name: "Toshiba" },
-  { id: 4, name: "HP" },
-  { id: 5, name: "MSI" },
-  { id: 6, name: "Dell" },
+const totalEmployees = [
+  { id: 1, name: "Kurang dari 10 karyawan" },
+  { id: 2, name: "Lebih dari 10 kurang dari 25 karyawan" },
+  { id: 3, name: "Lebih dari 25 kurang dari 50 karyawan" },
+  { id: 4, name: "Lebih dari 50 karyawan" },
 ];
 
-export const SelectInputBrand = ({
+export const SelectTotalEmployees = ({
   name,
   placeholder,
   withSearch,
@@ -37,15 +36,8 @@ export const SelectInputBrand = ({
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(() => {
-        setLoaded(true);
-        // hit api
-        setData(brand);
-      }, 2000);
-
-      return () => {
-        clearTimeout(timer);
-      };
+      setLoaded(true);
+      setData(totalEmployees);
     }
   }, [isOpen]);
 

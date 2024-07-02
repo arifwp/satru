@@ -1,5 +1,6 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { category } from "../../../constant/Category";
 import { SelectOption } from "../../../constant/SelectOption";
 import { PickerInput } from "../PickerInput";
 
@@ -13,16 +14,18 @@ interface Props extends ButtonProps {
   onConfirm: (inputValue: SelectOption | undefined) => void;
 }
 
-const brand = [
-  { id: 1, name: "Apple" },
-  { id: 2, name: "Asus" },
-  { id: 3, name: "Toshiba" },
-  { id: 4, name: "HP" },
-  { id: 5, name: "MSI" },
-  { id: 6, name: "Dell" },
+export const businessType = [
+  { id: 1, name: "Makanan & Minuman" },
+  { id: 2, name: "Kafe / Coffe Shop" },
+  { id: 3, name: "Restoran" },
+  { id: 4, name: "Roti, Kue & Camilan" },
+  { id: 5, name: "Retail" },
+  { id: 6, name: "Toko Kelontong & Retail" },
+  { id: 7, name: "Minimarket" },
+  { id: 8, name: "Vape Store" },
 ];
 
-export const SelectInputBrand = ({
+export const SelectBusinessType = ({
   name,
   placeholder,
   withSearch,
@@ -37,15 +40,8 @@ export const SelectInputBrand = ({
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(() => {
-        setLoaded(true);
-        // hit api
-        setData(brand);
-      }, 2000);
-
-      return () => {
-        clearTimeout(timer);
-      };
+      setLoaded(true);
+      setData(businessType);
     }
   }, [isOpen]);
 

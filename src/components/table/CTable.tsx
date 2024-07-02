@@ -72,7 +72,7 @@ export const CTable = ({
             {data?.map((item: any, i: any) => (
               <Tr key={i}>
                 {item.map((val: any, i: any) => (
-                  <Td key={val.id} display={val.display}>
+                  <Td key={val.id} {...item.props}>
                     {val.name}
                   </Td>
                 ))}

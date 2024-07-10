@@ -8,18 +8,21 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { RiEyeFill, RiEyeOffFill } from "@remixicon/react";
-import { useFormik } from "formik";
+import axios from "axios";
+import { FormikValues, useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Cookies, setCookie } from "typescript-cookie";
 import * as Yup from "yup";
 
 export const LoginForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<string>("hide");
-
+  const toast = useToast();
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -28,13 +31,36 @@ export const LoginForm = () => {
       email: Yup.string().required("Email harus diisi"),
       password: Yup.string().required("Password harus diisi"),
     }),
-    onSubmit: (values) => {
-      console.log(JSON.stringify(values));
+    onSubmit: async (values) => {
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        navigate("/fill-data");
-      }, 1000);
+      axios
+        .post(`${process.env.REACT_APP_API_URL}/v1/auth/login`, values)
+        .then((response) => {
+          setLoading(false);
+          console.log(response);
+          const token = response.data.data.token;
+          setCookie("token", token, { expires: 0.1 });
+          toast({
+            title: response.data.message,
+            status: "success",
+            isClosable: true,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+          toast({
+            title: error.response.data.message,
+            status: "error",
+            isClosable: true,
+          });
+        });
+
+      // setLoading(true);
+      // setTimeout(() => {
+      //   setLoading(false);
+      //   navigate("/fill-data");
+      // }, 1000);
     },
   });
 

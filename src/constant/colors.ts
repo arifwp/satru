@@ -12,3 +12,6 @@ export const useErrorColor = () => {
        return useColorModeValue("#E53E3E", "#FC8181");
 }
 
+export const useBorderColorInput = () => {
+    return useColorModeValue("RGBA(0, 0, 0, 0.08)", "RGBA(255, 255, 255, 0.16)");;
+}

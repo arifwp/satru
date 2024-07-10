@@ -31,12 +31,16 @@ export const CTable = ({
         lg: "12px",
         xl: "14px",
       }}
+      display={"flex"}
       overflowX={"auto"}
       overflowY={"hidden"}
+      borderWidth={"1px"}
+      borderRadius={"md"}
       {...rest}
     >
       <Box
         className="box-table scrollX"
+        display={"flex"}
         borderWidth={"1px"}
         borderRadius={"md"}
         overflowX={"auto"}

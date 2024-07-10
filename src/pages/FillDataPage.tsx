@@ -1,6 +1,7 @@
 import { Text, VStack } from "@chakra-ui/react";
 import { FillDataForm } from "../components/forms/FillDataForm";
 import { useBgComponentBaseColor } from "../constant/colors";
+import { ColorModeSwitcher } from "../ColorModeSwitcher";
 
 export const FillData = () => {
   const bgComponent = useBgComponentBaseColor();
@@ -9,11 +10,11 @@ export const FillData = () => {
     <VStack
       className="container"
       w={"100%"}
-      maxW={"720px"}
       mx={"auto"}
       h={"100vh"}
+      bg={bgComponent}
     >
-      <VStack w={"100%"} h={"100%"} p={10} bg={bgComponent} justify={"center"}>
+      <VStack w={"100%"} maxW={"720px"} h={"100%"} p={10} justify={"center"}>
         <VStack w={"100%"} align={"stretch"} mt={4}>
           <Text as={"b"} fontSize={"lg"}>
             Informasi Bisnis
@@ -25,6 +26,15 @@ export const FillData = () => {
 
         <FillDataForm mt={10} />
       </VStack>
+
+      <ColorModeSwitcher
+        position={"absolute"}
+        top={0}
+        right={0}
+        mt={30}
+        mr={30}
+        fontSize={"24px"}
+      />
     </VStack>
   );
 };

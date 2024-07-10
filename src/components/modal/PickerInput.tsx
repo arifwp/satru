@@ -18,7 +18,11 @@ import {
 import { RiArrowDownSLine } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { SelectOption } from "../../constant/SelectOption";
-import { useBgComponentBaseColor, useBgHover } from "../../constant/colors";
+import {
+  useBgComponentBaseColor,
+  useBgHover,
+  useBorderColorInput,
+} from "../../constant/colors";
 import { CButton } from "../CButton";
 import { TableSkeleton } from "../TableSkeleton";
 import { SearchInput } from "../input/SearchInput";
@@ -58,6 +62,7 @@ export const PickerInput = ({
   const [search, setSearch] = useState<string>("");
   const bgComponent = useBgComponentBaseColor();
   const bgHover = useBgHover();
+  const borderColorInput = useBorderColorInput();
 
   useEffect(() => {
     setSelected(inputValue);
@@ -106,8 +111,6 @@ export const PickerInput = ({
               px={4}
               py={2}
               textAlign={"start"}
-              lineHeight="1.2"
-              transition="all 0.2s cubic-bezier(.08,.52,.52,1)"
               borderWidth={"1px"}
               borderRadius={"md"}
               fontSize="xs"
@@ -140,7 +143,8 @@ export const PickerInput = ({
       <CButton
         height={"40px"}
         variant="outline"
-        borderColor={isError ? "red.300" : "RGBA(255, 255, 255, 0.24)"}
+        // borderColor={isError ? "red.300" : "RGBA(255, 255, 255, 0.24)"}
+        borderColor={isError ? "red.300" : borderColorInput}
         borderWidth={isError ? "2px" : ""}
         onClick={onOpen}
         justifyContent={"space-between"}

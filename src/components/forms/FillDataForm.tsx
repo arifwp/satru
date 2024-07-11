@@ -14,6 +14,8 @@ import { SelectTotalEmployees } from "../modal/dedicated/SelectTotalEmployees";
 import { SelectBusinessType } from "../modal/dedicated/SelectBusinessType";
 import { CButton } from "../CButton";
 import { useNavigate } from "react-router-dom";
+import { getCookieToken, getDataUser } from "../../utils/helperFunction";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 const initialValues = {
   businessName: undefined,
@@ -28,8 +30,7 @@ export const FillDataForm = ({ ...rest }) => {
   const navigate = useNavigate();
 
   const formik = useFormik({
-    validateOnChange: true,
-    validateOnBlur: true,
+    validateOnBlur: false,
     initialValues: initialValues,
     validationSchema: Yup.object().shape({
       businessName: Yup.string().required("Nama bisnis harus diisi"),
@@ -38,13 +39,36 @@ export const FillDataForm = ({ ...rest }) => {
       businessType: Yup.object().required("Jenis bisnis harus diisi"),
     }),
     onSubmit: (values) => {
-      console.log(JSON.stringify(values));
-
       setLoading(true);
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+      const type = JSON.stringify(values.businessType);
+      const estEmployee = JSON.stringify(values.totalEmployees);
+
+      const finalValue = {
+        ownerId: getDataUser()._id,
+        name: values.businessName,
+        estEmployee: JSON.parse(estEmployee).value,
+        address: values.businessAddress,
+        typeId: JSON.parse(type)._id,
+      };
+
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/v1/outlet/createOutlet`,
+          finalValue,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getCookieToken()}`,
+            },
+          }
+        )
+        .then((response: AxiosResponse) => {
+          console.log(response);
+        })
+        .catch((error: AxiosError) => {
+          console.log(error.request.response);
+        });
     },
   });
 
@@ -55,11 +79,18 @@ export const FillDataForm = ({ ...rest }) => {
       style={{ width: "100%" }}
     >
       <VStack className="form-container" spacing={6} {...rest}>
-        <FormControl isInvalid={formik.errors.businessName ? true : false}>
+        <FormControl
+          isInvalid={
+            formik.errors.businessName && formik.touched.businessName
+              ? true
+              : false
+          }
+        >
           <FormLabel htmlFor="businessName">Nama Bisnis</FormLabel>
           <Input
             name="businessName"
             type="text"
+            value={formik.values.businessName || ""}
             placeholder="Xiaomi Coffe"
             onChange={formik.handleChange}
             fontSize={"xs"}
@@ -67,7 +98,13 @@ export const FillDataForm = ({ ...rest }) => {
           <FormErrorMessage>{formik.errors.businessName}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={formik.errors.totalEmployees ? true : false}>
+        <FormControl
+          isInvalid={
+            formik.errors.totalEmployees && formik.touched.totalEmployees
+              ? true
+              : false
+          }
+        >
           <FormLabel htmlFor="totalEmployees">
             Jumlah karyawan yang bekerja di bisnis anda saat ini
           </FormLabel>
@@ -78,14 +115,24 @@ export const FillDataForm = ({ ...rest }) => {
             }}
             inputValue={formik.values.totalEmployees}
             placeholder="Pilih Kategori"
-            isError={!!formik.errors.totalEmployees}
+            isError={
+              formik.touched.totalEmployees && formik.errors.totalEmployees
+                ? true
+                : false
+            }
             withSearch={true}
             w={"100%"}
           />
           <FormErrorMessage>{formik.errors.totalEmployees}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={formik.errors.businessAddress ? true : false}>
+        <FormControl
+          isInvalid={
+            formik.errors.businessAddress && formik.touched.businessAddress
+              ? true
+              : false
+          }
+        >
           <FormLabel htmlFor="businessAddress">Alamat Bisnis</FormLabel>
           <Textarea
             name="businessAddress"
@@ -98,7 +145,13 @@ export const FillDataForm = ({ ...rest }) => {
           <FormErrorMessage>{formik.errors.businessAddress}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={formik.errors.businessType ? true : false}>
+        <FormControl
+          isInvalid={
+            formik.errors.businessType && formik.touched.businessType
+              ? true
+              : false
+          }
+        >
           <FormLabel htmlFor="businessType">Jenis Bisnis</FormLabel>
           <SelectBusinessType
             name="businessType"
@@ -107,7 +160,11 @@ export const FillDataForm = ({ ...rest }) => {
             }}
             inputValue={formik.values.businessType}
             placeholder="Pilih Jenis Bisnis"
-            isError={!!formik.errors.businessType}
+            isError={
+              formik.touched.totalEmployees && formik.errors.totalEmployees
+                ? true
+                : false
+            }
             withSearch={true}
             w={"100%"}
           />

@@ -14,8 +14,9 @@ import { SelectTotalEmployees } from "../modal/dedicated/SelectTotalEmployees";
 import { SelectBusinessType } from "../modal/dedicated/SelectBusinessType";
 import { CButton } from "../CButton";
 import { useNavigate } from "react-router-dom";
-import { getCookieToken, getDataUser } from "../../utils/helperFunction";
+import { getDataUser } from "../../utils/helperFunction";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { getCookie } from "typescript-cookie";
 
 const initialValues = {
   businessName: undefined,
@@ -52,6 +53,7 @@ export const FillDataForm = ({ ...rest }) => {
         typeId: JSON.parse(type)._id,
       };
 
+      const token = getCookie("token");
       axios
         .post(
           `${process.env.REACT_APP_API_URL}/v1/outlet/createOutlet`,
@@ -59,15 +61,27 @@ export const FillDataForm = ({ ...rest }) => {
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${getCookieToken()}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         )
         .then((response: AxiosResponse) => {
-          console.log(response);
+          toast({
+            title: JSON.parse(response.request.response).message,
+            status: "success",
+            isClosable: true,
+          });
+          navigate("/dashboard");
         })
         .catch((error: AxiosError) => {
-          console.log(error.request.response);
+          toast({
+            title: JSON.parse(error.request.response).message,
+            status: "error",
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setLoading(false);
         });
     },
   });
@@ -174,6 +188,9 @@ export const FillDataForm = ({ ...rest }) => {
         <VStack w={"100%"} mt={4}>
           <CButton
             form="fillDataForm"
+            isLoading={loading}
+            loadingText="Loading"
+            spinnerPlacement="start"
             w={"100%"}
             height={"40px"}
             colorScheme="teal"

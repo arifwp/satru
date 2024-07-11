@@ -27,7 +27,6 @@ export const RegisterPage = () => {
         columns={[1, 2, 2]}
         spacing={0}
         w={"100%"}
-        h={"100%"}
         className="simplegrid"
         p={4}
       >
@@ -72,7 +71,7 @@ export const RegisterPage = () => {
 
           <RegisterForm />
 
-          <HStack mt={8}>
+          <HStack mt={8} fontSize={"sm"}>
             <Text>Sudah mempunyai akun? </Text>
             <ChakraLink
               as={ReactRouterLink}
@@ -87,7 +86,7 @@ export const RegisterPage = () => {
             position={"absolute"}
             bottom={0}
             right={0}
-            fontSize={"36px"}
+            fontSize={"24px"}
           />
         </VStack>
       </SimpleGrid>

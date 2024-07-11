@@ -13,7 +13,7 @@ const product: Array<ProductInterface> = [
     name: "Macbook jaya selamanya",
     price: 12000000,
     category: {
-      id: "1",
+      _id: "1",
       name: "Laptop",
     },
     brand: {
@@ -31,7 +31,7 @@ const product: Array<ProductInterface> = [
     name: "Lenovo Gila",
     price: 9000000,
     category: {
-      id: "1",
+      _id: "1",
       name: "Laptop",
     },
     brand: {
@@ -62,7 +62,7 @@ const product: Array<ProductInterface> = [
     name: "Asus Pro Art Jelek",
     price: 12000,
     category: {
-      id: "1",
+      _id: "1",
       name: "Laptop",
     },
     brand: {
@@ -93,7 +93,7 @@ const product: Array<ProductInterface> = [
     name: "MSI Gaming",
     price: 14500000,
     category: {
-      id: "1",
+      _id: "1",
       name: "Laptop",
     },
     brand: {

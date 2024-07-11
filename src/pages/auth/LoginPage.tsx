@@ -87,7 +87,7 @@ export const LoginPage = () => {
             position={"absolute"}
             bottom={0}
             right={0}
-            fontSize={"36px"}
+            fontSize={"24px"}
           />
         </VStack>
       </SimpleGrid>

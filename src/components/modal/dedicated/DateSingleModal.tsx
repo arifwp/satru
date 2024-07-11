@@ -20,7 +20,6 @@ import {
 import {
   RiArrowLeftDoubleFill,
   RiArrowRightDoubleFill,
-  RiCalendar2Line,
 } from "@remixicon/react";
 import React, { useEffect, useState } from "react";
 import { CButton } from "../../CButton";
@@ -193,10 +192,6 @@ export const DateSingleModal: React.FC<DatePickerModalProps> = ({
     return date ? date.toLocaleDateString("en-GB") : null;
   };
 
-  const formatTime = (date: Date | null): string | null => {
-    return date ? date.toLocaleString("en-GB") : null;
-  };
-
   const handleMonthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const month = parseInt(event.target.value, 10);
     if (
@@ -217,11 +212,6 @@ export const DateSingleModal: React.FC<DatePickerModalProps> = ({
   const handleSubmit = () => {
     onConfirm(formatDate(selectedDate));
     onClose();
-    // setLoading(true);
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   onClose();
-    // }, 2000);
   };
 
   return (

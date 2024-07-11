@@ -11,16 +11,16 @@ export const FillData = () => {
       className="container"
       w={"100%"}
       mx={"auto"}
-      h={"100vh"}
+      h={"100%"}
       bg={bgComponent}
     >
       <VStack w={"100%"} maxW={"720px"} h={"100%"} p={10} justify={"center"}>
         <VStack w={"100%"} align={"stretch"} mt={4}>
           <Text as={"b"} fontSize={"lg"}>
-            Informasi Bisnis
+            Buat outlet pertama anda!
           </Text>
           <Text fontSize={"xs"} variant={"secondary"}>
-            Sebelum menggunakan aplikasi anda wajib mengisi data di bawah ini
+            Sebelum menggunakan aplikasi anda wajib mengisi data outlet
           </Text>
         </VStack>
 

@@ -65,7 +65,7 @@ export const PickerButton = ({
     });
 
   const handleSelect = (val: any) => {
-    val.id === selected?.id ? setSelected(undefined) : setSelected(val);
+    val.id === selected?._id ? setSelected(undefined) : setSelected(val);
   };
 
   const handleSubmit = () => {
@@ -89,7 +89,7 @@ export const PickerButton = ({
     <Wrap spacing={2}>
       {finalData &&
         finalData.map((item, i) => (
-          <WrapItem key={item.id}>
+          <WrapItem key={item._id}>
             <Box
               as="button"
               px={4}
@@ -100,7 +100,7 @@ export const PickerButton = ({
               fontSize="xs"
               _hover={{ bg: bgHover }}
               borderColor={
-                selected && selected.id === item.id ? "teal.400" : undefined
+                selected && selected._id === item._id ? "teal.400" : undefined
               }
               onClick={() => handleSelect(item)}
             >

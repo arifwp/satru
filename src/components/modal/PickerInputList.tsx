@@ -1,6 +1,5 @@
 import {
   Box,
-  HStack,
   Icon,
   Image,
   Modal,
@@ -41,7 +40,7 @@ interface Props {
   loaded: boolean;
 }
 
-export const PickerInput = ({
+export const PickerInputList = ({
   name,
   placeholder,
   withSearch,
@@ -143,7 +142,6 @@ export const PickerInput = ({
       <CButton
         height={"40px"}
         variant="outline"
-        // borderColor={isError ? "red.300" : "RGBA(255, 255, 255, 0.24)"}
         borderColor={isError ? "red.300" : borderColorInput}
         borderWidth={isError ? "2px" : ""}
         onClick={onOpen}
@@ -186,12 +184,13 @@ export const PickerInput = ({
               : skeleton()}
           </ModalBody>
           <ModalFooter>
-            <CButton variant="solid" onClick={onClose}>
-              Close
+            <CButton variant="outline" onClick={onClose}>
+              Tutup
             </CButton>
 
             <CButton
               ml={4}
+              colorScheme="teal"
               variant="solid"
               isLoading={loading}
               loadingText="Loading"

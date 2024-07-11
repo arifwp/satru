@@ -1,12 +1,11 @@
 export interface CategoryInterface {
-    id: any;
-    name: string;
-} 
-
+  _id: any;
+  name: string;
+}
 
 export const category: Array<CategoryInterface> = [
-    { id: 1, name: "Laptop" },
-    { id: 2, name: "Komputer" },
-    { id: 3, name: "Smartphone" },
-    { id: 4, name: "Tablet" },
-  ];
+  { _id: 1, name: "Laptop" },
+  { _id: 2, name: "Komputer" },
+  { _id: 3, name: "Smartphone" },
+  { _id: 4, name: "Tablet" },
+];

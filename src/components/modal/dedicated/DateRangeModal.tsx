@@ -75,17 +75,6 @@ export const DateRangeModal = ({
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // useEffect(() => {
-  //   const now = new Date();
-  //   setCurrentMonth(now.getMonth());
-  //   setCurrentYear(now.getFullYear());
-  //   const start = new Date(now.getFullYear(), now.getMonth(), 1);
-  //   const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  //   setStartDate(start);
-  //   setEndDate(end);
-  //   onChange && onChange({ start, end });
-  // }, [onChange]);
-
   useEffect(() => {
     if (initialStartDate && initialEndDate) {
       setStartDate(initialStartDate);
@@ -103,23 +92,6 @@ export const DateRangeModal = ({
       onChange && onChange({ start, end });
     }
   }, [initialStartDate, initialEndDate, onChange]);
-
-  // const handleDateClick = (date: Date) => {
-  //   if (!startDate || (startDate && endDate)) {
-  //     setStartDate(date);
-  //     setEndDate(null);
-  //     onChange && onChange({ start: date, end: null });
-  //   } else if (startDate && !endDate) {
-  //     if (date < startDate) {
-  //       setEndDate(startDate);
-  //       setStartDate(date);
-  //       onChange && onChange({ start: date, end: startDate });
-  //     } else {
-  //       setEndDate(date);
-  //       onChange && onChange({ start: startDate, end: date });
-  //     }
-  //   }
-  // };
 
   const handleDateClick = (date: Date) => {
     // Check if the clicked date is within this week range
@@ -157,53 +129,6 @@ export const DateRangeModal = ({
     if (!startDate || !endDate) return false;
     return date >= startDate && date <= endDate;
   };
-
-  // const renderCalendar = () => {
-  //   if (currentMonth === null || currentYear === null) return null;
-  //   const daysInMonth = getDaysInMonth(currentMonth, currentYear);
-  //   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-
-  //   const dates = [];
-  //   for (let i = 0; i < firstDayOfMonth; i++) {
-  //     dates.push(<GridItem key={`empty-${i}`} />);
-  //   }
-
-  //   for (let i = 1; i <= daysInMonth; i++) {
-  //     const date = new Date(currentYear, currentMonth, i);
-  //     dates.push(
-  //       <GridItem key={i}>
-  //         <Button
-  //           size="sm"
-  //           onClick={() => handleDateClick(date)}
-  //           fontSize="xs"
-  //           lineHeight="1"
-  //           p={1}
-  //           minW="24px"
-  //           bg={
-  //             (startDate && date.toDateString() === startDate.toDateString()) ||
-  //             (endDate && date.toDateString() === endDate.toDateString())
-  //               ? "teal.400"
-  //               : isInRange(date)
-  //               ? "teal.400"
-  //               : ""
-  //           }
-  //           color={
-  //             (startDate && date.toDateString() === startDate.toDateString()) ||
-  //             (endDate && date.toDateString() === endDate.toDateString())
-  //               ? "white"
-  //               : isInRange(date)
-  //               ? "white"
-  //               : ""
-  //           }
-  //         >
-  //           {i}
-  //         </Button>
-  //       </GridItem>
-  //     );
-  //   }
-
-  //   return dates;
-  // };
 
   const renderCalendar = () => {
     if (currentMonth === null || currentYear === null) return null;
@@ -374,18 +299,6 @@ export const DateRangeModal = ({
     setCurrentYear(now.getFullYear());
     onChange && onChange({ start, end });
   };
-
-  // const handleThisWeekClick = () => {
-  //   const now = new Date();
-  //   const first = now.getDate() - now.getDay();
-  //   const start = new Date(now.setDate(first));
-  //   const end = new Date(now.setDate(first + 6));
-  //   setStartDate(start);
-  //   setEndDate(end);
-  //   setCurrentMonth(start.getMonth());
-  //   setCurrentYear(start.getFullYear());
-  //   onChange && onChange({ start, end });
-  // };
 
   const handleThisWeekClick = () => {
     const now = new Date();

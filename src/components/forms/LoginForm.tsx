@@ -13,10 +13,10 @@ import {
 } from "@chakra-ui/react";
 import { RiEyeFill, RiEyeOffFill } from "@remixicon/react";
 import axios from "axios";
-import { FormikValues, useFormik } from "formik";
+import { useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Cookies, setCookie } from "typescript-cookie";
+import { setCookie } from "typescript-cookie";
 import * as Yup from "yup";
 
 export const LoginForm = () => {
@@ -36,8 +36,6 @@ export const LoginForm = () => {
       axios
         .post(`${process.env.REACT_APP_API_URL}/v1/auth/login`, values)
         .then((response) => {
-          setLoading(false);
-          console.log(response);
           const token = response.data.data.token;
           setCookie("token", token, { expires: 0.1 });
           toast({
@@ -45,22 +43,19 @@ export const LoginForm = () => {
             status: "success",
             isClosable: true,
           });
+          navigate("/fill-data");
         })
         .catch((error) => {
           console.log(error);
-          setLoading(false);
           toast({
-            title: error.response.data.message,
+            title: JSON.parse(error.request.response).message,
             status: "error",
             isClosable: true,
           });
+        })
+        .finally(() => {
+          setLoading(false);
         });
-
-      // setLoading(true);
-      // setTimeout(() => {
-      //   setLoading(false);
-      //   navigate("/fill-data");
-      // }, 1000);
     },
   });
 

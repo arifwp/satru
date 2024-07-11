@@ -8,27 +8,29 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { RiEyeFill, RiEyeOffFill } from "@remixicon/react";
+import axios, { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
 
 const initialValues = {
-  name: "",
-  username: "",
-  email: "",
-  password: "",
-  phone: "",
+  name: undefined,
+  username: undefined,
+  email: undefined,
+  password: undefined,
+  phone: undefined,
+  bornDate: undefined,
 };
 
 export const RegisterForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<string>("hide");
-
-  const navigate = useNavigate();
+  const toast = useToast();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -38,14 +40,32 @@ export const RegisterForm = () => {
       email: Yup.string().email("Invalid email").required("Email harus diisi"),
       password: Yup.string().required("Password harus diisi"),
       phone: Yup.string().required("Nomor telepon harus diisi"),
+      bornDate: Yup.string().required("Tanggal lahir harus diisi"),
     }),
     onSubmit: (values) => {
-      console.log(JSON.stringify(values));
+      console.log(values);
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        navigate("/login");
-      }, 1000 * 2);
+      axios
+        .post(`${process.env.REACT_APP_API_URL}/v1/auth/register`, values)
+        .then((response) => {
+          console.log(response);
+          toast({
+            title: response.data.message,
+            status: "success",
+            isClosable: true,
+          });
+        })
+        .catch((error: AxiosError) => {
+          console.log(error);
+          toast({
+            title: JSON.parse(error.request.response).message,
+            status: "error",
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     },
   });
 
@@ -152,6 +172,36 @@ export const RegisterForm = () => {
           />
 
           <FormErrorMessage>{formik.errors.phone}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl
+          isInvalid={
+            formik.errors.bornDate && formik.touched.bornDate ? true : false
+          }
+        >
+          <FormLabel htmlFor="bornDate">Tanggal lahir</FormLabel>
+          <SelectDateSingle
+            initialDate={null}
+            placeholder="Tanggal lahir"
+            onConfirm={(inputValue) => {
+              console.log(inputValue);
+              formik.setFieldValue("bornDate", inputValue);
+            }}
+            w={"100%"}
+            h={"40px"}
+            borderWidth={"1px"}
+            borderColor={"rgba(255, 255, 255, 0.24)"}
+            color={
+              formik.values.bornDate
+                ? "fieldtext !important"
+                : "rgba(255, 255, 255, 0.24)"
+            }
+            fontWeight={"normal"}
+            fontSize={"sm"}
+            justifyContent={"flex-start"}
+          />
+
+          <FormErrorMessage>{formik.errors.bornDate}</FormErrorMessage>
         </FormControl>
 
         <Button

@@ -12,7 +12,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { RiEyeFill, RiEyeOffFill } from "@remixicon/react";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -35,18 +35,26 @@ export const LoginForm = () => {
       setLoading(true);
       axios
         .post(`${process.env.REACT_APP_API_URL}/v1/auth/login`, values)
-        .then((response) => {
-          const token = response.data.data.token;
-          setCookie("token", token, { expires: 0.1 });
+        .then((response: AxiosResponse) => {
+          console.log(response);
+          const token = response.data.data.dataUser.token;
+          setCookie("token", token, { expires: 1 });
+          localStorage.setItem(
+            "user",
+            JSON.stringify(response.data.data.dataUser)
+          );
           toast({
-            title: response.data.message,
+            title: JSON.parse(response.request.response).message,
             status: "success",
             isClosable: true,
           });
-          navigate("/fill-data");
+          if (response.data.data.outlet) {
+            navigate("/dashboard");
+          } else {
+            navigate("/fill-data");
+          }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((error: AxiosError) => {
           toast({
             title: JSON.parse(error.request.response).message,
             status: "error",
@@ -80,9 +88,7 @@ export const LoginForm = () => {
             placeholder="email@gmail.com"
             onChange={formik.handleChange}
           />
-          {formik.touched.email && formik.errors.email ? (
-            <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
-          ) : null}
+          <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
         </FormControl>
 
         <FormControl
@@ -114,9 +120,7 @@ export const LoginForm = () => {
               />
             </InputRightElement>
           </InputGroup>
-          {formik.touched.password && formik.errors.password ? (
-            <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
-          ) : null}
+          <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
         </FormControl>
 
         <Button

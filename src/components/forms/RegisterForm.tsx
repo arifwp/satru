@@ -48,7 +48,6 @@ export const RegisterForm = () => {
       axios
         .post(`${process.env.REACT_APP_API_URL}/v1/auth/register`, values)
         .then((response) => {
-          console.log(response);
           toast({
             title: response.data.message,
             status: "success",
@@ -56,7 +55,6 @@ export const RegisterForm = () => {
           });
         })
         .catch((error: AxiosError) => {
-          console.log(error);
           toast({
             title: JSON.parse(error.request.response).message,
             status: "error",

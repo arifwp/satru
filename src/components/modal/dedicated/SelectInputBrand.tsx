@@ -14,12 +14,12 @@ interface Props extends ButtonProps {
 }
 
 const brand = [
-  { id: 1, name: "Apple" },
-  { id: 2, name: "Asus" },
-  { id: 3, name: "Toshiba" },
-  { id: 4, name: "HP" },
-  { id: 5, name: "MSI" },
-  { id: 6, name: "Dell" },
+  { _id: 1, name: "Apple" },
+  { _id: 2, name: "Asus" },
+  { _id: 3, name: "Toshiba" },
+  { _id: 4, name: "HP" },
+  { _id: 5, name: "MSI" },
+  { _id: 6, name: "Dell" },
 ];
 
 export const SelectInputBrand = ({

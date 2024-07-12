@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { category } from "../../../constant/Category";
 import { SelectOption } from "../../../constant/SelectOption";
 import { PickerInput } from "../PickerInput";
+import { PickerInputList } from "../PickerInputList";
 
 interface Props extends ButtonProps {
   name: string;
@@ -15,10 +16,10 @@ interface Props extends ButtonProps {
 }
 
 const totalEmployees = [
-  { id: 1, name: "Kurang dari 10 karyawan" },
-  { id: 2, name: "Lebih dari 10 kurang dari 25 karyawan" },
-  { id: 3, name: "Lebih dari 25 kurang dari 50 karyawan" },
-  { id: 4, name: "Lebih dari 50 karyawan" },
+  { _id: 1, name: "Kurang dari 10 karyawan", value: 10 },
+  { _id: 2, name: "Lebih dari 10 kurang dari 25 karyawan", value: 25 },
+  { _id: 3, name: "Lebih dari 25 kurang dari 50 karyawan", value: 50 },
+  { _id: 4, name: "Lebih dari 50 karyawan", value: 70 },
 ];
 
 export const SelectTotalEmployees = ({
@@ -42,7 +43,7 @@ export const SelectTotalEmployees = ({
   }, [isOpen]);
 
   return (
-    <PickerInput
+    <PickerInputList
       name={name}
       options={data}
       placeholder={placeholder}

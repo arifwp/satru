@@ -1,26 +1,18 @@
-import { Link as ChakraLink, HStack, Stack, VStack } from "@chakra-ui/react";
-import { RiAddCircleLine, RiBox3Line } from "@remixicon/react";
+import { HStack, Stack, VStack } from "@chakra-ui/react";
 import { useState } from "react";
-import { Link as ReactRouterLink } from "react-router-dom";
-import { CButton } from "../../../../components/CButton";
 import { PageContainer } from "../../../../components/containers/PageContainer";
 import { SearchInput } from "../../../../components/input/SearchInput";
-import { SelectButtonSort } from "../../../../components/modal/dedicated/SelectButtonSort";
+import { ModalSingleForm } from "../../../../components/modal/dedicated/ModalSingleForm";
+import { TableCategory } from "../../../../components/table/dedicated/TableCategory";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
 import { SelectOption } from "../../../../constant/SelectOption";
-import { ModalSingleForm } from "../../../../components/modal/dedicated/ModalSingleForm";
-
-const sort = [
-  { _id: "name", name: "Nama" },
-  { _id: "newest", name: "Terbaru" },
-  { _id: "oldest", name: "Terlama" },
-];
 
 export const CategoryPage = () => {
   const [filterSearch, setfilterSearch] = useState<string>("");
   const [filterSort, setfilterSort] = useState<SelectOption | undefined>(
     undefined
   );
+  const [statusData, setStatusData] = useState<boolean>(false);
 
   return (
     <PageContainer navs={pageNavsProduct}>
@@ -48,26 +40,18 @@ export const CategoryPage = () => {
             />
           </HStack>
 
-          <SelectButtonSort
-            name="outlet"
-            placeholder="Urutkan"
-            withSearch={false}
-            icon={RiBox3Line}
-            onConfirm={(inputValue) => {
-              // ADD TODO
-              // console.log(inputValue);
-              setfilterSort(inputValue);
-            }}
-            options={sort}
-          />
-
           <ModalSingleForm
             btnText="Tambah Kategori"
             placeholder="Tambah kategori"
             formValue="category"
             url="/v1/product/createCategory"
+            onConfirm={(inputValue) => {
+              setStatusData(inputValue);
+            }}
           />
         </Stack>
+
+        <TableCategory filterSearch={filterSearch} mt={4} />
       </VStack>
     </PageContainer>
   );

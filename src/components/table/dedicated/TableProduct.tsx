@@ -2,8 +2,8 @@ import { AspectRatio, Image, TableProps } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ProductInterface } from "../../../constant/Product";
 import { SelectOption } from "../../../constant/SelectOption";
-import { CTable } from "../CTable";
 import { TableSkeleton } from "../../TableSkeleton";
+import { CTable } from "../CTable";
 
 const product: Array<ProductInterface> = [
   {

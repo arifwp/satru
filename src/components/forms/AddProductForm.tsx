@@ -81,7 +81,7 @@ export const AddProductForm = () => {
       setTimeout(() => {
         setLoading(false);
         toast({
-          title: `Berhasil menambahkan produk`,
+          title: "Berhasil menambahkan produk",
           status: "success",
           duration: 2000,
         });

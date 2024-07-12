@@ -9,7 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import { navs } from "../../data/navs";
+import { navs } from "../../constant/navs";
 import NavButton from "../navbar/NavButton";
 
 interface Props extends StackProps {

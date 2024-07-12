@@ -7,9 +7,11 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spinner,
   StackProps,
   Text,
   useColorMode,
+  useToast,
 } from "@chakra-ui/react";
 import {
   RiAccountCircleFill,
@@ -19,6 +21,11 @@ import {
   RiMoonLine,
   RiSunLine,
 } from "@remixicon/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getCookie, removeCookie } from "typescript-cookie";
+import { getDataUser } from "../../utils/helperFunction";
 
 interface Props extends StackProps {
   children?: any;
@@ -28,9 +35,47 @@ interface Props extends StackProps {
 
 export const MenuHeaderShrink = ({ children, label, isSubPage }: Props) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const toast = useToast();
 
   const handleBack = () => {
     window.history.back();
+  };
+
+  const handleLogout = () => {
+    setLoading(true);
+    const token = getCookie("token");
+
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/v1/auth/logout/${getDataUser()._id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response: AxiosResponse) => {
+        removeCookie("token");
+        toast({
+          title: JSON.parse(response.request.response).message,
+          status: "success",
+          isClosable: true,
+        });
+        navigate("/login");
+      })
+      .catch((error: AxiosError) => {
+        toast({
+          title: JSON.parse(error.request.response).message,
+          status: "error",
+          isClosable: true,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -73,14 +118,25 @@ export const MenuHeaderShrink = ({ children, label, isSubPage }: Props) => {
         <MenuList>
           <MenuItem
             icon={<Icon as={colorMode === "light" ? RiMoonLine : RiSunLine} />}
+            fontSize={"sm"}
             onClick={toggleColorMode}
           >
             {colorMode === "light" ? "Dark" : "Light"} Mode
           </MenuItem>
-          <MenuItem icon={<Icon as={RiAccountCircleFill} />}>Profil</MenuItem>
+          <MenuItem icon={<Icon as={RiAccountCircleFill} />} fontSize={"sm"}>
+            Profil
+          </MenuItem>
           <MenuDivider />
-          <MenuItem icon={<Icon as={RiLogoutBoxLine} color={"red.400"} />}>
-            <Text color={"red.400"}>Sign Out</Text>
+          <MenuItem
+            icon={<Icon as={RiLogoutBoxLine} color={"red.400"} />}
+            onClick={handleLogout}
+          >
+            icon=
+            {loading ? (
+              <Spinner size={"sm"} color="red.400" />
+            ) : (
+              <Icon as={RiLogoutBoxLine} color={"red.400"} />
+            )}{" "}
           </MenuItem>
         </MenuList>
       </Menu>

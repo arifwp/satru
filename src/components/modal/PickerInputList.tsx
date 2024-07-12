@@ -101,29 +101,29 @@ export const PickerInputList = ({
   const skeleton = () => <TableSkeleton row={3} column={3} />;
 
   const component = () => (
-    <Wrap spacing={2}>
+    <VStack w={"100%"} spacing={2}>
       {finalData &&
         finalData.map((item, i) => (
-          <WrapItem key={item._id}>
-            <Box
-              as="button"
-              px={4}
-              py={2}
-              textAlign={"start"}
-              borderWidth={"1px"}
-              borderRadius={"md"}
-              fontSize="xs"
-              _hover={{ bg: bgHover }}
-              borderColor={
-                selected && selected._id === item._id ? "teal.400" : undefined
-              }
-              onClick={() => handleSelect(item)}
-            >
-              {item.name}
-            </Box>
-          </WrapItem>
+          <Box
+            key={item._id}
+            w={"100%"}
+            as="button"
+            px={4}
+            py={2}
+            textAlign={"start"}
+            borderWidth={"1px"}
+            borderRadius={"md"}
+            fontSize="xs"
+            _hover={{ bg: bgHover }}
+            borderColor={
+              selected && selected._id === item._id ? "teal.400" : undefined
+            }
+            onClick={() => handleSelect(item)}
+          >
+            {item.name}
+          </Box>
         ))}
-    </Wrap>
+    </VStack>
   );
 
   const empty = () => (

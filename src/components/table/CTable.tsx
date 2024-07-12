@@ -40,14 +40,13 @@ export const CTable = ({
     >
       <Box
         className="box-table scrollX"
+        w={"100%"}
         display={"flex"}
-        borderWidth={"1px"}
-        borderRadius={"md"}
         overflowX={"auto"}
         overflowY={"hidden"}
       >
         <Table variant={"primary"}>
-          <Thead borderWidth={"1px"}>
+          <Thead borderBottomWidth={"1px"}>
             <Tr>
               {columnHeader.map((item: any, i: any) => (
                 <Th

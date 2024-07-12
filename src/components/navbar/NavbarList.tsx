@@ -30,23 +30,6 @@ export const NavbarList = ({ ...props }) => {
 
   return (
     <Stack direction={sw >= 640 ? "column" : "row"} w={"100%"}>
-      {/* <NavButton to="/home">
-        <HStack justify={"start"}>
-          <Icon as={RiHome3Line} w={"100%"} maxW={"24px"} fontSize={"18px"} />
-          <Text
-            className="label-navbar"
-            fontSize={"10px"}
-            fontWeight={"semibold"}
-            display={"none"}
-            opacity={0}
-            animation={`${fadeText} 200ms linear`}
-            _groupHover={{ display: "block", opacity: 1 }}
-          >
-            Home
-          </Text>
-        </HStack>
-      </NavButton> */}
-
       <NavButton to="/product">
         <HStack justify={"start"}>
           <Icon as={RiProductHuntLine} pl={1} fontSize={"18px"} />

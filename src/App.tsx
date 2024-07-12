@@ -6,10 +6,11 @@ import "./index.css";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { HomePage } from "./pages/dashboard/HomePage";
-import { ProductPage } from "./pages/dashboard/product/ProductPage";
-import { AddProductPage } from "./pages/dashboard/product/AddProductPage";
+import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
+import { AddProductPage } from "./pages/dashboard/product/productroot/AddProductPage";
 import { FillData } from "./pages/FillDataPage";
 import { RequiredAuth } from "./components/middleware/RequiredAuth";
+import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -56,6 +57,28 @@ export const App = () => (
             <RequiredAuth>
               <ContentContainer label="Tambah Produk" isSubPage={true}>
                 <AddProductPage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/product/category"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Kategori" isSubPage={false}>
+                <CategoryPage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/product/brand"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Merk" isSubPage={false}>
+                <CategoryPage />
               </ContentContainer>
             </RequiredAuth>
           }

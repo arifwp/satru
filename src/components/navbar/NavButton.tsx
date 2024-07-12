@@ -8,13 +8,15 @@ import { NavLink as ReactLink } from "react-router-dom";
 interface Props extends LinkProps {
   children?: any;
   to?: string;
+  end?: any;
 }
 
-export default function NavButton({ children, to, ...rest }: Props) {
+export default function NavButton({ children, to, end, ...rest }: Props) {
   const bg = useColorModeValue("#E2E8F060", "#2D374860");
 
   return (
     <ChakraLink
+      end={end}
       className="nav-button-link"
       as={ReactLink}
       to={to}

@@ -1,8 +1,8 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { RemixiconComponentType } from "@remixicon/react";
-import { SelectOption } from "../../../constant/SelectOption";
-import { PickerButton } from "../PickerButton";
 import { useEffect, useState } from "react";
+import { SelectOption } from "../../../constant/SelectOption";
+import { PickerButtonList } from "../PickerButtonList";
 
 interface Props extends ButtonProps {
   name: string;
@@ -10,15 +10,16 @@ interface Props extends ButtonProps {
   icon: RemixiconComponentType;
   onConfirm: (inputValue: SelectOption | undefined) => void;
   placeholder: string;
+  options: SelectOption[];
 }
 
-const sort = [
-  { id: "name", name: "Nama" },
-  { id: "smallestStock", name: "Stok Terkecil" },
-  { id: "biggestStock", name: "Stok Terbesar" },
-  { id: "newest", name: "Terbaru" },
-  { id: "oldest", name: "Terlama" },
-];
+// const sort = [
+//   { _id: "name", name: "Nama" },
+//   { _id: "smallestStock", name: "Stok Terkecil" },
+//   { _id: "biggestStock", name: "Stok Terbesar" },
+//   { _id: "newest", name: "Terbaru" },
+//   { _id: "oldest", name: "Terlama" },
+// ];
 
 export const SelectButtonSort = ({
   name,
@@ -26,6 +27,7 @@ export const SelectButtonSort = ({
   icon,
   onConfirm,
   placeholder,
+  options,
   ...rest
 }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,12 +35,12 @@ export const SelectButtonSort = ({
 
   useEffect(() => {
     if (isOpen) {
-      setData(sort);
+      setData(options);
     }
   }, [isOpen]);
 
   return (
-    <PickerButton
+    <PickerButtonList
       name={name}
       options={data}
       icon={icon}

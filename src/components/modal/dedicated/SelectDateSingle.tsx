@@ -1,6 +1,5 @@
 import { ButtonProps } from "@chakra-ui/react";
 import { DateSingleModal } from "./DateSingleModal";
-import { string } from "yup";
 
 interface Props extends ButtonProps {
   initialDate?: Date | null;

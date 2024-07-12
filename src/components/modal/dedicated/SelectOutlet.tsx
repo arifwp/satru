@@ -13,12 +13,12 @@ interface Props extends ButtonProps {
 }
 
 const outlet = [
-  { id: 1, name: "Semua Outlet" },
-  { id: 2, name: "Pusat" },
-  { id: 3, name: "Cabang Semarang" },
-  { id: 4, name: "Cabang Yogyakarta" },
-  { id: 5, name: "Cabang Depok" },
-  { id: 6, name: "Cabang Boyolali" },
+  { _id: 1, name: "Semua Outlet" },
+  { _id: 2, name: "Pusat" },
+  { _id: 3, name: "Cabang Semarang" },
+  { _id: 4, name: "Cabang Yogyakarta" },
+  { _id: 5, name: "Cabang Depok" },
+  { _id: 6, name: "Cabang Boyolali" },
 ];
 
 export const SelectOutlet = ({

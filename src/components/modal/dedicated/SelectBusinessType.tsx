@@ -1,8 +1,9 @@
-import { ButtonProps, useDisclosure } from "@chakra-ui/react";
+import { ButtonProps, useDisclosure, useToast } from "@chakra-ui/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { category } from "../../../constant/Category";
+import { getCookie } from "typescript-cookie";
 import { SelectOption } from "../../../constant/SelectOption";
-import { PickerInput } from "../PickerInput";
+import { PickerInputList } from "../PickerInputList";
 
 interface Props extends ButtonProps {
   name: string;
@@ -13,17 +14,6 @@ interface Props extends ButtonProps {
   inputValue: SelectOption | undefined;
   onConfirm: (inputValue: SelectOption | undefined) => void;
 }
-
-export const businessType = [
-  { id: 1, name: "Makanan & Minuman" },
-  { id: 2, name: "Kafe / Coffe Shop" },
-  { id: 3, name: "Restoran" },
-  { id: 4, name: "Roti, Kue & Camilan" },
-  { id: 5, name: "Retail" },
-  { id: 6, name: "Toko Kelontong & Retail" },
-  { id: 7, name: "Minimarket" },
-  { id: 8, name: "Vape Store" },
-];
 
 export const SelectBusinessType = ({
   name,
@@ -37,16 +27,39 @@ export const SelectBusinessType = ({
   const [loaded, setLoaded] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState<SelectOption[] | undefined>(undefined);
+  const toast = useToast();
 
   useEffect(() => {
     if (isOpen) {
-      setLoaded(true);
-      setData(businessType);
+      const token = getCookie("token");
+      axios
+        .get(
+          `${process.env.REACT_APP_API_URL}/v1/typeOutlet/getAllTypeOutlet`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response: AxiosResponse) => {
+          setData(JSON.parse(response.request.response).data);
+        })
+        .catch((error: AxiosError) => {
+          toast({
+            title: JSON.parse(error.request.response).message,
+            status: "error",
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setLoaded(true);
+        });
     }
-  }, [isOpen]);
+  }, [isOpen, toast]);
 
   return (
-    <PickerInput
+    <PickerInputList
       name={name}
       options={data}
       placeholder={placeholder}

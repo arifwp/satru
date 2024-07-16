@@ -1,8 +1,11 @@
-import { ButtonProps, useDisclosure } from "@chakra-ui/react";
+import { ButtonProps, useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { category } from "../../../constant/Category";
 import { SelectOption } from "../../../constant/SelectOption";
 import { PickerInput } from "../PickerInput";
+import { getDataUser } from "../../../utils/helperFunction";
+import { getCookie } from "typescript-cookie";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 interface Props extends ButtonProps {
   name: string;
@@ -26,20 +29,50 @@ export const SelectInputCategory = ({
   const [loaded, setLoaded] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState<SelectOption[] | undefined>(undefined);
+  const toast = useToast();
 
   useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        setLoaded(true);
-        // hit api
-        setData(category);
-      }, 2000);
+    const ownerId = getDataUser()._id;
+    const token = getCookie("token");
 
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [isOpen]);
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/v1/product/getAllCategory/${ownerId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response: AxiosResponse) => {
+        setData(JSON.parse(response.request.response).data);
+      })
+      .catch((error: AxiosError) => {
+        toast({
+          title: JSON.parse(error.request.response).message,
+          status: "error",
+          isClosable: true,
+        });
+      })
+      .finally(() => {
+        setLoaded(true);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     const timer = setTimeout(() => {
+  //       setLoaded(true);
+  //       // hit api
+  //       setData(category);
+  //     }, 2000);
+
+  //     return () => {
+  //       clearTimeout(timer);
+  //     };
+  //   }
+  // }, [isOpen]);
 
   return (
     <PickerInput

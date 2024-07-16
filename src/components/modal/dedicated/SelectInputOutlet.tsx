@@ -1,26 +1,29 @@
 import { ButtonProps, useDisclosure, useToast } from "@chakra-ui/react";
-import { RemixiconComponentType } from "@remixicon/react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import { SelectOption } from "../../../constant/SelectOption";
 import { getDataUser } from "../../../utils/helperFunction";
-import { MultiPickerButton } from "../MultiPickerButton";
+import { MultiPickerInput } from "../MultiPickerInput";
 
 interface Props extends ButtonProps {
   name: string;
-  withSearch: boolean;
-  icon: RemixiconComponentType;
-  onConfirm: (inputValue: SelectOption[] | undefined) => void;
   placeholder: string;
+  required?: boolean;
+  withSearch: boolean;
+  isError?: boolean;
+  inputValue: SelectOption[] | undefined;
+  onConfirm: (inputValue: SelectOption[] | undefined) => void;
 }
 
-export const SelectButtonCategory = ({
+export const SelectInputOutlet = ({
   name,
-  withSearch,
-  icon,
-  onConfirm,
   placeholder,
+  required,
+  withSearch,
+  isError,
+  inputValue,
+  onConfirm,
   ...rest
 }: Props) => {
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -34,7 +37,7 @@ export const SelectButtonCategory = ({
 
     axios
       .get(
-        `${process.env.REACT_APP_API_URL}/v1/product/getAllCategory/${ownerId}`,
+        `${process.env.REACT_APP_API_URL}/v1/outlet/getAllOutlet/${ownerId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -58,13 +61,13 @@ export const SelectButtonCategory = ({
   }, []);
 
   return (
-    <MultiPickerButton
+    <MultiPickerInput
       name={name}
       options={data}
-      icon={icon}
       placeholder={placeholder}
       withSearch={withSearch}
-      withSkeleton={true}
+      isError={isError}
+      inputValue={inputValue}
       onConfirm={onConfirm}
       isOpen={isOpen}
       onOpen={onOpen}

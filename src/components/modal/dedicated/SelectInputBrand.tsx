@@ -1,7 +1,10 @@
-import { ButtonProps, useDisclosure } from "@chakra-ui/react";
+import { ButtonProps, useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { SelectOption } from "../../../constant/SelectOption";
 import { PickerInput } from "../PickerInput";
+import { getDataUser } from "../../../utils/helperFunction";
+import { getCookie } from "typescript-cookie";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 interface Props extends ButtonProps {
   name: string;
@@ -12,15 +15,6 @@ interface Props extends ButtonProps {
   inputValue: SelectOption | undefined;
   onConfirm: (inputValue: SelectOption | undefined) => void;
 }
-
-const brand = [
-  { _id: 1, name: "Apple" },
-  { _id: 2, name: "Asus" },
-  { _id: 3, name: "Toshiba" },
-  { _id: 4, name: "HP" },
-  { _id: 5, name: "MSI" },
-  { _id: 6, name: "Dell" },
-];
 
 export const SelectInputBrand = ({
   name,
@@ -34,20 +28,50 @@ export const SelectInputBrand = ({
   const [loaded, setLoaded] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState<SelectOption[] | undefined>(undefined);
+  const toast = useToast();
 
   useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        setLoaded(true);
-        // hit api
-        setData(brand);
-      }, 2000);
+    const ownerId = getDataUser()._id;
+    const token = getCookie("token");
 
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [isOpen]);
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/v1/product/getAllBrand/${ownerId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response: AxiosResponse) => {
+        setData(JSON.parse(response.request.response).data);
+      })
+      .catch((error: AxiosError) => {
+        toast({
+          title: JSON.parse(error.request.response).message,
+          status: "error",
+          isClosable: true,
+        });
+      })
+      .finally(() => {
+        setLoaded(true);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     const timer = setTimeout(() => {
+  //       setLoaded(true);
+  //       // hit api
+  //       setData(brand);
+  //     }, 2000);
+
+  //     return () => {
+  //       clearTimeout(timer);
+  //     };
+  //   }
+  // }, [isOpen]);
 
   return (
     <PickerInput

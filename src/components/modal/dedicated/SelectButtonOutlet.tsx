@@ -15,7 +15,7 @@ interface Props extends ButtonProps {
   placeholder: string;
 }
 
-export const SelectButtonCategory = ({
+export const SelectButtonOutlet = ({
   name,
   withSearch,
   icon,
@@ -34,7 +34,7 @@ export const SelectButtonCategory = ({
 
     axios
       .get(
-        `${process.env.REACT_APP_API_URL}/v1/product/getAllCategory/${ownerId}`,
+        `${process.env.REACT_APP_API_URL}/v1/outlet/getAllOutlet/${ownerId}`,
         {
           headers: {
             "Content-Type": "application/json",

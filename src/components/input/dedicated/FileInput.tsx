@@ -49,8 +49,7 @@ export const FileInput = ({ onFileChange, onHandleDrop }: Props) => {
   };
 
   return (
-    <FormControl>
-      <FormLabel htmlFor="img">Foto</FormLabel>
+    <>
       <Box
         px={4}
         py={10}
@@ -94,9 +93,9 @@ export const FileInput = ({ onFileChange, onHandleDrop }: Props) => {
       </Box>
       <Input
         ref={inputRef}
-        id="imgInput"
+        id="imageProduct"
         type="file"
-        name="img"
+        name="imageProduct"
         accept="image/jpeg, image/png"
         onChange={(event) => {
           handleFileChange(event);
@@ -113,6 +112,6 @@ export const FileInput = ({ onFileChange, onHandleDrop }: Props) => {
       >
         Reset
       </CButton>
-    </FormControl>
+    </>
   );
 };

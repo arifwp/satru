@@ -51,7 +51,7 @@ export const BrandPage = () => {
             />
           </HStack>
 
-          <SelectButtonCategory
+          {/* <SelectButtonCategory
             name="outlet"
             placeholder="Filter Kategori"
             withSearch={true}
@@ -59,7 +59,7 @@ export const BrandPage = () => {
             onConfirm={(inputValue) => {
               setFilterCategory(inputValue);
             }}
-          />
+          /> */}
 
           <SelectButtonSort
             name="outlet"

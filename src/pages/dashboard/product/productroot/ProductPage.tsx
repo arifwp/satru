@@ -1,29 +1,25 @@
 import { Link as ChakraLink, HStack, Stack, VStack } from "@chakra-ui/react";
-import { RiAddCircleLine, RiBox3Line } from "@remixicon/react";
+import {
+  RiAddCircleLine,
+  RiBox3Line,
+  RiShoppingBag2Line,
+} from "@remixicon/react";
 import { useState } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { CButton } from "../../../../components/CButton";
+import { PageContainer } from "../../../../components/containers/PageContainer";
 import { SearchInput } from "../../../../components/input/SearchInput";
 import { SelectButtonCategory } from "../../../../components/modal/dedicated/SelectButtonCategory";
-import { SelectButtonSort } from "../../../../components/modal/dedicated/SelectButtonSort";
 import { TableProduct } from "../../../../components/table/dedicated/TableProduct";
-import { SelectOption } from "../../../../constant/SelectOption";
-import { PageContainer } from "../../../../components/containers/PageContainer";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
-
-const sort = [
-  { _id: "name", name: "Nama" },
-  { _id: "smallestStock", name: "Stok Terkecil" },
-  { _id: "biggestStock", name: "Stok Terbesar" },
-  { _id: "newest", name: "Terbaru" },
-  { _id: "oldest", name: "Terlama" },
-];
+import { SelectOption } from "../../../../constant/SelectOption";
+import { SelectButtonOutlet } from "../../../../components/modal/dedicated/SelectButtonOutlet";
 
 export const ProductPage = () => {
   const [filterCategory, setFilterCategory] = useState<
-    SelectOption | undefined
+    SelectOption[] | undefined
   >(undefined);
-  const [filterSort, setfilterSort] = useState<SelectOption | undefined>(
+  const [filterOutlet, setFilterOutlet] = useState<SelectOption[] | undefined>(
     undefined
   );
   const [filterSearch, setfilterSearch] = useState<string>("");
@@ -54,27 +50,26 @@ export const ProductPage = () => {
             />
           </HStack>
 
-          <SelectButtonCategory
+          <SelectButtonOutlet
             name="outlet"
+            placeholder="Filter Outlet"
+            withSearch={true}
+            icon={RiShoppingBag2Line}
+            onConfirm={(inputValue) => {
+              // console.log(inputValue);
+              setFilterOutlet(inputValue);
+            }}
+          />
+
+          <SelectButtonCategory
+            name="category"
             placeholder="Filter Kategori"
             withSearch={true}
             icon={RiBox3Line}
             onConfirm={(inputValue) => {
+              console.log(inputValue);
               setFilterCategory(inputValue);
             }}
-          />
-
-          <SelectButtonSort
-            name="outlet"
-            placeholder="Urutkan"
-            withSearch={false}
-            icon={RiBox3Line}
-            onConfirm={(inputValue) => {
-              // ADD TODO
-              // console.log(inputValue);
-              setfilterSort(inputValue);
-            }}
-            options={sort}
           />
 
           <ChakraLink
@@ -94,7 +89,7 @@ export const ProductPage = () => {
         </Stack>
 
         <TableProduct
-          filterSort={filterSort}
+          filterOutlet={filterOutlet}
           filterCategory={filterCategory}
           filterSearch={filterSearch}
           mt={4}

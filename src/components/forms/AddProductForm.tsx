@@ -21,9 +21,15 @@ import { SelectInputBrand } from "../modal/dedicated/SelectInputBrand";
 import { SelectInputCategory } from "../modal/dedicated/SelectInputCategory";
 import { NumberInput } from "../input/NumberInput";
 import { FileInput } from "../input/dedicated/FileInput";
+import { getDataUser } from "../../utils/helperFunction";
+import { getCookie } from "typescript-cookie";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { SelectInputOutlet } from "../modal/dedicated/SelectInputOutlet";
 
 const initialValues = {
-  img: undefined,
+  ownerId: undefined,
+  outlet: [],
+  imageProduct: undefined,
   code: undefined,
   name: undefined,
   description: undefined,
@@ -59,6 +65,7 @@ export const AddProductForm = () => {
       price: Yup.number()
         .required("Harga harus diisi")
         .typeError("Harga harus berupa angka"),
+      outlet: Yup.array().required("Outlet harus diisi"),
       category: Yup.object().required("Kategori harus diisi"),
       stock: Yup.number().required("Stok harus diisi"),
       minimumStock: Yup.number().test({
@@ -74,20 +81,95 @@ export const AddProductForm = () => {
       }),
     }),
     onSubmit: (values, { resetForm }) => {
-      console.log(JSON.stringify(values));
-
       setLoading(true);
+      console.log(JSON.stringify(values.imageProduct));
+      const token = getCookie("token");
 
-      setTimeout(() => {
-        setLoading(false);
-        toast({
-          title: "Berhasil menambahkan produk",
-          status: "success",
-          duration: 2000,
+      const category = JSON.stringify(values.category);
+      const brand = JSON.stringify(values.brand);
+      const outlet = JSON.stringify(values.outlet);
+
+      const arrOutletId =
+        values.outlet && (values.outlet as any[]).map((item: any) => item._id);
+      const formData = new FormData();
+      formData.append("ownerId", getDataUser()._id);
+      if (arrOutletId) {
+        const dataArray = arrOutletId.join(",").split(",");
+        console.log(dataArray);
+        for (let i = 0; i < values.outlet.length; i++) {
+          formData.append(`outletId[${i}]`, dataArray[i]);
+        }
+      }
+      formData.append("name", values.name || "");
+      formData.append("price", values.price || "");
+      formData.append("categoryId", JSON.parse(category)._id);
+      formData.append("stock", values.stock || "");
+
+      const newValue = {
+        ownerId: getDataUser()._id,
+        outletId: JSON.parse(outlet)._id,
+        name: values.name,
+        price: values.price,
+        categoryId: JSON.parse(category)._id,
+        stock: values.stock,
+      };
+
+      if (values.code) {
+        formData.append("code", values.code || "");
+        Object.assign(newValue, { code: values.code });
+      }
+
+      if (values.description) {
+        formData.append("description", values.description || "");
+        Object.assign(newValue, { description: values.description });
+      }
+
+      if (values.brand) {
+        formData.append("brandId", JSON.parse(brand)._id);
+        Object.assign(newValue, { code: JSON.parse(brand)._id });
+      }
+
+      if (values.minimumStock) {
+        formData.append("minimumStock", values.minimumStock || "");
+        Object.assign(newValue, { minimumStock: values.minimumStock });
+      }
+
+      if (values.imageProduct) {
+        formData.append("imageProduct", values.imageProduct || "");
+        Object.assign(newValue, { imageProduct: values.imageProduct });
+      }
+
+      console.log(formData);
+
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/v1/product/createProduct`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response: AxiosResponse) => {
+          resetForm({ values: initialValues });
+          toast({
+            title: JSON.parse(response.request.response).message,
+            status: "success",
+            duration: 2000,
+          });
+        })
+        .catch((error: AxiosError) => {
+          toast({
+            title: JSON.parse(error.request.response).message,
+            status: "error",
+            duration: 2000,
+          });
+        })
+        .finally(() => {
+          setLoading(false);
         });
-
-        resetForm({ values: initialValues });
-      }, 500);
     },
   });
 
@@ -194,6 +276,30 @@ export const AddProductForm = () => {
 
               <FormControl
                 isInvalid={
+                  formik.errors.outlet && formik.touched.outlet ? true : false
+                }
+              >
+                <FormLabel htmlFor="outlet">Outlet</FormLabel>
+                <SelectInputOutlet
+                  name="outlet"
+                  onConfirm={(inputValue) => {
+                    formik.setFieldValue("outlet", inputValue);
+                  }}
+                  inputValue={formik.values.outlet}
+                  placeholder="Pilih Outlet"
+                  isError={
+                    formik.touched.outlet && formik.errors.outlet ? true : false
+                  }
+                  withSearch={true}
+                  w={"100%"}
+                />
+                <FormErrorMessage>
+                  {formik.errors.outlet as string}
+                </FormErrorMessage>
+              </FormControl>
+
+              <FormControl
+                isInvalid={
                   formik.errors.category && formik.touched.category
                     ? true
                     : false
@@ -207,7 +313,11 @@ export const AddProductForm = () => {
                   }}
                   inputValue={formik.values.category}
                   placeholder="Pilih Kategori"
-                  isError={!!formik.errors.category}
+                  isError={
+                    formik.touched.category && formik.errors.category
+                      ? true
+                      : false
+                  }
                   withSearch={true}
                   w={"100%"}
                 />
@@ -227,7 +337,9 @@ export const AddProductForm = () => {
                   }}
                   inputValue={formik.values.brand}
                   placeholder="Pilih Merk"
-                  isError={!!formik.errors.brand}
+                  isError={
+                    formik.touched.brand && formik.errors.brand ? true : false
+                  }
                   withSearch={true}
                   w={"100%"}
                 />
@@ -344,14 +456,27 @@ export const AddProductForm = () => {
           >
             <Text as={"b"}>Media</Text>
 
-            <FileInput
+            {/* <FileInput
               onFileChange={(inputValue) => {
-                formik.setFieldValue("img", inputValue);
+                formik.setFieldValue("imageProduct", inputValue);
               }}
               onHandleDrop={(inputValue) => {
-                formik.setFieldValue("img", inputValue);
+                formik.setFieldValue("imageProduct", inputValue);
               }}
-            />
+            /> */}
+
+            <FormControl>
+              <FormLabel htmlFor="imageProduct">Foto</FormLabel>
+              <FileInput
+                onFileChange={(inputValue) => {
+                  console.log(inputValue);
+                  formik.setFieldValue("imageProduct", inputValue);
+                }}
+                onHandleDrop={(inputValue) => {
+                  formik.setFieldValue("imageProduct", inputValue);
+                }}
+              />
+            </FormControl>
           </VStack>
         </VStack>
       </Stack>

@@ -1,9 +1,12 @@
-import { AspectRatio, Image, TableProps } from "@chakra-ui/react";
+import { AspectRatio, Image, TableProps, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ProductInterface } from "../../../constant/Product";
 import { SelectOption } from "../../../constant/SelectOption";
 import { TableSkeleton } from "../../TableSkeleton";
 import { CTable } from "../CTable";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { getCookie } from "typescript-cookie";
+import { getDataUser } from "../../../utils/helperFunction";
 
 const product: Array<ProductInterface> = [
   {
@@ -120,14 +123,14 @@ const product: Array<ProductInterface> = [
 ];
 
 interface Props extends TableProps {
-  filterCategory: SelectOption | undefined;
-  filterSort: SelectOption | undefined;
+  filterOutlet: SelectOption[] | undefined;
+  filterCategory: SelectOption[] | undefined;
   filterSearch: string;
 }
 
 export const TableProduct = ({
+  filterOutlet,
   filterCategory,
-  filterSort,
   filterSearch,
   ...rest
 }: Props) => {
@@ -136,13 +139,48 @@ export const TableProduct = ({
   const [value, setValue] = useState<any[]>([]);
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  // console.log(filterCategory, filterSearch);
+  const toast = useToast();
 
   useEffect(() => {
-    setData(product);
-    setTimeout(() => {
-      setLoaded(true);
-    }, 2000);
-  }, [data, filterSort, filterCategory, filterSearch]);
+    const token = getCookie("token");
+    const ownerId = getDataUser()._id;
+    let url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProduct/${ownerId}`;
+    if (filterOutlet) {
+      const ids = filterOutlet.map((item) => item._id);
+      const outletIds = ids.join(",");
+      console.log(outletIds);
+      url = url + `/${outletIds}`;
+    }
+    if (filterCategory) {
+      const ids = filterCategory.map((item) => item._id);
+      const categoryIds = ids.join(",");
+      console.log(categoryIds);
+      url = url + `/${categoryIds}`;
+    }
+
+    axios
+      .get(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response: AxiosResponse) => {
+        // console.log(JSON.parse(response.request.response).data);
+      })
+      .catch((error: AxiosError) => {
+        toast({
+          title: JSON.parse(error.request.response).message,
+          status: "error",
+          isClosable: true,
+        });
+        // console.log(JSON.parse(error.request.response).data);
+      })
+      .finally(() => {
+        setLoaded(true);
+      });
+  }, [filterOutlet, filterCategory, filterSearch]);
 
   useEffect(() => {
     if (data && data?.length > 0) {

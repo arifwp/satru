@@ -13,13 +13,13 @@ import { CTable } from "../CTable";
 interface Props extends TableProps {
   filterSearch: string;
   statusData: boolean;
-  actionStatusData: any;
+  setStatusData: any;
 }
 
 export const TableBrand = ({
   filterSearch,
   statusData,
-  actionStatusData,
+  setStatusData,
   ...rest
 }: Props) => {
   const [data, setData] = useState<any[] | undefined>(undefined);
@@ -54,8 +54,6 @@ export const TableBrand = ({
         console.log(statusData);
         setLoaded(true);
       });
-
-    console.log(data);
   }, [statusData, toast]);
 
   useEffect(() => {
@@ -110,8 +108,7 @@ export const TableBrand = ({
               btnText="Hapus"
               icon={RiDeleteBin2Line}
               onConfirm={(inputValue) => {
-                actionStatusData(statusData ? false : true);
-                console.log(statusData);
+                setStatusData(statusData ? false : true);
               }}
             />
           ),

@@ -91,13 +91,8 @@ export const MultiPickerInput = ({
   };
 
   const handleSubmit = () => {
-    setLoading(true);
     onConfirm(selected);
-    setLoading(false);
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   onClose();
-    // }, 500);
+    onClose();
   };
 
   const skeleton = () => <TableSkeleton row={3} column={3} />;

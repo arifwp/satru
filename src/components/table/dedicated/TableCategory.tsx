@@ -36,7 +36,7 @@ export const TableCategory = ({
 
     axios
       .get(
-        `${process.env.REACT_APP_API_URL}/v1/product/getAllCategory/${ownerId}`,
+        `${process.env.REACT_APP_API_URL}/v1/category/getAllCategory/${ownerId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export const TableCategory = ({
       .finally(() => {
         setLoaded(true);
       });
-  }, []);
+  }, [statusData, toast]);
 
   useEffect(() => {
     if (data && data.length > 0) {
@@ -103,13 +103,16 @@ export const TableCategory = ({
           name: (
             <Confirmation
               size={"xs"}
-              method="post"
               colorScheme="red"
               variant={"ghost"}
-              message={`Apakah anda yakin ingin menghapus item ${item.name}?`}
-              url={``}
+              message={`Apakah anda yakin ingin menghapus kategori ${item.name}?`}
+              url={`/v1/category/deleteCategory/${item._id}`}
+              method="delete"
               btnText="Hapus"
               icon={RiDeleteBin2Line}
+              onConfirm={(inputValue) => {
+                setStatusData(statusData ? false : true);
+              }}
             />
           ),
           props: { display: "table-cell" },

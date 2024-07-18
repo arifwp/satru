@@ -40,9 +40,9 @@ export const CategoryPage = () => {
             btnText="Tambah Kategori"
             placeholder="Tambah kategori"
             formValue="category"
-            url="/v1/product/createCategory"
+            url="/v1/category/createCategory"
             onConfirm={(inputValue) => {
-              setStatusData(inputValue);
+              setStatusData(statusData ? false : true);
             }}
           />
         </Stack>

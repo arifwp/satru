@@ -19,6 +19,7 @@ import { useBgComponentBaseColor } from "../../../constant/colors";
 import { CButton } from "../../CButton";
 import { getCookie } from "typescript-cookie";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { getDataUser } from "../../../utils/helperFunction";
 
 interface Props {
   btnText: string;
@@ -53,8 +54,14 @@ export const ModalSingleForm = ({
       console.log(values);
       setLoading(true);
       const token = getCookie("token");
+
+      const data = {
+        ownerId: getDataUser()._id,
+        name: values.name,
+      };
+
       axios
-        .post(`${process.env.REACT_APP_API_URL}${url}`, values, {
+        .post(`${process.env.REACT_APP_API_URL}${url}`, data, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

@@ -49,7 +49,7 @@ export const BrandPage = () => {
         <TableBrand
           filterSearch={filterSearch}
           statusData={statusData}
-          actionStatusData={setStatusData}
+          setStatusData={setStatusData}
           mt={4}
         />
       </VStack>

@@ -82,7 +82,7 @@ export const AddProductForm = () => {
     }),
     onSubmit: (values, { resetForm }) => {
       setLoading(true);
-      console.log(JSON.stringify(values.imageProduct));
+
       const token = getCookie("token");
 
       const category = JSON.stringify(values.category);
@@ -95,7 +95,6 @@ export const AddProductForm = () => {
       formData.append("ownerId", getDataUser()._id);
       if (arrOutletId) {
         const dataArray = arrOutletId.join(",").split(",");
-        console.log(dataArray);
         for (let i = 0; i < values.outlet.length; i++) {
           formData.append(`outletId[${i}]`, dataArray[i]);
         }
@@ -138,8 +137,6 @@ export const AddProductForm = () => {
         formData.append("imageProduct", values.imageProduct || "");
         Object.assign(newValue, { imageProduct: values.imageProduct });
       }
-
-      console.log(formData);
 
       axios
         .post(
@@ -469,7 +466,6 @@ export const AddProductForm = () => {
               <FormLabel htmlFor="imageProduct">Foto</FormLabel>
               <FileInput
                 onFileChange={(inputValue) => {
-                  console.log(inputValue);
                   formik.setFieldValue("imageProduct", inputValue);
                 }}
                 onHandleDrop={(inputValue) => {

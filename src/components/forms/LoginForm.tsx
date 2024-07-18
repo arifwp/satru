@@ -36,7 +36,6 @@ export const LoginForm = () => {
       axios
         .post(`${process.env.REACT_APP_API_URL}/v1/auth/login`, values)
         .then((response: AxiosResponse) => {
-          console.log(response);
           const token = response.data.data.dataUser.token;
           setCookie("token", token, { expires: 1 });
           localStorage.setItem(

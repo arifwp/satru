@@ -43,7 +43,6 @@ export const RegisterForm = () => {
       bornDate: Yup.string().required("Tanggal lahir harus diisi"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       setLoading(true);
       axios
         .post(`${process.env.REACT_APP_API_URL}/v1/auth/register`, values)
@@ -182,7 +181,6 @@ export const RegisterForm = () => {
             initialDate={null}
             placeholder="Tanggal lahir"
             onConfirm={(inputValue) => {
-              console.log(inputValue);
               formik.setFieldValue("bornDate", inputValue);
             }}
             w={"100%"}

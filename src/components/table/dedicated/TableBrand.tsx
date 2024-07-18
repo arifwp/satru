@@ -13,13 +13,13 @@ import { CTable } from "../CTable";
 interface Props extends TableProps {
   filterSearch: string;
   statusData: boolean;
-  setStatusData: any;
+  actionStatusData: any;
 }
 
-export const TableCategory = ({
+export const TableBrand = ({
   filterSearch,
   statusData,
-  setStatusData,
+  actionStatusData,
   ...rest
 }: Props) => {
   const [data, setData] = useState<any[] | undefined>(undefined);
@@ -27,7 +27,6 @@ export const TableCategory = ({
   const [value, setValue] = useState<any[]>([]);
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-
   const toast = useToast();
 
   useEffect(() => {
@@ -35,15 +34,12 @@ export const TableCategory = ({
     const token = getCookie("token");
 
     axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/v1/product/getAllCategory/${ownerId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(`${process.env.REACT_APP_API_URL}/v1/brand/getAllBrand/${ownerId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response: AxiosResponse) => {
         setData(JSON.parse(response.request.response).data);
       })
@@ -55,9 +51,12 @@ export const TableCategory = ({
         });
       })
       .finally(() => {
+        console.log(statusData);
         setLoaded(true);
       });
-  }, []);
+
+    console.log(data);
+  }, [statusData, toast]);
 
   useEffect(() => {
     if (data && data.length > 0) {
@@ -68,7 +67,7 @@ export const TableCategory = ({
           props: { display: "table-cell" },
         },
         {
-          id: "categoryName",
+          id: "brandName",
           name: item.name,
           props: { display: "table-cell" },
         },
@@ -103,13 +102,17 @@ export const TableCategory = ({
           name: (
             <Confirmation
               size={"xs"}
-              method="post"
               colorScheme="red"
+              method="delete"
               variant={"ghost"}
               message={`Apakah anda yakin ingin menghapus item ${item.name}?`}
-              url={``}
+              url={`/v1/brand/deleteBrand/${item._id}`}
               btnText="Hapus"
               icon={RiDeleteBin2Line}
+              onConfirm={(inputValue) => {
+                actionStatusData(statusData ? false : true);
+                console.log(statusData);
+              }}
             />
           ),
           props: { display: "table-cell" },
@@ -151,10 +154,10 @@ export const TableCategory = ({
       props: { justifyContent: "center" },
     },
     {
-      id: "categoryName",
+      id: "brandName",
       name: "Nama kategori",
       sortable: true,
-      onClick: () => sortByColumn("categoryName"),
+      onClick: () => sortByColumn("brandName"),
     },
     {
       id: "dateCreated",

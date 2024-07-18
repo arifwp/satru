@@ -1,126 +1,24 @@
-import { AspectRatio, Image, TableProps, useToast } from "@chakra-ui/react";
+import {
+  AspectRatio,
+  Link as ChakraLink,
+  Image,
+  TableProps,
+  useToast,
+} from "@chakra-ui/react";
+import { RiArrowLeftDoubleLine, RiDeleteBin2Line } from "@remixicon/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { getCookie } from "typescript-cookie";
 import { ProductInterface } from "../../../constant/Product";
 import { SelectOption } from "../../../constant/SelectOption";
+import formatNumber from "../../../lib/formatNumber";
+import { getDataUser } from "../../../utils/helperFunction";
+import { CButton } from "../../CButton";
+import { Empty } from "../../Empty";
+import { Confirmation } from "../../modal/Confirmation";
 import { TableSkeleton } from "../../TableSkeleton";
 import { CTable } from "../CTable";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { getCookie } from "typescript-cookie";
-import { getDataUser } from "../../../utils/helperFunction";
-
-const product: Array<ProductInterface> = [
-  {
-    id: 1,
-    productCode: "STR-001",
-    img: "https://placehold.co/600x400",
-    name: "Macbook jaya selamanya",
-    price: 12000000,
-    category: {
-      _id: "1",
-      name: "Laptop",
-    },
-    brand: {
-      id: "1",
-      name: "Apple",
-    },
-    stock: 12,
-    haveVariant: false,
-    variantItem: undefined,
-  },
-  {
-    id: 2,
-    productCode: "STR-002",
-    img: "https://placehold.co/600x400",
-    name: "Lenovo Gila",
-    price: 9000000,
-    category: {
-      _id: "1",
-      name: "Laptop",
-    },
-    brand: {
-      id: "2",
-      name: "Lenovo",
-    },
-    stock: 8,
-    haveVariant: true,
-    variantItem: [
-      {
-        variantId: 1,
-        variantName: "Lenovo LOQ",
-        variantPrice: 18000000,
-        variantStock: 12,
-      },
-      {
-        variantId: 2,
-        variantName: "Lenovo Dell",
-        variantPrice: 12000000,
-        variantStock: 9,
-      },
-    ],
-  },
-  {
-    id: 3,
-    productCode: "STR-003",
-    img: "https://placehold.co/600x400",
-    name: "Asus Pro Art Jelek",
-    price: 12000,
-    category: {
-      _id: "1",
-      name: "Laptop",
-    },
-    brand: {
-      id: "3",
-      name: "Asus",
-    },
-    stock: 3,
-    haveVariant: true,
-    variantItem: [
-      {
-        variantId: 4,
-        variantName: "Asus ROG Strix G16",
-        variantPrice: 5000000,
-        variantStock: 4,
-      },
-      {
-        variantId: 1,
-        variantName: "Asus Zephyrus G14",
-        variantPrice: 3000000,
-        variantStock: 19,
-      },
-    ],
-  },
-  {
-    id: 4,
-    productCode: "STR-004",
-    img: "https://placehold.co/600x400",
-    name: "MSI Gaming",
-    price: 14500000,
-    category: {
-      _id: "1",
-      name: "Laptop",
-    },
-    brand: {
-      id: "4",
-      name: "MSI",
-    },
-    stock: 5,
-    haveVariant: true,
-    variantItem: [
-      {
-        variantId: 10,
-        variantName: "MSI Stealth",
-        variantPrice: 12000500,
-        variantStock: 12,
-      },
-      {
-        variantId: 20,
-        variantName: "MSI Modern 14",
-        variantPrice: 7000000,
-        variantStock: 9,
-      },
-    ],
-  },
-];
 
 interface Props extends TableProps {
   filterOutlet: SelectOption[] | undefined;
@@ -139,24 +37,39 @@ export const TableProduct = ({
   const [value, setValue] = useState<any[]>([]);
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  // console.log(filterCategory, filterSearch);
   const toast = useToast();
 
   useEffect(() => {
     const token = getCookie("token");
     const ownerId = getDataUser()._id;
-    let url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProduct/${ownerId}`;
-    if (filterOutlet) {
-      const ids = filterOutlet.map((item) => item._id);
-      const outletIds = ids.join(",");
-      console.log(outletIds);
-      url = url + `/${outletIds}`;
-    }
-    if (filterCategory) {
-      const ids = filterCategory.map((item) => item._id);
-      const categoryIds = ids.join(",");
-      console.log(categoryIds);
-      url = url + `/${categoryIds}`;
+    let url;
+
+    if (
+      filterOutlet &&
+      filterOutlet.length !== 0 &&
+      filterCategory &&
+      filterCategory.length !== 0
+    ) {
+      const otltIds = filterOutlet.map((item) => item._id);
+      const outletIds = otltIds.join(",");
+
+      const ctgIds = filterCategory.map((item) => item._id);
+      const categoryIds = ctgIds.join(",");
+
+      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByOutletCategory/${ownerId}/${outletIds}/${categoryIds}`;
+    } else if (filterCategory && filterCategory.length > 0) {
+      const ctgIds = filterCategory.map((item) => item._id);
+      const categoryIds = ctgIds.join(",");
+
+      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByCategory/${ownerId}/${categoryIds}`;
+    } else if (filterOutlet && filterOutlet.length > 0) {
+      const otltIds =
+        filterOutlet && (filterOutlet as any[]).map((item) => item._id);
+      const outletIds = otltIds && (otltIds as string[]).join(",");
+
+      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByOutlet/${ownerId}/${outletIds}`;
+    } else {
+      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProduct/${ownerId}`;
     }
 
     axios
@@ -167,7 +80,7 @@ export const TableProduct = ({
         },
       })
       .then((response: AxiosResponse) => {
-        // console.log(JSON.parse(response.request.response).data);
+        setData(JSON.parse(response.request.response).data);
       })
       .catch((error: AxiosError) => {
         toast({
@@ -175,29 +88,44 @@ export const TableProduct = ({
           status: "error",
           isClosable: true,
         });
-        // console.log(JSON.parse(error.request.response).data);
       })
       .finally(() => {
         setLoaded(true);
       });
-  }, [filterOutlet, filterCategory, filterSearch]);
+  }, [filterOutlet, filterCategory, filterSearch, toast]);
 
   useEffect(() => {
-    if (data && data?.length > 0) {
-      const formattedData = data.map((item) => [
+    if (data) {
+      const formattedData = data.map((item, i) => [
         {
-          id: "productCode",
-          name: item.productCode,
+          id: "index",
+          name: i + 1,
+          props: { display: "table-cell", textAlign: "center" },
+        },
+        {
+          id: "code",
+          name: item.code,
           props: { display: "table-cell" },
         },
         {
           id: "img",
           name: (
-            <AspectRatio maxW={"100px"} minW={"75px"} ratio={4 / 3}>
-              <Image src={item.img} objectFit={"cover"} />
+            <AspectRatio
+              visibility={item.imageProduct ? "visible" : "hidden"}
+              maxW={"100px"}
+              minW={"75px"}
+              ratio={4 / 3}
+            >
+              <Image
+                src={`http://localhost:3000/uploads/products/${item.imageProduct}`}
+                alt={item.name}
+                objectFit={"cover"}
+              />
             </AspectRatio>
           ),
-          props: { display: "table-cell" },
+          props: {
+            display: "table-cell",
+          },
         },
         {
           id: "name",
@@ -211,17 +139,54 @@ export const TableProduct = ({
         },
         {
           id: "brand",
-          name: item.brand.name,
+          name: item.brand ? item.brand.name : "",
           props: { display: "table-cell" },
         },
         {
           id: "price",
-          name: item.price,
+          name: formatNumber(item.price),
           props: { display: "table-cell" },
         },
         {
           id: "stock",
           name: item.stock,
+          props: { display: "table-cell" },
+        },
+        {
+          id: "actionDetail",
+          name: (
+            <ChakraLink
+              as={ReactRouterLink}
+              to={`product/detail-product/${item._id}`}
+              textDecoration={"none"}
+              _hover={{ textDecoration: "none" }}
+            >
+              <CButton
+                variant={"ghost"}
+                size={"xs"}
+                colorScheme={"teal"}
+                icon={RiArrowLeftDoubleLine}
+              >
+                Detail
+              </CButton>
+            </ChakraLink>
+          ),
+          props: { display: "table-cell" },
+        },
+        {
+          id: "actionDelete",
+          name: (
+            <Confirmation
+              size={"xs"}
+              method="post"
+              colorScheme="red"
+              variant={"ghost"}
+              message={`Apakah anda yakin ingin menghapus item ${item.name}?`}
+              url={``}
+              btnText="Hapus"
+              icon={RiDeleteBin2Line}
+            />
+          ),
           props: { display: "table-cell" },
         },
       ]);
@@ -255,10 +220,17 @@ export const TableProduct = ({
 
   const columnHeader = [
     {
-      id: "productCode",
+      id: "index",
+      name: "No.",
+      sortable: true,
+      onClick: () => sortByColumn("index"),
+      props: { justifyContent: "center" },
+    },
+    {
+      id: "code",
       name: "Kode Produk",
       sortable: true,
-      onClick: () => sortByColumn("productCode"),
+      onClick: () => sortByColumn("code"),
     },
     { id: "img", name: "Foto", sortable: false, onClick: undefined },
     {
@@ -267,7 +239,12 @@ export const TableProduct = ({
       sortable: true,
       onClick: () => sortByColumn("name"),
     },
-    { id: "category", name: "Kategori", sortable: false, onClick: undefined },
+    {
+      id: "category",
+      name: "Kategori",
+      sortable: undefined,
+      onClick: undefined,
+    },
     { id: "brand", name: "Merk", sortable: false, onClick: undefined },
     {
       id: "price",
@@ -281,10 +258,26 @@ export const TableProduct = ({
       sortable: true,
       onClick: () => sortByColumn("stock"),
     },
+    {
+      id: "actionDetail",
+      name: "Detail",
+      sortable: false,
+      onClick: undefined,
+      props: { justifyContent: "center" },
+    },
+    {
+      id: "actionDelete",
+      name: "Hapus",
+      sortable: false,
+      onClick: undefined,
+      props: { justifyContent: "center" },
+    },
   ];
 
   if (!loaded) {
     return <TableSkeleton row={5} column={10} />;
+  } else if (loaded && value && value.length < 1) {
+    return <Empty title="Produk tidak ditemukan" mt={6} />;
   }
 
   return (

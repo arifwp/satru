@@ -10,10 +10,10 @@ import { CButton } from "../../../../components/CButton";
 import { PageContainer } from "../../../../components/containers/PageContainer";
 import { SearchInput } from "../../../../components/input/SearchInput";
 import { SelectButtonCategory } from "../../../../components/modal/dedicated/SelectButtonCategory";
+import { SelectButtonOutlet } from "../../../../components/modal/dedicated/SelectButtonOutlet";
 import { TableProduct } from "../../../../components/table/dedicated/TableProduct";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
 import { SelectOption } from "../../../../constant/SelectOption";
-import { SelectButtonOutlet } from "../../../../components/modal/dedicated/SelectButtonOutlet";
 
 export const ProductPage = () => {
   const [filterCategory, setFilterCategory] = useState<
@@ -67,7 +67,7 @@ export const ProductPage = () => {
             withSearch={true}
             icon={RiBox3Line}
             onConfirm={(inputValue) => {
-              console.log(inputValue);
+              // console.log(inputValue);
               setFilterCategory(inputValue);
             }}
           />

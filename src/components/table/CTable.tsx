@@ -54,7 +54,7 @@ export const CTable = ({
                   key={item.id}
                   onClick={item.onClick}
                 >
-                  <HStack w={"100%"}>
+                  <HStack {...item.props}>
                     <Text>{item.name}</Text>
                     {item.sortable &&
                       (sortedColumn === item.id ? (
@@ -75,7 +75,7 @@ export const CTable = ({
             {data?.map((item: any, i: any) => (
               <Tr key={i}>
                 {item.map((val: any, i: any) => (
-                  <Td key={val.id} {...item.props}>
+                  <Td key={val.id} {...val.props}>
                     {val.name}
                   </Td>
                 ))}

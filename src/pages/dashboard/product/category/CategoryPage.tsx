@@ -5,13 +5,9 @@ import { SearchInput } from "../../../../components/input/SearchInput";
 import { ModalSingleForm } from "../../../../components/modal/dedicated/ModalSingleForm";
 import { TableCategory } from "../../../../components/table/dedicated/TableCategory";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
-import { SelectOption } from "../../../../constant/SelectOption";
 
 export const CategoryPage = () => {
   const [filterSearch, setfilterSearch] = useState<string>("");
-  const [filterSort, setfilterSort] = useState<SelectOption | undefined>(
-    undefined
-  );
   const [statusData, setStatusData] = useState<boolean>(false);
 
   return (
@@ -51,7 +47,12 @@ export const CategoryPage = () => {
           />
         </Stack>
 
-        <TableCategory filterSearch={filterSearch} mt={4} />
+        <TableCategory
+          filterSearch={filterSearch}
+          statusData={statusData}
+          setStatusData={setStatusData}
+          mt={4}
+        />
       </VStack>
     </PageContainer>
   );

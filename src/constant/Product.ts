@@ -2,21 +2,27 @@ import { BrandInterface } from "./Brand";
 import { CategoryInterface } from "./Category";
 
 export interface ProductVariantInterface {
-    variantId: any;
-    variantName: string;
-    variantPrice: number;
-    variantStock: number;
+  variantId: any;
+  variantName: string;
+  variantPrice: number;
+  variantStock: number;
 }
 
 export interface ProductInterface {
-    id: any;
-    productCode: string;
-    img: string;
-    name: string;
-    price: number;
-    category: CategoryInterface;
-    brand: BrandInterface;
-    stock: number;
-    haveVariant: boolean;
-    variantItem?: Array<ProductVariantInterface>
+  _id: any;
+  ownerId: any;
+  outletId: any;
+  code: string;
+  name: string;
+  description: string;
+  price: number;
+  categoryId: string;
+  category: CategoryInterface;
+  brandId: string;
+  brand: BrandInterface;
+  stock: number;
+  minimumStock: number;
+  imageProduct: string;
+  variants?: Array<ProductVariantInterface>;
+  createdAt: Date;
 }

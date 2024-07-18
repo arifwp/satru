@@ -1,4 +1,7 @@
 export interface BrandInterface {
-    id: string;
-    name: string;
-} 
+  _id: any;
+  ownerId: string;
+  name: string;
+  isDeleted: number;
+  createdAt: Date;
+}

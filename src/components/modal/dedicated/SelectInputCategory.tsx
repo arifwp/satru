@@ -1,11 +1,10 @@
 import { ButtonProps, useDisclosure, useToast } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { category } from "../../../constant/Category";
-import { SelectOption } from "../../../constant/SelectOption";
-import { PickerInput } from "../PickerInput";
-import { getDataUser } from "../../../utils/helperFunction";
-import { getCookie } from "typescript-cookie";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import { getCookie } from "typescript-cookie";
+import { SelectOption } from "../../../constant/SelectOption";
+import { getDataUser } from "../../../utils/helperFunction";
+import { PickerInput } from "../PickerInput";
 
 interface Props extends ButtonProps {
   name: string;
@@ -37,7 +36,7 @@ export const SelectInputCategory = ({
 
     axios
       .get(
-        `${process.env.REACT_APP_API_URL}/v1/product/getAllCategory/${ownerId}`,
+        `${process.env.REACT_APP_API_URL}/v1/category/getAllCategory/${ownerId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -59,20 +58,6 @@ export const SelectInputCategory = ({
         setLoaded(true);
       });
   }, []);
-
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     const timer = setTimeout(() => {
-  //       setLoaded(true);
-  //       // hit api
-  //       setData(category);
-  //     }, 2000);
-
-  //     return () => {
-  //       clearTimeout(timer);
-  //     };
-  //   }
-  // }, [isOpen]);
 
   return (
     <PickerInput

@@ -34,7 +34,7 @@ export const SelectButtonCategory = ({
 
     axios
       .get(
-        `${process.env.REACT_APP_API_URL}/v1/product/getAllCategory/${ownerId}`,
+        `${process.env.REACT_APP_API_URL}/v1/category/getAllCategory/${ownerId}`,
         {
           headers: {
             "Content-Type": "application/json",

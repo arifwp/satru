@@ -1,8 +1,6 @@
 import { ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { category } from "../../../constant/Category";
 import { SelectOption } from "../../../constant/SelectOption";
-import { PickerInput } from "../PickerInput";
 import { PickerInputList } from "../PickerInputList";
 
 interface Props extends ButtonProps {

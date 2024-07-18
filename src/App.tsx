@@ -11,6 +11,8 @@ import { AddProductPage } from "./pages/dashboard/product/productroot/AddProduct
 import { FillData } from "./pages/FillDataPage";
 import { RequiredAuth } from "./components/middleware/RequiredAuth";
 import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
+import { DetailPage } from "./pages/dashboard/product/detail/DetailPage";
+import { BrandPage } from "./pages/dashboard/product/brand/BrandPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -52,6 +54,17 @@ export const App = () => (
         />
 
         <Route
+          path="/product/detail-product/:_id"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Detail Produk" isSubPage={true}>
+                <DetailPage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
           path="/product/add-product"
           element={
             <RequiredAuth>
@@ -78,7 +91,7 @@ export const App = () => (
           element={
             <RequiredAuth>
               <ContentContainer label="Merk" isSubPage={false}>
-                <CategoryPage />
+                <BrandPage />
               </ContentContainer>
             </RequiredAuth>
           }

@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat("id-ID").format(value);
 };
@@ -18,4 +20,14 @@ export const formatIDR = (value: string) => {
 export const getDataUser = () => {
   var dataUser = localStorage.getItem("user") || "";
   return JSON.parse(dataUser);
+};
+
+interface DateFormatProps {
+  dateString: string;
+}
+
+export const formatDateToId = ({ dateString }: DateFormatProps) => {
+  const formattedDate = moment(dateString).locale("id").format("D MMM YYYY");
+
+  return formattedDate;
 };

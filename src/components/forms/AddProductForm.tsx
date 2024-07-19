@@ -12,7 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import * as Yup from "yup";
 import { useBgComponentBaseColor } from "../../constant/colors";
 import useScreenWidth from "../../lib/useScreenWidth";
@@ -55,6 +55,8 @@ export const AddProductForm = () => {
   const sw = useScreenWidth();
 
   const bgComponent = useBgComponentBaseColor();
+
+  const fileInputRef = useRef<{ reset: () => void }>(null);
 
   const formik = useFormik({
     validateOnChange: true,
@@ -151,6 +153,9 @@ export const AddProductForm = () => {
         )
         .then((response: AxiosResponse) => {
           resetForm({ values: initialValues });
+          if (fileInputRef.current) {
+            fileInputRef.current.reset();
+          }
           toast({
             title: JSON.parse(response.request.response).message,
             status: "success",
@@ -362,13 +367,6 @@ export const AddProductForm = () => {
                 }
               >
                 <FormLabel htmlFor="stock">Stok</FormLabel>
-                {/* <Input
-                  name="stock"
-                  type="number"
-                  placeholder="69"
-                  onChange={formik.handleChange}
-                  value={formik.values.stock}
-                /> */}
                 <NumberInput
                   name="stock"
                   onChange={(inputValue) => {
@@ -376,7 +374,6 @@ export const AddProductForm = () => {
                   }}
                   inputValue={formik.values.stock}
                   placeholder="12"
-                  // isError={!!formik.errors.stock}
                   isCurrency={false}
                 />
                 <FormErrorMessage>{formik.errors.stock}</FormErrorMessage>
@@ -453,18 +450,10 @@ export const AddProductForm = () => {
           >
             <Text as={"b"}>Media</Text>
 
-            {/* <FileInput
-              onFileChange={(inputValue) => {
-                formik.setFieldValue("imageProduct", inputValue);
-              }}
-              onHandleDrop={(inputValue) => {
-                formik.setFieldValue("imageProduct", inputValue);
-              }}
-            /> */}
-
             <FormControl>
               <FormLabel htmlFor="imageProduct">Foto</FormLabel>
               <FileInput
+                ref={fileInputRef}
                 onFileChange={(inputValue) => {
                   formik.setFieldValue("imageProduct", inputValue);
                 }}

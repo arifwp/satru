@@ -64,3 +64,16 @@ textarea.filled:focus-visible {
     background: RGBA(0, 0, 0, 0.64);
     border-radius: 100px;
 }
+
+.scrollY::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollY::-webkit-scrollbar-track {
+    background: #F8F9FA20;
+}
+
+.scrollY::-webkit-scrollbar-thumb {
+    background: RGBA(0, 0, 0, 0.64);
+    border-radius: 100px;
+}

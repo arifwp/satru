@@ -35,15 +35,12 @@ export const SelectInputBrand = ({
     const token = getCookie("token");
 
     axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/v1/product/getAllBrand/${ownerId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(`${process.env.REACT_APP_API_URL}/v1/brand/getAllBrand/${ownerId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response: AxiosResponse) => {
         setData(JSON.parse(response.request.response).data);
       })

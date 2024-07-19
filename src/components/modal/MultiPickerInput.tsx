@@ -182,6 +182,7 @@ export const MultiPickerInput = ({
               isChecked={selected.length === options?.length}
               onChange={handleSelectAll}
               mb={4}
+              size={"sm"}
             >
               Select All
             </Checkbox>

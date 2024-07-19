@@ -19,17 +19,22 @@ import { Empty } from "../../Empty";
 import { Confirmation } from "../../modal/Confirmation";
 import { TableSkeleton } from "../../TableSkeleton";
 import { CTable } from "../CTable";
+import { DetailProduct } from "../../drawer/dedicated/DetailProduct";
 
 interface Props extends TableProps {
   filterOutlet: SelectOption[] | undefined;
   filterCategory: SelectOption[] | undefined;
   filterSearch: string;
+  statusData: boolean;
+  setStatusData: any;
 }
 
 export const TableProduct = ({
   filterOutlet,
   filterCategory,
   filterSearch,
+  statusData,
+  setStatusData,
   ...rest
 }: Props) => {
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -92,7 +97,7 @@ export const TableProduct = ({
       .finally(() => {
         setLoaded(true);
       });
-  }, [filterOutlet, filterCategory, filterSearch, toast]);
+  }, [filterOutlet, filterCategory, filterSearch, toast, statusData]);
 
   useEffect(() => {
     if (data) {
@@ -130,7 +135,12 @@ export const TableProduct = ({
         {
           id: "name",
           name: item.name,
-          props: { display: "table-cell" },
+          props: {
+            display: "table-cell",
+            minWidth: "250px",
+            maxWidth: "300px",
+            whiteSpace: "pre-wrap",
+          },
         },
         {
           id: "category",
@@ -155,21 +165,23 @@ export const TableProduct = ({
         {
           id: "actionDetail",
           name: (
-            <ChakraLink
-              as={ReactRouterLink}
-              to={`product/detail-product/${item._id}`}
-              textDecoration={"none"}
-              _hover={{ textDecoration: "none" }}
-            >
-              <CButton
-                variant={"ghost"}
-                size={"xs"}
-                colorScheme={"teal"}
-                icon={RiArrowLeftDoubleLine}
-              >
-                Detail
-              </CButton>
-            </ChakraLink>
+            // <ChakraLink
+            //   as={ReactRouterLink}
+            //   to={`detail-product/${item._id}`}
+            //   textDecoration={"none"}
+            //   _hover={{ textDecoration: "none" }}
+            // >
+            //   <CButton
+            //     variant={"ghost"}
+            //     size={"xs"}
+            //     colorScheme={"teal"}
+            //     icon={RiArrowLeftDoubleLine}
+            //   >
+            //     Detail
+            //   </CButton>
+            // </ChakraLink>
+
+            <DetailProduct _id={item._id} />
           ),
           props: { display: "table-cell" },
         },
@@ -178,13 +190,16 @@ export const TableProduct = ({
           name: (
             <Confirmation
               size={"xs"}
-              method="post"
+              method="delete"
               colorScheme="red"
               variant={"ghost"}
               message={`Apakah anda yakin ingin menghapus item ${item.name}?`}
-              url={``}
+              url={`/v1/product/deleteProduct/${item._id}`}
               btnText="Hapus"
               icon={RiDeleteBin2Line}
+              onConfirm={(inputValue) => {
+                setStatusData(statusData ? false : true);
+              }}
             />
           ),
           props: { display: "table-cell" },

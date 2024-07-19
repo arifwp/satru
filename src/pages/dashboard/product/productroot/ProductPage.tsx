@@ -23,6 +23,7 @@ export const ProductPage = () => {
     undefined
   );
   const [filterSearch, setfilterSearch] = useState<string>("");
+  const [statusData, setStatusData] = useState<boolean>(false);
 
   return (
     <PageContainer navs={pageNavsProduct}>
@@ -92,6 +93,8 @@ export const ProductPage = () => {
           filterOutlet={filterOutlet}
           filterCategory={filterCategory}
           filterSearch={filterSearch}
+          statusData={statusData}
+          setStatusData={setStatusData}
           mt={4}
         />
       </VStack>

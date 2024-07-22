@@ -1,5 +1,6 @@
 import {
   ButtonProps,
+  Link as ChakraLink,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -15,15 +16,16 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { RiArrowLeftDoubleLine } from "@remixicon/react";
+import { RiArrowLeftDoubleLine, RiEdit2Line } from "@remixicon/react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import { Link as ReactRouterLink } from "react-router-dom";
 import { getCookie } from "typescript-cookie";
 import { ProductInterface } from "../../../constant/Product";
 import { useBgComponentBaseColor } from "../../../constant/colors";
 import formatNumber from "../../../lib/formatNumber";
-import { CButton } from "../../CButton";
 import { formatDateToId } from "../../../utils/helperFunction";
+import { CButton } from "../../CButton";
 
 interface Props extends ButtonProps {
   _id: string;
@@ -202,9 +204,20 @@ export const DetailProduct = ({ _id }: Props) => {
             <CButton variant="ghost" mr={3} onClick={onClose}>
               Tutup
             </CButton>
-            <CButton colorScheme="teal" variant="solid">
-              Edit
-            </CButton>
+            <ChakraLink
+              as={ReactRouterLink}
+              to={`edit-product/${data && data._id}`}
+              textDecoration={"none"}
+              _hover={{ textDecoration: "none" }}
+            >
+              <CButton
+                variant={"solid"}
+                colorScheme={"yellow"}
+                icon={RiEdit2Line}
+              >
+                Edit
+              </CButton>
+            </ChakraLink>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

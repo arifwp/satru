@@ -252,12 +252,12 @@ export const AddProductForm = () => {
           }
         )
         .then((response: AxiosResponse) => {
-          // resetForm({ values: initialValues });
+          resetForm({ values: initialValues });
           if (fileInputRef.current) {
             fileInputRef.current.reset();
           }
 
-          // variants.map((item, i) => handleRemoveVariant(item.variantId));
+          variants.map((item, i) => handleRemoveVariant(item.variantId));
 
           toast({
             title: JSON.parse(response.request.response).message,

@@ -23,7 +23,6 @@ export const ProductPage = () => {
     undefined
   );
   const [filterSearch, setfilterSearch] = useState<string>("");
-  const [statusData, setStatusData] = useState<boolean>(false);
 
   return (
     <PageContainer navs={pageNavsProduct}>
@@ -44,8 +43,6 @@ export const ProductPage = () => {
             <SearchInput
               placeholder="Cari nama..."
               onConfirm={(inputValue) => {
-                // ADD TODO
-                // console.log(inputValue);
                 setfilterSearch(inputValue);
               }}
             />
@@ -57,7 +54,6 @@ export const ProductPage = () => {
             withSearch={true}
             icon={RiShoppingBag2Line}
             onConfirm={(inputValue) => {
-              // console.log(inputValue);
               setFilterOutlet(inputValue);
             }}
           />
@@ -68,7 +64,6 @@ export const ProductPage = () => {
             withSearch={true}
             icon={RiBox3Line}
             onConfirm={(inputValue) => {
-              // console.log(inputValue);
               setFilterCategory(inputValue);
             }}
           />
@@ -93,8 +88,6 @@ export const ProductPage = () => {
           filterOutlet={filterOutlet}
           filterCategory={filterCategory}
           filterSearch={filterSearch}
-          statusData={statusData}
-          setStatusData={setStatusData}
           mt={4}
         />
       </VStack>

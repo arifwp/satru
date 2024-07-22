@@ -1,40 +1,29 @@
-import {
-  AspectRatio,
-  Link as ChakraLink,
-  Image,
-  TableProps,
-  useToast,
-} from "@chakra-ui/react";
-import { RiArrowLeftDoubleLine, RiDeleteBin2Line } from "@remixicon/react";
+import { AspectRatio, Image, TableProps, useToast } from "@chakra-ui/react";
+import { RiDeleteBin2Line } from "@remixicon/react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { Link as ReactRouterLink } from "react-router-dom";
 import { getCookie } from "typescript-cookie";
 import { ProductInterface } from "../../../constant/Product";
 import { SelectOption } from "../../../constant/SelectOption";
 import formatNumber from "../../../lib/formatNumber";
+import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 import { getDataUser } from "../../../utils/helperFunction";
-import { CButton } from "../../CButton";
+import { DetailProduct } from "../../drawer/dedicated/DetailProduct";
 import { Empty } from "../../Empty";
 import { Confirmation } from "../../modal/Confirmation";
 import { TableSkeleton } from "../../TableSkeleton";
 import { CTable } from "../CTable";
-import { DetailProduct } from "../../drawer/dedicated/DetailProduct";
 
 interface Props extends TableProps {
   filterOutlet: SelectOption[] | undefined;
   filterCategory: SelectOption[] | undefined;
   filterSearch: string;
-  statusData: boolean;
-  setStatusData: any;
 }
 
 export const TableProduct = ({
   filterOutlet,
   filterCategory,
   filterSearch,
-  statusData,
-  setStatusData,
   ...rest
 }: Props) => {
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -43,6 +32,7 @@ export const TableProduct = ({
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const toast = useToast();
+  const { statusData, setStatusData } = useTriggerRenderStore();
 
   useEffect(() => {
     const token = getCookie("token");
@@ -164,25 +154,7 @@ export const TableProduct = ({
         },
         {
           id: "actionDetail",
-          name: (
-            // <ChakraLink
-            //   as={ReactRouterLink}
-            //   to={`detail-product/${item._id}`}
-            //   textDecoration={"none"}
-            //   _hover={{ textDecoration: "none" }}
-            // >
-            //   <CButton
-            //     variant={"ghost"}
-            //     size={"xs"}
-            //     colorScheme={"teal"}
-            //     icon={RiArrowLeftDoubleLine}
-            //   >
-            //     Detail
-            //   </CButton>
-            // </ChakraLink>
-
-            <DetailProduct _id={item._id} />
-          ),
+          name: <DetailProduct _id={item._id} />,
           props: { display: "table-cell" },
         },
         {
@@ -198,7 +170,7 @@ export const TableProduct = ({
               btnText="Hapus"
               icon={RiDeleteBin2Line}
               onConfirm={(inputValue) => {
-                setStatusData(statusData ? false : true);
+                setStatusData();
               }}
             />
           ),

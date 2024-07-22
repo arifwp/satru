@@ -5,10 +5,11 @@ import { SearchInput } from "../../../../components/input/SearchInput";
 import { ModalSingleForm } from "../../../../components/modal/dedicated/ModalSingleForm";
 import { TableCategory } from "../../../../components/table/dedicated/TableCategory";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
+import { useTriggerRenderStore } from "../../../../store/useTriggerRenderStore";
 
 export const CategoryPage = () => {
   const [filterSearch, setfilterSearch] = useState<string>("");
-  const [statusData, setStatusData] = useState<boolean>(false);
+  const { setStatusData } = useTriggerRenderStore();
 
   return (
     <PageContainer navs={pageNavsProduct}>
@@ -29,8 +30,6 @@ export const CategoryPage = () => {
             <SearchInput
               placeholder="Cari kategori..."
               onConfirm={(inputValue) => {
-                // ADD TODO
-                // console.log(inputValue);
                 setfilterSearch(inputValue);
               }}
             />
@@ -42,17 +41,12 @@ export const CategoryPage = () => {
             formValue="category"
             url="/v1/category/createCategory"
             onConfirm={(inputValue) => {
-              setStatusData(statusData ? false : true);
+              setStatusData();
             }}
           />
         </Stack>
 
-        <TableCategory
-          filterSearch={filterSearch}
-          statusData={statusData}
-          setStatusData={setStatusData}
-          mt={4}
-        />
+        <TableCategory filterSearch={filterSearch} mt={4} />
       </VStack>
     </PageContainer>
   );

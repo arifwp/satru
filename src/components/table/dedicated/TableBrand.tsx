@@ -9,25 +9,20 @@ import { CButton } from "../../CButton";
 import { Confirmation } from "../../modal/Confirmation";
 import { TableSkeleton } from "../../TableSkeleton";
 import { CTable } from "../CTable";
+import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 
 interface Props extends TableProps {
   filterSearch: string;
-  statusData: boolean;
-  setStatusData: any;
 }
 
-export const TableBrand = ({
-  filterSearch,
-  statusData,
-  setStatusData,
-  ...rest
-}: Props) => {
+export const TableBrand = ({ filterSearch, ...rest }: Props) => {
   const [data, setData] = useState<any[] | undefined>(undefined);
   const [loaded, setLoaded] = useState<boolean>(false);
   const [value, setValue] = useState<any[]>([]);
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const toast = useToast();
+  const { statusData, setStatusData } = useTriggerRenderStore();
 
   useEffect(() => {
     const ownerId = getDataUser()._id;
@@ -108,7 +103,7 @@ export const TableBrand = ({
               btnText="Hapus"
               icon={RiDeleteBin2Line}
               onConfirm={(inputValue) => {
-                setStatusData(statusData ? false : true);
+                setStatusData();
               }}
             />
           ),

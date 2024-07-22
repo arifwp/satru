@@ -5,11 +5,11 @@ import { SearchInput } from "../../../../components/input/SearchInput";
 import { ModalSingleForm } from "../../../../components/modal/dedicated/ModalSingleForm";
 import { TableBrand } from "../../../../components/table/dedicated/TableBrand";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
+import { useTriggerRenderStore } from "../../../../store/useTriggerRenderStore";
 
 export const BrandPage = () => {
   const [filterSearch, setfilterSearch] = useState<string>("");
-
-  const [statusData, setStatusData] = useState<boolean>(false);
+  const { setStatusData } = useTriggerRenderStore();
 
   return (
     <PageContainer navs={pageNavsProduct}>
@@ -41,17 +41,12 @@ export const BrandPage = () => {
             formValue="brand"
             url="/v1/brand/createBrand"
             onConfirm={(inputValue) => {
-              setStatusData(inputValue);
+              setStatusData();
             }}
           />
         </Stack>
 
-        <TableBrand
-          filterSearch={filterSearch}
-          statusData={statusData}
-          setStatusData={setStatusData}
-          mt={4}
-        />
+        <TableBrand filterSearch={filterSearch} mt={4} />
       </VStack>
     </PageContainer>
   );

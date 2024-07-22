@@ -4,6 +4,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { getCookie } from "typescript-cookie";
+import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 import { formatDateToId, getDataUser } from "../../../utils/helperFunction";
 import { CButton } from "../../CButton";
 import { Confirmation } from "../../modal/Confirmation";
@@ -12,22 +13,15 @@ import { CTable } from "../CTable";
 
 interface Props extends TableProps {
   filterSearch: string;
-  statusData: boolean;
-  setStatusData: any;
 }
 
-export const TableCategory = ({
-  filterSearch,
-  statusData,
-  setStatusData,
-  ...rest
-}: Props) => {
+export const TableCategory = ({ filterSearch, ...rest }: Props) => {
   const [data, setData] = useState<any[] | undefined>(undefined);
   const [loaded, setLoaded] = useState<boolean>(false);
   const [value, setValue] = useState<any[]>([]);
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-
+  const { statusData, setStatusData } = useTriggerRenderStore();
   const toast = useToast();
 
   useEffect(() => {
@@ -111,7 +105,7 @@ export const TableCategory = ({
               btnText="Hapus"
               icon={RiDeleteBin2Line}
               onConfirm={(inputValue) => {
-                setStatusData(statusData ? false : true);
+                setStatusData();
               }}
             />
           ),

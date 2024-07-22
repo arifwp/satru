@@ -124,7 +124,7 @@ export const ModalSingleForm = ({
                   type="text"
                   placeholder={placeholder}
                   onChange={formik.handleChange}
-                  value={value ? value : ""}
+                  value={value && value}
                 />
                 <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
               </FormControl>

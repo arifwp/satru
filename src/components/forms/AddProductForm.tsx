@@ -32,12 +32,6 @@ import { SelectInputBrand } from "../modal/dedicated/SelectInputBrand";
 import { SelectInputCategory } from "../modal/dedicated/SelectInputCategory";
 import { SelectInputOutlet } from "../modal/dedicated/SelectInputOutlet";
 
-interface VariantError {
-  variantName?: string;
-  variantPrice?: string;
-  variantStock?: string;
-}
-
 const initialValues = {
   ownerId: undefined,
   outlet: [],
@@ -70,35 +64,6 @@ export const AddProductForm = () => {
   const bgComponent = useBgComponentBaseColor();
 
   const fileInputRef = useRef<{ reset: () => void }>(null);
-
-  // const handleAddVariant = () => {
-  //   const valueVariant: ProductVariantInterface = {
-  //     variantId: Date.now(),
-  //     variantName: formik.values.variant[0].variantName,
-  //     variantPrice: formik.values.variant[0].variantPrice,
-  //     variantStock: formik.values.variant[0].variantStock,
-  //   };
-
-  //   addVariant(valueVariant);
-
-  //   formik.setFieldValue("variant", [
-  //     {
-  //       variantId: undefined,
-  //       variantName: undefined || "",
-  //       variantPrice: undefined || 0,
-  //       variantStock: undefined || 0,
-  //     },
-  //   ]);
-
-  //   toast({
-  //     title: "Varian berhasil ditambahkan",
-  //     status: "success",
-  //     duration: 2000,
-  //     isClosable: true,
-  //   });
-
-  //   console.log(formik.values);
-  // };
 
   const handleRemoveVariant = (variantId: any) => {
     removeVariant(variantId);

@@ -5,26 +5,38 @@ import {
   FormLabel,
   HStack,
   Input,
+  ModalBody,
   Stack,
   Text,
   Textarea,
   VStack,
   useToast,
 } from "@chakra-ui/react";
+import { RiDeleteBinLine } from "@remixicon/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import { useRef, useState } from "react";
+import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
+import { ProductVariantInterface } from "../../constant/Product";
 import { useBgComponentBaseColor } from "../../constant/colors";
+import formatNumber from "../../lib/formatNumber";
 import useScreenWidth from "../../lib/useScreenWidth";
+import { useProductVariantStore } from "../../store/useProductVariantStore";
+import { getDataUser } from "../../utils/helperFunction";
 import { CButton } from "../CButton";
-import { SelectInputBrand } from "../modal/dedicated/SelectInputBrand";
-import { SelectInputCategory } from "../modal/dedicated/SelectInputCategory";
 import { NumberInput } from "../input/NumberInput";
 import { FileInput } from "../input/dedicated/FileInput";
-import { getDataUser } from "../../utils/helperFunction";
-import { getCookie } from "typescript-cookie";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { ModalInputForm } from "../modal/ModalInputForm";
+import { SelectInputBrand } from "../modal/dedicated/SelectInputBrand";
+import { SelectInputCategory } from "../modal/dedicated/SelectInputCategory";
 import { SelectInputOutlet } from "../modal/dedicated/SelectInputOutlet";
+
+interface VariantError {
+  variantName?: string;
+  variantPrice?: string;
+  variantStock?: string;
+}
 
 const initialValues = {
   ownerId: undefined,
@@ -38,25 +50,99 @@ const initialValues = {
   brand: undefined,
   stock: undefined,
   minimumStock: undefined,
-  isHaveVariant: undefined,
-  variant: [
-    {
-      variantName: undefined,
-      variantPrice: undefined,
-      variantStock: undefined,
-      variantMinimumStock: undefined,
-    },
-  ],
+};
+
+const initialValuesVariant = {
+  variantId: undefined,
+  variantName: undefined,
+  variantPrice: undefined,
+  variantStock: undefined,
 };
 
 export const AddProductForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { variants, addVariant, removeVariant, updateVariant } =
+    useProductVariantStore();
   const toast = useToast();
   const sw = useScreenWidth();
 
   const bgComponent = useBgComponentBaseColor();
 
   const fileInputRef = useRef<{ reset: () => void }>(null);
+
+  // const handleAddVariant = () => {
+  //   const valueVariant: ProductVariantInterface = {
+  //     variantId: Date.now(),
+  //     variantName: formik.values.variant[0].variantName,
+  //     variantPrice: formik.values.variant[0].variantPrice,
+  //     variantStock: formik.values.variant[0].variantStock,
+  //   };
+
+  //   addVariant(valueVariant);
+
+  //   formik.setFieldValue("variant", [
+  //     {
+  //       variantId: undefined,
+  //       variantName: undefined || "",
+  //       variantPrice: undefined || 0,
+  //       variantStock: undefined || 0,
+  //     },
+  //   ]);
+
+  //   toast({
+  //     title: "Varian berhasil ditambahkan",
+  //     status: "success",
+  //     duration: 2000,
+  //     isClosable: true,
+  //   });
+
+  //   console.log(formik.values);
+  // };
+
+  const handleRemoveVariant = (variantId: any) => {
+    removeVariant(variantId);
+  };
+
+  const handleUpdateVariant = (updatedVariant: ProductVariantInterface) => {
+    updateVariant(updatedVariant);
+  };
+
+  const formikVariant = useFormik({
+    validateOnChange: true,
+    validateOnBlur: true,
+    initialValues: initialValuesVariant,
+    validationSchema: Yup.object().shape({
+      variantName: Yup.string().required("Nama varian produk harus diisi"),
+      variantPrice: Yup.number()
+        .required("Harga varian produk harus diisi")
+        .typeError("Harga varian harus berupa angka"),
+      variantStock: Yup.number()
+        .required("Jumlah stok harus diisi")
+        .typeError("Jumlah stok harus berupa angka"),
+    }),
+    onSubmit: (values, { resetForm }) => {
+      const valueVariant: ProductVariantInterface = {
+        variantId: Date.now(),
+        variantName: values.variantName!,
+        variantPrice: values.variantPrice!,
+        variantStock: values.variantStock!,
+      };
+
+      addVariant(valueVariant);
+
+      console.log("isi variants", variants);
+
+      toast({
+        title: "Varian berhasil ditambahkan",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+
+      resetForm({ values: initialValuesVariant });
+    },
+  });
 
   const formik = useFormik({
     validateOnChange: true,
@@ -67,7 +153,15 @@ export const AddProductForm = () => {
       price: Yup.number()
         .required("Harga harus diisi")
         .typeError("Harga harus berupa angka"),
-      outlet: Yup.array().required("Outlet harus diisi"),
+      outlet: Yup.array()
+        .required("Outlet harus diisi")
+        .test({
+          name: "requiredOutlet",
+          message: "Pilih outlet terlebih dahulu",
+          test: function (value) {
+            return value.length !== 0;
+          },
+        }),
       category: Yup.object().required("Kategori harus diisi"),
       stock: Yup.number().required("Stok harus diisi"),
       minimumStock: Yup.number().test({
@@ -135,10 +229,16 @@ export const AddProductForm = () => {
         Object.assign(newValue, { minimumStock: values.minimumStock });
       }
 
+      if (variants && variants.length !== 0) {
+        formData.append("variants", JSON.stringify(variants));
+      }
+
       if (values.imageProduct) {
         formData.append("imageProduct", values.imageProduct || "");
         Object.assign(newValue, { imageProduct: values.imageProduct });
       }
+
+      console.log("isi variant", values);
 
       axios
         .post(
@@ -152,10 +252,13 @@ export const AddProductForm = () => {
           }
         )
         .then((response: AxiosResponse) => {
-          resetForm({ values: initialValues });
+          // resetForm({ values: initialValues });
           if (fileInputRef.current) {
             fileInputRef.current.reset();
           }
+
+          // variants.map((item, i) => handleRemoveVariant(item.variantId));
+
           toast({
             title: JSON.parse(response.request.response).message,
             status: "success",
@@ -285,6 +388,7 @@ export const AddProductForm = () => {
                 <SelectInputOutlet
                   name="outlet"
                   onConfirm={(inputValue) => {
+                    console.log(inputValue);
                     formik.setFieldValue("outlet", inputValue);
                   }}
                   inputValue={formik.values.outlet}
@@ -407,6 +511,147 @@ export const AddProductForm = () => {
                 </FormErrorMessage>
               </FormControl>
             </VStack>
+          </VStack>
+
+          <VStack
+            className="varian"
+            w={"100%"}
+            p={4}
+            borderRadius={"md"}
+            spacing={6}
+            bg={bgComponent}
+            align={"stretch"}
+          >
+            <VStack className="stock-form" align={"stretch"} spacing={6}>
+              <Text as={"b"}>Varian Produk</Text>
+
+              <ModalInputForm
+                btnText="Tambah varian"
+                headerText="Tambah varian"
+                onClick={formikVariant.handleSubmit}
+              >
+                <ModalBody>
+                  <VStack spacing={6}>
+                    <FormControl
+                      isInvalid={
+                        formikVariant.errors.variantName &&
+                        formikVariant.touched.variantName
+                          ? true
+                          : false
+                      }
+                    >
+                      <FormLabel htmlFor={"variantName"}>Nama varian</FormLabel>
+                      <Input
+                        name={"variantName"}
+                        type="text"
+                        placeholder="Nama Varian"
+                        onChange={formikVariant.handleChange}
+                        value={formikVariant.values.variantName || ""}
+                      />
+                      <FormErrorMessage>
+                        {formikVariant.errors.variantName}
+                      </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl
+                      isInvalid={
+                        formikVariant.errors.variantPrice &&
+                        formikVariant.touched.variantPrice
+                          ? true
+                          : false
+                      }
+                    >
+                      <FormLabel htmlFor={"variantPrice"}>
+                        Harga varian
+                      </FormLabel>
+                      <NumberInput
+                        name={"variantPrice"}
+                        placeholder="Harga Varian"
+                        onChange={(inputValue) => {
+                          formikVariant.setFieldValue(
+                            "variantPrice",
+                            inputValue
+                          );
+                        }}
+                        inputValue={formikVariant.values.variantPrice}
+                        isCurrency={true}
+                      />
+                      <FormErrorMessage>
+                        {formikVariant.errors.variantPrice}
+                      </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl
+                      isInvalid={
+                        formikVariant.errors.variantStock &&
+                        formikVariant.touched.variantStock
+                          ? true
+                          : false
+                      }
+                    >
+                      <FormLabel htmlFor={"variantStock"}>
+                        Stok varian
+                      </FormLabel>
+                      <NumberInput
+                        name={"variantStock"}
+                        placeholder="Stok Varian"
+                        onChange={(inputValue) => {
+                          formikVariant.setFieldValue(
+                            "variantStock",
+                            inputValue
+                          );
+                        }}
+                        inputValue={formikVariant.values.variantStock}
+                        isCurrency={false}
+                      />
+                      <FormErrorMessage>
+                        {formikVariant.errors.variantStock}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </VStack>
+                </ModalBody>
+              </ModalInputForm>
+            </VStack>
+
+            {variants.length > 0 &&
+              variants.map((variant, i) => (
+                <VStack
+                  w={"100%"}
+                  flexWrap={"wrap"}
+                  key={variant.variantId}
+                  px={2}
+                  align="stretch"
+                  fontSize={"sm"}
+                  mt={variants.length > 0 ? 2 : 0}
+                >
+                  <HStack>
+                    <Text fontWeight="semibold">Nama Varian :</Text>
+                    <Text>{variant.variantName}</Text>
+                  </HStack>
+
+                  <HStack>
+                    <Text fontWeight="semibold">Harga Varian :</Text>
+                    <Text>Rp {formatNumber(variant.variantPrice)}</Text>
+                  </HStack>
+
+                  <HStack>
+                    <Text fontWeight="semibold">Stok Varian :</Text>
+                    <Text>{variant.variantStock}</Text>
+                  </HStack>
+
+                  <CButton
+                    justifyContent={"start"}
+                    icon={RiDeleteBinLine}
+                    colorScheme="red"
+                    variant="ghost"
+                    size={"xs"}
+                    w={"min-content"}
+                    onClick={() => handleRemoveVariant(variant.variantId)}
+                  >
+                    Hapus
+                  </CButton>
+                </VStack>
+              ))}
           </VStack>
 
           <HStack w={"100%"}>

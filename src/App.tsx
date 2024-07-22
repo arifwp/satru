@@ -1,18 +1,17 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ContentContainer } from "./components/containers/ContentContainer";
+import { RequiredAuth } from "./components/middleware/RequiredAuth";
 import customTheme from "./customTheme";
 import "./index.css";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { HomePage } from "./pages/dashboard/HomePage";
-import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
-import { AddProductPage } from "./pages/dashboard/product/productroot/AddProductPage";
-import { FillData } from "./pages/FillDataPage";
-import { RequiredAuth } from "./components/middleware/RequiredAuth";
-import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
-import { DetailProductPage } from "./pages/dashboard/product/detail/DetailProductPage";
 import { BrandPage } from "./pages/dashboard/product/brand/BrandPage";
+import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
+import { AddProductPage } from "./pages/dashboard/product/productroot/AddProductPage";
+import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
+import { FillData } from "./pages/FillDataPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -48,17 +47,6 @@ export const App = () => (
             <RequiredAuth>
               <ContentContainer label="Produk" isSubPage={false}>
                 <ProductPage />
-              </ContentContainer>
-            </RequiredAuth>
-          }
-        />
-
-        <Route
-          path="/product/detail-product/:_id"
-          element={
-            <RequiredAuth>
-              <ContentContainer label="Detail Produk" isSubPage={true}>
-                <DetailProductPage />
               </ContentContainer>
             </RequiredAuth>
           }

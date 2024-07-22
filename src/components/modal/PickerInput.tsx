@@ -1,6 +1,5 @@
 import {
   Box,
-  HStack,
   Icon,
   Image,
   Modal,
@@ -143,7 +142,6 @@ export const PickerInput = ({
       <CButton
         height={"40px"}
         variant="outline"
-        // borderColor={isError ? "red.300" : "RGBA(255, 255, 255, 0.24)"}
         borderColor={isError ? "red.300" : borderColorInput}
         borderWidth={isError ? "2px" : ""}
         onClick={onOpen}

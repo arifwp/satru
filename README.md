@@ -1,59 +1,38 @@
-This project was bootstrapped with
-[Create React App](https://github.com/facebook/create-react-app).
+# SATRU Frontend
 
-## Available Scripts
+Welcome to the frontend repository of **SATRU (Sistem Administrasi Transaksi Retail Unggul)**. This project is built using modern web development technologies to provide a seamless and efficient user experience for retail transaction administration.
 
-In the project directory, you can run:
+## Technologies Used
 
-### `npm start`
+- **React.js**: A JavaScript library for building user interfaces.
+- **Chakra UI**: A simple, modular, and accessible component library for React.
+- **TypeScript**: A strongly typed programming language that builds on JavaScript.
+- **React Router DOM**: A library for handling routing in React applications.
+- **TS-Cookie**: A TypeScript library for handling cookies.
+- **React-Chart.js-2**: A library for creating charts in React.
+- **Zustand**: A small, fast, and scalable state-management solution.
+- **Formik**: A library for building forms in React.
+- **Yup**: A JavaScript schema builder for value parsing and validation.
+- **Moment**: A library for parsing, validating, manipulating, and formatting dates.
+- **Axios**: A promise-based HTTP client for making requests.
 
-Runs the app in the development mode.<br /> Open
-[http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Features
 
-The page will reload if you make edits.<br /> You will also see any lint errors
-in the console.
+- **User Authentication**: Secure login and registration system.
+- **Dashboard**: Interactive dashboard with various charts and statistics.
+- **Product Management**: Add, edit, and delete products with real-time validation.
+- **Transaction Tracking**: Keep track of retail transactions and generate reports.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
 
-### `npm test`
+## Getting Started
 
-Launches the test runner in the interactive watch mode.<br /> See the section
-about
-[running tests](https://facebook.github.io/create-react-app/docs/running-tests)
-for more information.
+To get started with the project, clone the repository and install the dependencies:
 
-### `npm run build`
+```bash
+git clone https://github.com/yourusername/satru-frontend.git
+cd satru-frontend
+npm install
 
-Builds the app for production to the `build` folder.<br /> It correctly bundles
-React in production mode and optimizes the build for the best performance.
+Then, start the development server:
 
-The build is minified and the filenames include the hashes.<br /> Your app is
-ready to be deployed!
-
-See the section about
-[deployment](https://facebook.github.io/create-react-app/docs/deployment) for
-more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can
-`eject` at any time. This command will remove the single build dependency from
-your project.
-
-Instead, it will copy all the configuration files and the transitive
-dependencies (webpack, Babel, ESLint, etc) right into your project so you have
-full control over them. All of the commands except `eject` will still work, but
-they will point to the copied scripts so you can tweak them. At this point
-you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for
-small and middle deployments, and you shouldn’t feel obligated to use this
-feature. However we understand that this tool wouldn’t be useful if you couldn’t
-customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the
-[Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+npm start

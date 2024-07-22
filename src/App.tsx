@@ -9,6 +9,7 @@ import { RegisterPage } from "./pages/auth/RegisterPage";
 import { HomePage } from "./pages/dashboard/HomePage";
 import { BrandPage } from "./pages/dashboard/product/brand/BrandPage";
 import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
+import { EditProductPage } from "./pages/dashboard/product/edit/EditProductPage";
 import { AddProductPage } from "./pages/dashboard/product/productroot/AddProductPage";
 import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
 import { FillData } from "./pages/FillDataPage";
@@ -58,6 +59,17 @@ export const App = () => (
             <RequiredAuth>
               <ContentContainer label="Tambah Produk" isSubPage={true}>
                 <AddProductPage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/product/edit-product/:productId"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Edit Produk" isSubPage={true}>
+                <EditProductPage />
               </ContentContainer>
             </RequiredAuth>
           }

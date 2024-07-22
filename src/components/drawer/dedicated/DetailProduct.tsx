@@ -23,6 +23,7 @@ import { ProductInterface } from "../../../constant/Product";
 import { useBgComponentBaseColor } from "../../../constant/colors";
 import formatNumber from "../../../lib/formatNumber";
 import { CButton } from "../../CButton";
+import { formatDateToId } from "../../../utils/helperFunction";
 
 interface Props extends ButtonProps {
   _id: string;
@@ -188,7 +189,10 @@ export const DetailProduct = ({ _id }: Props) => {
                 <VStack fontSize={"xs"} align={"stretch"} spacing={1} mt={4}>
                   <Text variant={"secondary"}>Tanggal Ditambahkan</Text>
 
-                  <Text fontSize={"sm"}>{}</Text>
+                  <Text fontSize={"sm"}>
+                    {data &&
+                      formatDateToId({ dateString: data.createdAt.toString() })}
+                  </Text>
                 </VStack>
               </SkeletonText>
             </VStack>

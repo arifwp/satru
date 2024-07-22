@@ -25,6 +25,7 @@ interface Props {
   btnText: string;
   placeholder: string;
   formValue: string;
+  value?: string;
   url: string;
   onConfirm: (value: boolean) => void;
 }
@@ -37,6 +38,7 @@ export const ModalSingleForm = ({
   btnText,
   placeholder,
   formValue,
+  value,
   url,
   onConfirm,
   ...rest
@@ -122,6 +124,7 @@ export const ModalSingleForm = ({
                   type="text"
                   placeholder={placeholder}
                   onChange={formik.handleChange}
+                  value={value ? value : ""}
                 />
                 <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
               </FormControl>

@@ -1,19 +1,32 @@
 import { Box, Icon, Image, Input, Text, VStack } from "@chakra-ui/react";
 import { RiFileUploadLine } from "@remixicon/react";
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { useBgHover } from "../../../constant/colors";
 import { CButton } from "../../CButton";
 
 interface Props {
   onFileChange: (file: any | undefined) => void;
   onHandleDrop: (file: any | undefined) => void;
+  initValue?: string;
 }
 
 export const FileInput = forwardRef(
-  ({ onFileChange, onHandleDrop }: Props, ref) => {
+  ({ onFileChange, onHandleDrop, initValue }: Props, ref) => {
     const [previewImage, setPreviewImage] = useState<string>("");
     const inputRef = useRef<HTMLInputElement | null>(null);
     const bgHover = useBgHover();
+
+    useEffect(() => {
+      if (initValue) {
+        setPreviewImage(`http://localhost:3000/uploads/products/${initValue}`);
+      }
+    }, [initValue]);
 
     useImperativeHandle(ref, () => ({
       reset() {

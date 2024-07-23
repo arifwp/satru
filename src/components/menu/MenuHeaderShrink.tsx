@@ -43,6 +43,10 @@ export const MenuHeaderShrink = ({ children, label, isSubPage }: Props) => {
     window.history.back();
   };
 
+  const navigateToProfile = () => {
+    navigate("/profile", { state: { userId: getDataUser()._id } });
+  };
+
   const handleLogout = () => {
     setLoading(true);
     const token = getCookie("token");
@@ -123,7 +127,11 @@ export const MenuHeaderShrink = ({ children, label, isSubPage }: Props) => {
           >
             {colorMode === "light" ? "Dark" : "Light"} Mode
           </MenuItem>
-          <MenuItem icon={<Icon as={RiAccountCircleFill} />} fontSize={"sm"}>
+          <MenuItem
+            icon={<Icon as={RiAccountCircleFill} />}
+            fontSize={"sm"}
+            onClick={navigateToProfile}
+          >
             Profil
           </MenuItem>
           <MenuDivider />
@@ -131,7 +139,6 @@ export const MenuHeaderShrink = ({ children, label, isSubPage }: Props) => {
             icon={<Icon as={RiLogoutBoxLine} color={"red.400"} />}
             onClick={handleLogout}
           >
-            icon=
             {loading ? (
               <Spinner size={"sm"} color="red.400" />
             ) : (

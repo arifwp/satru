@@ -35,10 +35,6 @@ interface Props extends StackProps {
 }
 
 export const MenuHeader = ({ children, label, isSubPage }: Props) => {
-  const [selectedDates, setSelectedDates] = useState<{
-    start: Date | null;
-    end: Date | null;
-  }>({ start: null, end: null });
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const toast = useToast();
@@ -47,6 +43,10 @@ export const MenuHeader = ({ children, label, isSubPage }: Props) => {
 
   const handleBack = () => {
     window.history.back();
+  };
+
+  const navigateToProfile = () => {
+    navigate("/profile", { state: { userId: getDataUser()._id } });
   };
 
   const handleLogout = () => {
@@ -129,6 +129,7 @@ export const MenuHeader = ({ children, label, isSubPage }: Props) => {
               as={"div"}
               icon={<Icon as={RiAccountCircleFill} fontSize={"md"} />}
               fontSize={"sm"}
+              onClick={navigateToProfile}
             >
               Profil
             </MenuItem>

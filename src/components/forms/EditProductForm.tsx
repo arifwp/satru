@@ -264,6 +264,7 @@ export const EditProductForm = ({ paramsId }: Props) => {
           });
 
           navigate("/product");
+          clearVariant();
         })
         .catch((error: AxiosError) => {
           toast({

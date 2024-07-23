@@ -55,14 +55,11 @@ const initialValuesVariant = {
 
 export const AddProductForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
-
-  const { variants, addVariant, removeVariant, updateVariant } =
+  const { variants, addVariant, removeVariant, updateVariant, clearVariant } =
     useProductVariantStore();
   const toast = useToast();
   const sw = useScreenWidth();
-
   const bgComponent = useBgComponentBaseColor();
-
   const fileInputRef = useRef<{ reset: () => void }>(null);
 
   const handleRemoveVariant = (variantId: any) => {
@@ -224,7 +221,7 @@ export const AddProductForm = () => {
             fileInputRef.current.reset();
           }
 
-          variants.map((item, i) => handleRemoveVariant(item.variantId));
+          clearVariant();
 
           toast({
             title: JSON.parse(response.request.response).message,

@@ -75,6 +75,7 @@ export const ProductPage = () => {
             _hover={{ textDecoration: "none" }}
           >
             <CButton
+              w={"100%"}
               variant={"outline"}
               colorScheme="teal"
               icon={RiAddCircleLine}

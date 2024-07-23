@@ -8,6 +8,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  HStack,
   Image,
   Skeleton,
   SkeletonText,
@@ -54,7 +55,7 @@ export const DetailProduct = ({ _id }: Props) => {
         )
         .then((response: AxiosResponse) => {
           setData(JSON.parse(response.request.response).data);
-          console.log(data);
+          console.log(JSON.parse(response.request.response).data);
         })
         .catch((error: AxiosError) => {
           toast({
@@ -146,6 +147,25 @@ export const DetailProduct = ({ _id }: Props) => {
                 isLoaded={loaded}
               >
                 <VStack fontSize={"xs"} align={"stretch"} spacing={1} mt={4}>
+                  <Text variant={"secondary"}>Outlet</Text>
+
+                  {data &&
+                    data.outlet.map((item, i) => (
+                      <Text key={item._id} fontSize={"sm"}>
+                        {item.name}
+                      </Text>
+                    ))}
+                  {/* <Text fontSize={"sm"}>{data?.outlet.map}</Text> */}
+                </VStack>
+              </SkeletonText>
+
+              <SkeletonText
+                noOfLines={2}
+                spacing={2}
+                skeletonHeight={4}
+                isLoaded={loaded}
+              >
+                <VStack fontSize={"xs"} align={"stretch"} spacing={1} mt={4}>
                   <Text variant={"secondary"}>Harga</Text>
 
                   <Text fontSize={"sm"}>
@@ -179,6 +199,75 @@ export const DetailProduct = ({ _id }: Props) => {
                   <Text fontSize={"sm"}>
                     {data && data.brand ? data.brand.name : "-"}
                   </Text>
+                </VStack>
+              </SkeletonText>
+
+              <SkeletonText
+                noOfLines={2}
+                spacing={2}
+                skeletonHeight={4}
+                isLoaded={loaded}
+              >
+                <VStack fontSize={"xs"} align={"stretch"} spacing={1} mt={4}>
+                  <Text variant={"secondary"}>Stok</Text>
+
+                  <Text fontSize={"sm"}>{data && data.stock}</Text>
+                </VStack>
+              </SkeletonText>
+
+              <SkeletonText
+                noOfLines={2}
+                spacing={2}
+                skeletonHeight={4}
+                isLoaded={loaded}
+              >
+                <VStack fontSize={"xs"} align={"stretch"} spacing={1} mt={4}>
+                  <Text variant={"secondary"}>Minimum Stok</Text>
+
+                  <Text fontSize={"sm"}>
+                    {data && data.minimumStock ? data.minimumStock : "-"}
+                  </Text>
+                </VStack>
+              </SkeletonText>
+
+              <SkeletonText
+                noOfLines={2}
+                spacing={2}
+                skeletonHeight={4}
+                isLoaded={loaded}
+              >
+                <VStack fontSize={"xs"} align={"stretch"} spacing={1} mt={4}>
+                  <Text variant={"secondary"}>Varian Produk</Text>
+
+                  {data &&
+                    data.variants?.map((item, i) => (
+                      <VStack key={i} align={"stretch"}>
+                        <HStack
+                          className="wrap-horizontal"
+                          align={"start"}
+                          fontSize={"xs"}
+                        >
+                          <VStack p={"1.5px"}>
+                            <Text variant={"secondary"}>{`${i + 1}.`}</Text>
+                          </VStack>
+                          <VStack align={"stretch"} p={0} m={0}>
+                            <HStack>
+                              <Text variant={"secondary"}>Nama :</Text>
+                              <Text>{item.variantName}</Text>
+                            </HStack>
+                            <HStack>
+                              <Text variant={"secondary"}>Harga :</Text>
+                              <Text>{formatNumber(item.variantPrice)}</Text>
+                            </HStack>
+
+                            <HStack>
+                              <Text variant={"secondary"}>Stok :</Text>
+                              <Text>{formatNumber(item.variantStock)}</Text>
+                            </HStack>
+                          </VStack>
+                        </HStack>
+                      </VStack>
+                    ))}
                 </VStack>
               </SkeletonText>
 

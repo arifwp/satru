@@ -1,7 +1,9 @@
 import { BrandInterface } from "./Brand";
 import { CategoryInterface } from "./Category";
+import { OutletInterface } from "./Outlet";
 
 export interface ProductVariantInterface {
+  _id?: any;
   variantId: any;
   variantName: string;
   variantPrice: number;
@@ -20,6 +22,7 @@ export interface ProductInterface {
   category: CategoryInterface;
   brandId: string;
   brand: BrandInterface;
+  outlet: OutletInterface[];
   stock: number;
   minimumStock: number;
   imageProduct: string;

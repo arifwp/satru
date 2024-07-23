@@ -50,7 +50,8 @@ export const EditProductForm = ({ paramsId }: Props) => {
   const sw = useScreenWidth();
   const fileInputRef = useRef<{ reset: () => void }>(null);
   const navigate = useNavigate();
-  const { variants, addVariant, removeVariant } = useProductVariantStore();
+  const { variants, addVariant, removeVariant, clearVariant } =
+    useProductVariantStore();
 
   useEffect(() => {
     axios
@@ -65,12 +66,13 @@ export const EditProductForm = ({ paramsId }: Props) => {
       )
       .then((response: AxiosResponse) => {
         setData(JSON.parse(response.request.response).data);
+        clearVariant();
 
         if (JSON.parse(response.request.response).data.variants.length !== 0) {
           JSON.parse(response.request.response).data.variants.forEach(
             (variant: any) => {
               const variantWithId = { ...variant, variantId: variant._id };
-              addVariant(variantWithId);
+              addVariant(variantWithId, "init");
             }
           );
         }
@@ -145,7 +147,7 @@ export const EditProductForm = ({ paramsId }: Props) => {
         isClosable: true,
       });
 
-      // resetForm({ values: initialValuesVariant });
+      resetForm({ values: initialValuesVariant });
     },
   });
 

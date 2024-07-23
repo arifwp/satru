@@ -3,24 +3,40 @@ import { ProductVariantInterface } from "../constant/Product";
 
 interface ProductVariantState {
   variants: ProductVariantInterface[];
-  addVariant: (variant: ProductVariantInterface) => void;
+  addVariant: (variant: ProductVariantInterface, note?: string) => void;
   removeVariant: (variantId: any) => void;
   updateVariant: (variant: ProductVariantInterface) => void;
+  clearVariant: () => void;
 }
 
 export const useProductVariantStore = create<ProductVariantState>((set) => ({
   variants: [],
-  // addVariant: (variant) =>
+  // addVariant: (variant, note) =>
+
   //   set((state) => ({
   //     variants: [...state.variants, variant],
   //   })),
-  addVariant: (variant) =>
+  // addVariant: (variant,note) =>
+  //   set((state) => {
+  //     if (note) {
+
+  //     }
+  //     const exists = state.variants.some((v) => v._id === variant._id);
+  //     if (!exists) {
+  //       return { variants: [...state.variants, variant] };
+  //     }
+  //     return state;
+  //   }),
+  addVariant: (variant, note) =>
     set((state) => {
-      const exists = state.variants.some((v) => v._id === variant._id);
-      if (!exists) {
-        return { variants: [...state.variants, variant] };
+      if (note) {
+        const exists = state.variants.some((v) => v._id === variant._id);
+        if (!exists) {
+          return { variants: [...state.variants, variant] };
+        }
+        return state;
       }
-      return state;
+      return { variants: [...state.variants, variant] };
     }),
   removeVariant: (variantId) =>
     set((state) => ({
@@ -34,4 +50,5 @@ export const useProductVariantStore = create<ProductVariantState>((set) => ({
           : variant
       ),
     })),
+  clearVariant: () => set(() => ({ variants: [] })),
 }));

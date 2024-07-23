@@ -88,7 +88,7 @@ export const AddProductForm = () => {
     }),
     onSubmit: (values, { resetForm }) => {
       const valueVariant: ProductVariantInterface = {
-        variantId: Date.now(),
+        variantId: Date.now().toLocaleString(),
         variantName: values.variantName!,
         variantPrice: values.variantPrice!,
         variantStock: values.variantStock!,
@@ -108,6 +108,8 @@ export const AddProductForm = () => {
       resetForm({ values: initialValuesVariant });
     },
   });
+
+  console.log(variants);
 
   const formik = useFormik({
     validateOnChange: true,

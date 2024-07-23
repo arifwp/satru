@@ -13,6 +13,7 @@ import { EditProductPage } from "./pages/dashboard/product/edit/EditProductPage"
 import { AddProductPage } from "./pages/dashboard/product/productroot/AddProductPage";
 import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
 import { FillData } from "./pages/FillDataPage";
+import { ProfilePage } from "./pages/menu/profile/ProfilePage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -37,6 +38,17 @@ export const App = () => (
             <RequiredAuth>
               <ContentContainer label="Dashboard" isSubPage={false}>
                 <HomePage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Profil" isSubPage={true}>
+                <ProfilePage />
               </ContentContainer>
             </RequiredAuth>
           }

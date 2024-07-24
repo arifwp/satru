@@ -1,9 +1,6 @@
-import {
-  Link as ChakraLink,
-  LinkProps,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Link as ChakraLink, LinkProps } from "@chakra-ui/react";
 import { NavLink as ReactLink } from "react-router-dom";
+import { useBgHover } from "../../constant/colors";
 
 interface Props extends LinkProps {
   children?: any;
@@ -12,7 +9,7 @@ interface Props extends LinkProps {
 }
 
 export default function NavButton({ children, to, end, ...rest }: Props) {
-  const bg = useColorModeValue("#E2E8F060", "#2D374860");
+  const bgHover = useBgHover();
 
   return (
     <ChakraLink
@@ -24,7 +21,7 @@ export default function NavButton({ children, to, end, ...rest }: Props) {
       borderRadius={"xl"}
       w={"100%"}
       textDecoration={"none"}
-      _hover={{ bgColor: bg }}
+      _hover={{ bgColor: bgHover }}
       _activeLink={{
         bg: "teal.400",
         color: "white",

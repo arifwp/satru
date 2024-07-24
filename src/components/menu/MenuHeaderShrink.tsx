@@ -124,6 +124,7 @@ export const MenuHeaderShrink = ({ children, label, isSubPage }: Props) => {
             icon={<Icon as={colorMode === "light" ? RiMoonLine : RiSunLine} />}
             fontSize={"sm"}
             onClick={toggleColorMode}
+            cursor={"pointer"}
           >
             {colorMode === "light" ? "Dark" : "Light"} Mode
           </MenuItem>
@@ -131,6 +132,7 @@ export const MenuHeaderShrink = ({ children, label, isSubPage }: Props) => {
             icon={<Icon as={RiAccountCircleFill} />}
             fontSize={"sm"}
             onClick={navigateToProfile}
+            cursor={"pointer"}
           >
             Profil
           </MenuItem>

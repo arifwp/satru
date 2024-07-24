@@ -115,13 +115,13 @@ export const FileInput = forwardRef(
         />
         <CButton
           mt={4}
-          variant="outline"
+          variant="ghost"
           colorScheme="red"
           onClick={() => {
             setPreviewImage("");
           }}
         >
-          Reset
+          Hapus Foto
         </CButton>
       </>
     );

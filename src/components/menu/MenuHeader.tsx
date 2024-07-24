@@ -130,6 +130,7 @@ export const MenuHeader = ({ children, label, isSubPage }: Props) => {
               icon={<Icon as={RiAccountCircleFill} fontSize={"md"} />}
               fontSize={"sm"}
               onClick={navigateToProfile}
+              cursor={"pointer"}
             >
               Profil
             </MenuItem>

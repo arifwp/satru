@@ -1,11 +1,8 @@
-import { RiAddCircleLine, RiArrowDownSLine } from "@remixicon/react";
-import { CButton } from "../CButton";
 import {
   Button,
   ButtonProps,
   Icon,
   Modal,
-  ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -13,11 +10,13 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { RiArrowDownSLine } from "@remixicon/react";
+import { useState } from "react";
 import {
   useBgComponentBaseColor,
   useBorderColorInput,
 } from "../../constant/colors";
-import { useState } from "react";
+import { CButton } from "../CButton";
 
 interface Props extends ButtonProps {
   children?: any;

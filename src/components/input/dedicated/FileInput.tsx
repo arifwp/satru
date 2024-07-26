@@ -24,7 +24,8 @@ export const FileInput = forwardRef(
 
     useEffect(() => {
       if (initValue) {
-        setPreviewImage(`http://localhost:3000/uploads/products/${initValue}`);
+        // setPreviewImage(`http://localhost:3000/uploads/products/${initValue}`);
+        setPreviewImage(`http://localhost:3000/uploads/${initValue}`);
       }
     }, [initValue]);
 

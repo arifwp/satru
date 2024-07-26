@@ -185,7 +185,7 @@ export const RegisterForm = () => {
             }}
             w={"100%"}
             h={"40px"}
-            borderWidth={"1px"}
+            borderWidth={!!formik.errors.bornDate ? "2px" : "1px"}
             borderColor={"rgba(255, 255, 255, 0.24)"}
             color={
               formik.values.bornDate

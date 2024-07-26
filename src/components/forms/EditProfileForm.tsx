@@ -24,17 +24,8 @@ import {
   useBgComponentBaseColor,
   useBorderColorInput,
 } from "../../constant/colors";
-
-const initialValues = {
-  name: undefined,
-  email: undefined,
-  phone: undefined,
-  bornDate: undefined,
-  avatar: undefined,
-  createdAt: undefined,
-  lastLogin: undefined,
-  updatedAt: undefined,
-};
+import { UserInterface } from "../../constant/User";
+import { useTriggerRenderStore } from "../../store/useTriggerRenderStore";
 
 interface Props {
   paramsId: any;
@@ -43,10 +34,11 @@ interface Props {
 export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [data, setData] = useState({});
+  const [data, setData] = useState<UserInterface>();
   const toast = useToast();
   const fileInputRef = useRef<{ reset: () => void }>(null);
   const borderColorInput = useBorderColorInput();
+  const { statusData, setStatusData } = useTriggerRenderStore();
 
   useEffect(() => {
     const token = getCookie("token");
@@ -76,7 +68,15 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
       .finally(() => {
         setLoaded(false);
       });
-  }, []);
+  }, [statusData, toast]);
+
+  const initialValues = {
+    name: data && data.name,
+    bornDate: data?.bornDate
+      ? new Date(data.bornDate).toLocaleDateString("en-GB")
+      : "",
+    avatar: data && data.avatar,
+  };
 
   const formik = useFormik({
     validateOnBlur: false,
@@ -85,15 +85,56 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
     initialValues: initialValues,
     validationSchema: Yup.object().shape({
       name: Yup.string().required("Nama harus diisi"),
-      email: Yup.string()
-        .required("Email harus diisi")
-        .email("Format email harus benar"),
-      phone: Yup.string().required("Nomor telepon harus diisi"),
       bornDate: Yup.string().required("Tanggal lahir harus diisi"),
     }),
     onSubmit: (values, { resetForm }) => {
       console.log(values);
-      // setLoading(true)
+      // setStatusData()
+      setLoading(true);
+
+      const token = getCookie("token");
+      const formattedDate = values.bornDate
+        ? (values.bornDate as unknown as string).split("/").reverse().join("-")
+        : "";
+
+      const formData = new FormData();
+      formData.append("name", values.name || "");
+      formData.append("bornDate", formattedDate);
+      formData.append("avatar", values.avatar || "");
+
+      axios
+        .put(
+          `${process.env.REACT_APP_API_URL}/v1/user/updateUser/${
+            getDataUser()._id
+          }`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response: AxiosResponse) => {
+          setStatusData();
+          toast({
+            title: JSON.parse(response.request.response).message,
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
+        })
+        .catch((error: AxiosError) => {
+          toast({
+            title: JSON.parse(error.request.response).message,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     },
   });
 
@@ -133,9 +174,16 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
           >
             <FormLabel htmlFor="bornDate">Tanggal Lahir</FormLabel>
             <SelectDateSingle
-              initialDate={null}
+              initialDate={
+                formik.values.bornDate
+                  ? new Date(
+                      formik.values.bornDate.split("/").reverse().join("-")
+                    )
+                  : undefined
+              }
               placeholder="Tanggal lahir"
               onConfirm={(inputValue) => {
+                console.log("hasil input", inputValue);
                 formik.setFieldValue("bornDate", inputValue);
               }}
               w={"100%"}
@@ -160,6 +208,7 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
             alignSelf={"stretch"}
             form="editProfileForm"
             size={"sm"}
+            isLoading={loading}
             colorScheme="teal"
             variant={"solid"}
             type="submit"
@@ -179,7 +228,9 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
             onHandleDrop={(inputValue) => {
               formik.setFieldValue("avatar", inputValue);
             }}
-            initValue=""
+            initValue={
+              formik.values.avatar && `users/avatars/${formik.values.avatar}`
+            }
           />
         </VStack>
       </Stack>

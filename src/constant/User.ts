@@ -9,4 +9,5 @@ export interface UserInterface {
   createdAt: Date;
   lastLogin: Date;
   token: string;
+  avatar: string;
 }

@@ -9,6 +9,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
@@ -16,7 +17,12 @@ import { useRef, useState } from "react";
 import * as Yup from "yup";
 import { useBgComponentBaseColor } from "../../constant/colors";
 import { CButton } from "../CButton";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { error } from "console";
+import { getDataUser } from "../../utils/helperFunction";
+import { getCookie } from "typescript-cookie";
+import { useTempEmailStore } from "../../store/useTempEmailStore";
+import { useTriggerRenderStore } from "../../store/useTriggerRenderStore";
 
 interface Props {
   isOpen: boolean;
@@ -36,7 +42,9 @@ export const OtpForm = ({
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const bgComponent = useBgComponentBaseColor();
-
+  const { tempEmail, setTempEmail, clearTempEmail } = useTempEmailStore();
+  const toast = useToast();
+  const { statusData, setStatusData } = useTriggerRenderStore();
   const field1Ref = useRef<HTMLInputElement>(null);
   const field2Ref = useRef<HTMLInputElement>(null);
   const field3Ref = useRef<HTMLInputElement>(null);
@@ -71,11 +79,47 @@ export const OtpForm = ({
       const combinedValue = `${values.field1}${values.field2}${values.field3}${values.field4}`;
       const numericValue = Number(combinedValue);
 
+      const token = getCookie("token");
+
       const finalValue = {
+        userId: getDataUser()._id,
         otpCode: numericValue,
+        newEmail: tempEmail,
       };
 
-      axios.post(`${process.env.REACT_APP_API_URL}/v1/user/changeEmail`);
+      axios
+        .put(
+          `${process.env.REACT_APP_API_URL}/v1/user/changeEmail`,
+          finalValue,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response: AxiosResponse) => {
+          onClose();
+          toast({
+            title: JSON.parse(response.request.response).message,
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
+        })
+        .catch((error: AxiosError) => {
+          toast({
+            title: JSON.parse(error.request.response).message,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          clearTempEmail();
+          setStatusData();
+          setLoading(false);
+        });
     },
   });
 

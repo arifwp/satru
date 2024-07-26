@@ -17,6 +17,8 @@ import { UserInterface } from "../../constant/User";
 import { getDataUser } from "../../utils/helperFunction";
 import { CButton } from "../CButton";
 import { OtpForm } from "./OtpForm";
+import { useTempEmailStore } from "../../store/useTempEmailStore";
+import { useTriggerRenderStore } from "../../store/useTriggerRenderStore";
 
 interface Props {
   paramsId: any;
@@ -29,6 +31,8 @@ export const EditEmailForm = ({ paramsId, ...rest }: Props) => {
   const [data, setData] = useState<UserInterface | undefined>(undefined);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { setTempEmail } = useTempEmailStore();
+  const { statusData, setStatusData } = useTriggerRenderStore();
 
   useEffect(() => {
     const token = getCookie("token");
@@ -58,7 +62,7 @@ export const EditEmailForm = ({ paramsId, ...rest }: Props) => {
       .finally(() => {
         setLoaded(true);
       });
-  }, []);
+  }, [statusData]);
 
   const initialValues = {
     oldEmail: data && data.email,
@@ -74,7 +78,7 @@ export const EditEmailForm = ({ paramsId, ...rest }: Props) => {
         .email("Masukkan format email yang benar"),
     }),
     onSubmit: (values, { resetForm }) => {
-      // setLoading(true);
+      setLoading(true);
       console.log(values);
 
       const finalValue = {
@@ -83,39 +87,34 @@ export const EditEmailForm = ({ paramsId, ...rest }: Props) => {
         newEmail: values.newEmail,
       };
       const token = getCookie("token");
-      setIsModalOpen(true);
-      // axios
-      //   .put(
-      //     `${process.env.REACT_APP_API_URL}/v1/user/confirmEmailChange`,
-      //     finalValue,
-      //     {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         Authorization: `Bearer ${token}`,
-      //       },
-      //     }
-      //   )
-      //   .then((response: AxiosResponse) => {
-      //     <OtpForm
-      //       isOpen={isOpen}
-      //       onOpen={onOpen}
-      //       onClose={onClose}
-      //       headerText="Kode Otp"
-      //       url=""
-      //       formId="changeEmailForm"
-      //     />;
-      //   })
-      //   .catch((error: AxiosError) => {
-      //     toast({
-      //       title: JSON.parse(error.request.response).message,
-      //       status: "error",
-      //       duration: 2000,
-      //       isClosable: true,
-      //     });
-      //   })
-      //   .finally(() => {
-      //     setLoading(false);
-      //   });
+      // setIsModalOpen(true);
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/v1/user/confirmEmailChange`,
+          finalValue,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response: AxiosResponse) => {
+          values.newEmail && setTempEmail(values.newEmail);
+          setIsModalOpen(true);
+          resetForm({ values: initialValues });
+        })
+        .catch((error: AxiosError) => {
+          toast({
+            title: JSON.parse(error.request.response).message,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     },
   });
 
@@ -163,6 +162,7 @@ export const EditEmailForm = ({ paramsId, ...rest }: Props) => {
           </FormControl>
 
           <CButton
+            form="editEmailForm"
             type="submit"
             spinnerPlacement="start"
             loadingText={"Loading..."}

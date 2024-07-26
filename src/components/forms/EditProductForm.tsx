@@ -712,7 +712,10 @@ export const EditProductForm = ({ paramsId }: Props) => {
                 onHandleDrop={(inputValue) => {
                   formik.setFieldValue("imageProduct", inputValue);
                 }}
-                initValue={formik.values.imageProduct}
+                initValue={
+                  formik.values.imageProduct &&
+                  `products/${formik.values.imageProduct}`
+                }
               />
             </FormControl>
           </VStack>

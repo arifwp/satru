@@ -1,31 +1,24 @@
 import {
-  AspectRatio,
   Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Image,
   Input,
   Stack,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { RiDeleteBin2Line, RiEdit2Line } from "@remixicon/react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
-import { getDataUser } from "../../utils/helperFunction";
-import { CButton } from "../CButton";
-import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
-import { FileInput } from "../input/dedicated/FileInput";
-import {
-  useBgComponentBaseColor,
-  useBorderColorInput,
-} from "../../constant/colors";
+import { useBorderColorInput } from "../../constant/colors";
 import { UserInterface } from "../../constant/User";
 import { useTriggerRenderStore } from "../../store/useTriggerRenderStore";
+import { getDataUser } from "../../utils/helperFunction";
+import { FileInput } from "../input/dedicated/FileInput";
+import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
 
 interface Props {
   paramsId: any;
@@ -145,13 +138,13 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
       onSubmit={formik.handleSubmit}
     >
       <Stack
-        direction={["column-reverse", "row", "row", "row", "row"]}
+        direction={["column-reverse", "column-reverse", "row", "row", "row"]}
         className="form-container"
         w={"100%"}
         spacing={6}
         {...rest}
       >
-        <VStack w={"50%"} spacing={6}>
+        <VStack flex={1} spacing={6}>
           <FormControl
             isInvalid={formik.errors.name && formik.touched.name ? true : false}
           >
@@ -219,7 +212,7 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
           </Button>
         </VStack>
 
-        <VStack w={"50%"} align={"start"}>
+        <VStack flex={1} align={"start"}>
           <FileInput
             ref={fileInputRef}
             onFileChange={(inputValue) => {
@@ -231,6 +224,7 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
             initValue={
               formik.values.avatar && `users/avatars/${formik.values.avatar}`
             }
+            w={"100%"}
           />
         </VStack>
       </Stack>

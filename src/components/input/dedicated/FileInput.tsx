@@ -1,4 +1,12 @@
-import { Box, Icon, Image, Input, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  Icon,
+  Image,
+  Input,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { RiFileUploadLine } from "@remixicon/react";
 import {
   forwardRef,
@@ -10,14 +18,14 @@ import {
 import { useBgHover } from "../../../constant/colors";
 import { CButton } from "../../CButton";
 
-interface Props {
+interface Props extends BoxProps {
   onFileChange: (file: any | undefined) => void;
   onHandleDrop: (file: any | undefined) => void;
   initValue?: string;
 }
 
 export const FileInput = forwardRef(
-  ({ onFileChange, onHandleDrop, initValue }: Props, ref) => {
+  ({ onFileChange, onHandleDrop, initValue, ...rest }: Props, ref) => {
     const [previewImage, setPreviewImage] = useState<string>("");
     const inputRef = useRef<HTMLInputElement | null>(null);
     const bgHover = useBgHover();
@@ -77,6 +85,7 @@ export const FileInput = forwardRef(
           onClick={() => inputRef.current?.click()}
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
+          {...rest}
         >
           {previewImage ? (
             <Image

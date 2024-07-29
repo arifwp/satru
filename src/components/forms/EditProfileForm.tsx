@@ -4,6 +4,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  Skeleton,
   Stack,
   useToast,
   VStack,
@@ -17,7 +18,7 @@ import { useBorderColorInput } from "../../constant/colors";
 import { UserInterface } from "../../constant/User";
 import { useTriggerRenderStore } from "../../store/useTriggerRenderStore";
 import { getDataUser } from "../../utils/helperFunction";
-import { FileInput } from "../input/dedicated/FileInput";
+import { InputAvatar } from "../avatar/InputAvatar";
 import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
 
 interface Props {
@@ -59,7 +60,8 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
         });
       })
       .finally(() => {
-        setLoaded(false);
+        setLoading(false);
+        setLoaded(true);
       });
   }, [statusData, toast]);
 
@@ -144,19 +146,39 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
         spacing={6}
         {...rest}
       >
-        <VStack flex={1} spacing={6}>
+        <VStack w={"100%"} spacing={6}>
+          <InputAvatar
+            ref={fileInputRef}
+            onFileChange={(inputValue) => {
+              formik.setFieldValue("avatar", inputValue);
+            }}
+            onHandleDrop={(inputValue) => {
+              formik.setFieldValue("avatar", inputValue);
+            }}
+            alt={formik.values.name}
+            initValue={
+              formik.values.avatar && `users/avatars/${formik.values.avatar}`
+            }
+          />
+
           <FormControl
             isInvalid={formik.errors.name && formik.touched.name ? true : false}
           >
             <FormLabel htmlFor="name">Nama</FormLabel>
-            <Input
-              name="name"
-              type="text"
-              value={formik.values.name || ""}
-              onChange={formik.handleChange}
-              fontSize={"xs"}
-              placeholder="Nama"
-            />
+            <Skeleton
+              isLoaded={loaded}
+              height={!loaded ? "40px" : ""}
+              borderRadius={"md"}
+            >
+              <Input
+                name="name"
+                type="text"
+                value={formik.values.name || ""}
+                onChange={formik.handleChange}
+                fontSize={"xs"}
+                placeholder="Nama"
+              />
+            </Skeleton>
             <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
           </FormControl>
 
@@ -166,33 +188,39 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
             }
           >
             <FormLabel htmlFor="bornDate">Tanggal Lahir</FormLabel>
-            <SelectDateSingle
-              initialDate={
-                formik.values.bornDate
-                  ? new Date(
-                      formik.values.bornDate.split("/").reverse().join("-")
-                    )
-                  : undefined
-              }
-              placeholder="Tanggal lahir"
-              onConfirm={(inputValue) => {
-                console.log("hasil input", inputValue);
-                formik.setFieldValue("bornDate", inputValue);
-              }}
-              w={"100%"}
-              h={"40px"}
-              borderWidth={!!formik.errors.bornDate ? "2px" : "1px"}
-              borderColor={
-                !!formik.errors.bornDate ? "red.300" : borderColorInput
-              }
-              boxShadow={"0 0 0 2px var(--p500) !important"}
-              color={
-                formik.values.bornDate ? "fieldtext !important" : "#96969691"
-              }
-              fontWeight={"normal"}
-              fontSize={"sm"}
-              justifyContent={"flex-start"}
-            />
+            <Skeleton
+              isLoaded={loaded}
+              height={!loaded ? "40px" : ""}
+              borderRadius={"md"}
+            >
+              <SelectDateSingle
+                initialDate={
+                  formik.values.bornDate
+                    ? new Date(
+                        formik.values.bornDate.split("/").reverse().join("-")
+                      )
+                    : undefined
+                }
+                placeholder="Tanggal lahir"
+                onConfirm={(inputValue) => {
+                  console.log("hasil input", inputValue);
+                  formik.setFieldValue("bornDate", inputValue);
+                }}
+                w={"100%"}
+                h={"40px"}
+                borderWidth={!!formik.errors.bornDate ? "2px" : "1px"}
+                borderColor={
+                  !!formik.errors.bornDate ? "red.300" : borderColorInput
+                }
+                boxShadow={"0 0 0 2px var(--p500) !important"}
+                color={
+                  formik.values.bornDate ? "fieldtext !important" : "#96969691"
+                }
+                fontWeight={"normal"}
+                fontSize={"sm"}
+                justifyContent={"flex-start"}
+              />
+            </Skeleton>
             <FormErrorMessage>{formik.errors.bornDate}</FormErrorMessage>
           </FormControl>
 
@@ -212,8 +240,8 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
           </Button>
         </VStack>
 
-        <VStack flex={1} align={"start"}>
-          <FileInput
+        <VStack align={"start"}>
+          {/* <FileInput
             ref={fileInputRef}
             onFileChange={(inputValue) => {
               formik.setFieldValue("avatar", inputValue);
@@ -225,7 +253,7 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
               formik.values.avatar && `users/avatars/${formik.values.avatar}`
             }
             w={"100%"}
-          />
+          /> */}
         </VStack>
       </Stack>
     </form>

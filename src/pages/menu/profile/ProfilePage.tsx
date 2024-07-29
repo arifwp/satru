@@ -8,15 +8,16 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
+import { EditEmailForm } from "../../../components/forms/EditEmailForm";
 import { EditProfileForm } from "../../../components/forms/EditProfileForm";
 import { useBgComponentBaseColor, useBgHover } from "../../../constant/colors";
-import { EditEmailForm } from "../../../components/forms/EditEmailForm";
 
 export const ProfilePage = () => {
   const location = useLocation();
   const paramsId = location.state.userId;
   const bgHover = useBgHover();
   const bgComponent = useBgComponentBaseColor();
+
   return (
     <VStack
       className="profile-container"

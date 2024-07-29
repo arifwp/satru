@@ -11,6 +11,7 @@ import { useLocation } from "react-router-dom";
 import { EditEmailForm } from "../../../components/forms/EditEmailForm";
 import { EditProfileForm } from "../../../components/forms/EditProfileForm";
 import { useBgComponentBaseColor, useBgHover } from "../../../constant/colors";
+import { EditWhatsappForm } from "../../../components/forms/EditWhatsappForm";
 
 export const ProfilePage = () => {
   const location = useLocation();
@@ -93,7 +94,7 @@ export const ProfilePage = () => {
             <EditEmailForm paramsId={paramsId} />
           </TabPanel>
           <TabPanel>
-            <p>two!</p>
+            <EditWhatsappForm paramsId={paramsId} />
           </TabPanel>
           <TabPanel>
             <p>three!</p>

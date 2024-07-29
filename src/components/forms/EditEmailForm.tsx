@@ -180,7 +180,9 @@ export const EditEmailForm = ({ paramsId, ...rest }: Props) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         headerText="Kode Otp"
-        url=""
+        subTitle="Periksa di spam/kotak masuk email anda untuk kode OTP yang kami
+                kirimkan melalui email"
+        url="/v1/user/changeEmail"
         formId="changeEmailForm"
       />
     </>

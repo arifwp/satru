@@ -28,6 +28,7 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   headerText: string;
+  subTitle: string;
   url: string;
   formId: string;
 }
@@ -36,6 +37,7 @@ export const OtpForm = ({
   isOpen,
   onClose,
   headerText,
+  subTitle,
   url,
   formId,
   ...rest
@@ -88,16 +90,12 @@ export const OtpForm = ({
       };
 
       axios
-        .put(
-          `${process.env.REACT_APP_API_URL}/v1/user/changeEmail`,
-          finalValue,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        .put(`${process.env.REACT_APP_API_URL}${url}`, finalValue, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((response: AxiosResponse) => {
           onClose();
           toast({
@@ -199,8 +197,7 @@ export const OtpForm = ({
               </Text>
 
               <Text textAlign={"center"} fontSize={"sm"} variant={"secondary"}>
-                Periksa di spam/kotak masuk email anda untuk kode OTP yang kami
-                kirimkan melalui email
+                {subTitle}
               </Text>
 
               <HStack mt={6}>

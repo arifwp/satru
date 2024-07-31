@@ -27,7 +27,7 @@ export const PageContainer = ({ children, navs, ...rest }: Props) => {
               fontSize={"sm"}
               variant={"secondary"}
             >
-              {item.label}
+              {item.name}
             </Text>
           </NavButton>
         ))}

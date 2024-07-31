@@ -1,11 +1,11 @@
 export interface PageNavsProps {
   id: any;
-  label: string;
+  name: string;
   to: string;
 }
 
 export const pageNavsProduct: PageNavsProps[] = [
-  { id: 1, label: "Product", to: "/product" },
-  { id: 2, label: "Kategori", to: "/product/category" },
-  { id: 3, label: "Merk", to: "/product/brand" },
+  { id: 1, name: "Product", to: "/product" },
+  { id: 2, name: "Kategori", to: "/product/category" },
+  { id: 3, name: "Merk", to: "/product/brand" },
 ];

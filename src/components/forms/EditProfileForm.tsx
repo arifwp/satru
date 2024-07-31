@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useFormik } from "formik";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
 import { useBorderColorInput } from "../../constant/colors";
@@ -22,48 +22,16 @@ import { InputAvatar } from "../avatar/InputAvatar";
 import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
 
 interface Props {
-  paramsId: any;
+  data: UserInterface | undefined;
+  loaded: boolean;
 }
 
-export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
+export const EditProfileForm = ({ data, loaded, ...rest }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [loaded, setLoaded] = useState<boolean>(false);
-  const [data, setData] = useState<UserInterface>();
   const toast = useToast();
   const fileInputRef = useRef<{ reset: () => void }>(null);
   const borderColorInput = useBorderColorInput();
-  const { statusData, setStatusData } = useTriggerRenderStore();
-
-  useEffect(() => {
-    const token = getCookie("token");
-    axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/v1/user/getDetailUser/${
-          getDataUser()._id
-        }`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response: AxiosResponse) => {
-        setData(JSON.parse(response.request.response).data);
-      })
-      .catch((error: AxiosError) => {
-        toast({
-          title: JSON.parse(error.request.response).message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-        setLoaded(true);
-      });
-  }, [statusData, toast]);
+  const { setStatusData } = useTriggerRenderStore();
 
   const initialValues = {
     name: data && data.name,
@@ -82,9 +50,7 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
       name: Yup.string().required("Nama harus diisi"),
       bornDate: Yup.string().required("Tanggal lahir harus diisi"),
     }),
-    onSubmit: (values, { resetForm }) => {
-      console.log(values);
-      // setStatusData()
+    onSubmit: (values) => {
       setLoading(true);
 
       const token = getCookie("token");
@@ -226,34 +192,20 @@ export const EditProfileForm = ({ paramsId, ...rest }: Props) => {
 
           <Button
             mt={2}
-            alignSelf={"stretch"}
             form="editProfileForm"
-            size={"sm"}
-            isLoading={loading}
-            colorScheme="teal"
-            variant={"solid"}
             type="submit"
-            loadingText="Loading..."
+            borderRadius={"md"}
+            size={"sm"}
             spinnerPlacement="start"
+            loadingText={"Loading..."}
+            isLoading={loading}
+            alignSelf={"start"}
+            colorScheme="teal"
+            variant="outline"
+            fontSize={[12, null, 14]}
           >
-            Submit
+            Ganti Profil
           </Button>
-        </VStack>
-
-        <VStack align={"start"}>
-          {/* <FileInput
-            ref={fileInputRef}
-            onFileChange={(inputValue) => {
-              formik.setFieldValue("avatar", inputValue);
-            }}
-            onHandleDrop={(inputValue) => {
-              formik.setFieldValue("avatar", inputValue);
-            }}
-            initValue={
-              formik.values.avatar && `users/avatars/${formik.values.avatar}`
-            }
-            w={"100%"}
-          /> */}
         </VStack>
       </Stack>
     </form>

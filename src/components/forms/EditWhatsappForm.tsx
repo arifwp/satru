@@ -1,63 +1,34 @@
 import {
+  Button,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Input,
   Skeleton,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { UserInterface } from "../../constant/User";
-import { useTriggerRenderStore } from "../../store/useTriggerRenderStore";
-import { getCookie } from "typescript-cookie";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { getDataUser } from "../../utils/helperFunction";
 import { useFormik } from "formik";
+import { useState } from "react";
+import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
-import { CButton } from "../CButton";
+import { UserInterface } from "../../constant/User";
+import { useTempValueStore } from "../../store/useTempValueStore";
+import { getDataUser } from "../../utils/helperFunction";
+import { OtpForm } from "./OtpForm";
 
 interface Props {
-  paramsId: any;
+  data: UserInterface | undefined;
+  loaded: boolean;
 }
 
-export const EditWhatsappForm = ({ paramsId, ...rest }: Props) => {
-  const [data, setData] = useState<UserInterface | undefined>(undefined);
+export const EditWhatsappForm = ({ data, loaded, ...rest }: Props) => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loaded, setLoaded] = useState<boolean>(false);
   const toast = useToast();
-  const { statusData, setStatusData } = useTriggerRenderStore();
-
-  useEffect(() => {
-    const token = getCookie("token");
-
-    axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/v1/user/getDetailUser/${
-          getDataUser()._id
-        }`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response: AxiosResponse) => {
-        setData(JSON.parse(response.request.response).data);
-      })
-      .catch((error: AxiosError) => {
-        toast({
-          title: JSON.parse(error.request.response).message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
-      })
-      .finally(() => {
-        setLoaded(true);
-      });
-  }, [statusData]);
+  const { setTempValue } = useTempValueStore();
 
   const initialValues = {
     oldWa: data && data.phone,
@@ -77,8 +48,8 @@ export const EditWhatsappForm = ({ paramsId, ...rest }: Props) => {
 
       const finalValue = {
         userId: getDataUser()._id,
-        oldEmail: values.oldWa,
-        newEmail: values.newWa,
+        oldWa: values.oldWa,
+        newWa: values.newWa,
       };
 
       axios
@@ -92,9 +63,11 @@ export const EditWhatsappForm = ({ paramsId, ...rest }: Props) => {
             },
           }
         )
-        .then((response: AxiosResponse) => [
-          resetForm({ values: initialValues }),
-        ])
+        .then((response: AxiosResponse) => {
+          values.newWa && setTempValue(values.newWa);
+          setIsModalOpen(true);
+          resetForm({ values: initialValues });
+        })
         .catch((error: AxiosError) => {
           toast({
             title: JSON.parse(error.request.response).message,
@@ -110,56 +83,73 @@ export const EditWhatsappForm = ({ paramsId, ...rest }: Props) => {
   });
 
   return (
-    <form
-      id="editWhatsapp"
-      className="edit-whatsapp-container"
-      style={{ width: "100%" }}
-      onSubmit={formik.handleSubmit}
-    >
-      <VStack w={"100%"} spacing={6}>
-        <FormControl>
-          <FormLabel htmlFor="oldWa">Nomor Whatsapp</FormLabel>
-          <Skeleton
-            isLoaded={loaded}
-            height={!loaded ? "40px" : ""}
-            borderRadius={"md"}
-          >
+    <>
+      <form
+        id="editWhatsapp"
+        className="edit-whatsapp-container"
+        style={{ width: "100%" }}
+        onSubmit={formik.handleSubmit}
+      >
+        <VStack w={"100%"} spacing={6}>
+          <FormControl>
+            <FormLabel htmlFor="oldWa">Nomor Whatsapp</FormLabel>
+            <Skeleton
+              isLoaded={loaded}
+              height={!loaded ? "40px" : ""}
+              borderRadius={"md"}
+            >
+              <Input
+                name="oldWa"
+                type="text"
+                fontSize={"xs"}
+                onChange={formik.handleChange}
+                value={formik.values.oldWa || ""}
+                readOnly
+              />
+            </Skeleton>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel htmlFor="newWa">Nomor Whatsapp Baru</FormLabel>
             <Input
-              name="oldWa"
+              name="newWa"
               type="text"
               fontSize={"xs"}
               onChange={formik.handleChange}
-              value={formik.values.oldWa || ""}
-              readOnly
+              value={formik.values.newWa || ""}
             />
-          </Skeleton>
-        </FormControl>
+            <FormHelperText fontSize={[12, null, 14]}>
+              Format nomor harus diawali dengan 62
+            </FormHelperText>
+            <FormErrorMessage>{formik.errors.newWa}</FormErrorMessage>
+          </FormControl>
 
-        <FormControl>
-          <FormLabel htmlFor="newWa">Nomor Whatsapp Baru</FormLabel>
-          <Input
-            name="newWa"
-            type="text"
-            fontSize={"xs"}
-            onChange={formik.handleChange}
-            value={formik.values.newWa || ""}
-          />
-          <FormErrorMessage>{formik.errors.newWa}</FormErrorMessage>
-        </FormControl>
+          <Button
+            form="editWhatsapp"
+            type="submit"
+            fontSize={[12, null, 14]}
+            size={"sm"}
+            borderRadius={"md"}
+            isLoading={loading}
+            spinnerPlacement="start"
+            loadingText={"Loading..."}
+            alignSelf={"start"}
+            colorScheme="teal"
+            variant="outline"
+          >
+            Ganti Whatsapp
+          </Button>
+        </VStack>
+      </form>
 
-        <CButton
-          form="editWhatsapp"
-          type="submit"
-          isLoading={loading}
-          spinnerPlacement="start"
-          loadingText={"Loading..."}
-          alignSelf={"start"}
-          colorScheme="teal"
-          variant="outline"
-        >
-          Ganti Whatsapp
-        </CButton>
-      </VStack>
-    </form>
+      <OtpForm
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        headerText="Kode Otp"
+        subTitle="Kami telah mengirimkan kode otp ke whatsapp anda"
+        url="/v1/user/changeWhatsapp"
+        formId="changeWhatsappForm"
+      />
+    </>
   );
 };

@@ -8,6 +8,7 @@ import {
 } from "react";
 import { useBgHover } from "../../constant/colors";
 import { CButton } from "../CButton";
+import { getDataUser } from "../../utils/helperFunction";
 
 interface Props extends BoxProps {
   onFileChange: (file: any | undefined) => void;
@@ -78,13 +79,13 @@ export const InputAvatar = forwardRef(
           {previewImage ? (
             <Avatar
               size={{ base: "lg", sm: "xl", md: "xl", lg: "2xl", xl: "2xl" }}
-              name={alt}
+              name={getDataUser().name && getDataUser().name}
               src={previewImage}
             />
           ) : (
             <Avatar
               size={{ base: "lg", sm: "xl", md: "xl", lg: "2xl", xl: "2xl" }}
-              name={alt}
+              name={getDataUser().name && getDataUser().name}
               bg={"teal.400"}
             />
           )}

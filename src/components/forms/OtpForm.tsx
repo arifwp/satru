@@ -12,17 +12,16 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import { useRef, useState } from "react";
+import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
 import { useBgComponentBaseColor } from "../../constant/colors";
-import { CButton } from "../CButton";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { error } from "console";
-import { getDataUser } from "../../utils/helperFunction";
-import { getCookie } from "typescript-cookie";
-import { useTempEmailStore } from "../../store/useTempEmailStore";
+import { useTempValueStore } from "../../store/useTempValueStore";
 import { useTriggerRenderStore } from "../../store/useTriggerRenderStore";
+import { getDataUser } from "../../utils/helperFunction";
+import { CButton } from "../CButton";
 
 interface Props {
   isOpen: boolean;
@@ -32,6 +31,13 @@ interface Props {
   url: string;
   formId: string;
 }
+
+const initialValues = {
+  field1: "",
+  field2: "",
+  field3: "",
+  field4: "",
+};
 
 export const OtpForm = ({
   isOpen,
@@ -44,9 +50,9 @@ export const OtpForm = ({
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const bgComponent = useBgComponentBaseColor();
-  const { tempEmail, setTempEmail, clearTempEmail } = useTempEmailStore();
+  const { tempValue, clearTempValue } = useTempValueStore();
   const toast = useToast();
-  const { statusData, setStatusData } = useTriggerRenderStore();
+  const { setStatusData } = useTriggerRenderStore();
   const field1Ref = useRef<HTMLInputElement>(null);
   const field2Ref = useRef<HTMLInputElement>(null);
   const field3Ref = useRef<HTMLInputElement>(null);
@@ -55,12 +61,7 @@ export const OtpForm = ({
   const formik = useFormik({
     validateOnChange: true,
     validateOnBlur: false,
-    initialValues: {
-      field1: "",
-      field2: "",
-      field3: "",
-      field4: "",
-    },
+    initialValues: initialValues,
     validationSchema: Yup.object().shape({
       field1: Yup.number()
         .required("Harus diisi")
@@ -76,8 +77,7 @@ export const OtpForm = ({
         .typeError("Harus berupa angka"),
     }),
     onSubmit: (values, { resetForm }) => {
-      console.log(values);
-
+      setLoading(true);
       const combinedValue = `${values.field1}${values.field2}${values.field3}${values.field4}`;
       const numericValue = Number(combinedValue);
 
@@ -86,7 +86,7 @@ export const OtpForm = ({
       const finalValue = {
         userId: getDataUser()._id,
         otpCode: numericValue,
-        newEmail: tempEmail,
+        newValue: tempValue,
       };
 
       axios
@@ -97,6 +97,7 @@ export const OtpForm = ({
           },
         })
         .then((response: AxiosResponse) => {
+          resetForm({ values: initialValues });
           onClose();
           toast({
             title: JSON.parse(response.request.response).message,
@@ -114,7 +115,7 @@ export const OtpForm = ({
           });
         })
         .finally(() => {
-          clearTempEmail();
+          clearTempValue();
           setStatusData();
           setLoading(false);
         });

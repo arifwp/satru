@@ -122,7 +122,16 @@ export const MenuHeader = ({ children, label, isSubPage }: Props) => {
             p={4}
             rightIcon={<Icon as={RiArrowDownSFill} />}
           >
-            <Avatar size="xs" name="Arif Wahyu" src="" />
+            <Avatar
+              size="xs"
+              name="Arif Wahyu"
+              src={
+                getDataUser().avatar &&
+                `http://localhost:3000/uploads/users/avatars/${
+                  getDataUser().avatar
+                }`
+              }
+            />
           </MenuButton>
           <MenuList>
             <MenuItem

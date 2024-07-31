@@ -32,7 +32,7 @@ export const CButton = ({
       rightIcon={rIcon !== undefined ? <Icon as={rIcon} /> : undefined}
       // pl={icon !== undefined ? 2 : 2}
       onClick={onClick}
-      fontSize={"xs"}
+      fontSize={[12, null, 14]}
       {...rest}
     >
       {children}

@@ -7,6 +7,7 @@ import {
   IconButton,
   Input,
   InputGroup,
+  InputLeftElement,
   InputRightElement,
   useToast,
   VStack,
@@ -20,7 +21,6 @@ import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
 
 const initialValues = {
   name: undefined,
-  username: undefined,
   email: undefined,
   password: undefined,
   phone: undefined,
@@ -36,17 +36,39 @@ export const RegisterForm = () => {
     initialValues: initialValues,
     validationSchema: Yup.object().shape({
       name: Yup.string().required("Nama harus diisi"),
-      username: Yup.string().required("Username harus diisi"),
       email: Yup.string().email("Invalid email").required("Email harus diisi"),
       password: Yup.string().required("Password harus diisi"),
-      phone: Yup.string().required("Nomor telepon harus diisi"),
+      phone: Yup.string()
+        .required("Nomor telepon harus diisi")
+        .test({
+          name: "wrong-format-phone-number",
+          message: "Format nomor whatsapp salah",
+          test: function (value) {
+            return value !== undefined && value[0] !== "8" ? false : true;
+          },
+        }),
       bornDate: Yup.string().required("Tanggal lahir harus diisi"),
     }),
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       setLoading(true);
+
+      const formattedDate = values.bornDate
+        ? (values.bornDate as unknown as string).split("/").reverse().join("-")
+        : "";
+
+      const request = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        phone: values.phone,
+        bornDate: formattedDate,
+      };
+
       axios
-        .post(`${process.env.REACT_APP_API_URL}/v1/auth/register`, values)
+        .post(`${process.env.REACT_APP_API_URL}/v1/auth/register`, request)
         .then((response) => {
+          resetForm({ values: initialValues });
+          formik.setFieldValue("email", undefined);
           toast({
             title: response.data.message,
             status: "success",
@@ -87,26 +109,10 @@ export const RegisterForm = () => {
             type="text"
             placeholder="Name"
             onChange={formik.handleChange}
+            value={formik.values.name || ""}
           />
 
           <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
-        </FormControl>
-
-        <FormControl
-          isInvalid={
-            formik.errors.username && formik.touched.username ? true : false
-          }
-        >
-          <FormLabel htmlFor="username">Username</FormLabel>
-
-          <Input
-            name="username"
-            type="text"
-            placeholder="Username"
-            onChange={formik.handleChange}
-          />
-
-          <FormErrorMessage>{formik.errors.username}</FormErrorMessage>
         </FormControl>
 
         <FormControl
@@ -119,6 +125,7 @@ export const RegisterForm = () => {
             type="email"
             placeholder="email@gmail.com"
             onChange={formik.handleChange}
+            value={formik.values.email || ""}
           />
 
           <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
@@ -136,6 +143,7 @@ export const RegisterForm = () => {
               type={toggle === "show" ? "text" : "password"}
               placeholder="Password"
               onChange={formik.handleChange}
+              value={formik.values.password || ""}
             />
             <InputRightElement>
               <IconButton
@@ -161,13 +169,28 @@ export const RegisterForm = () => {
           isInvalid={formik.errors.phone && formik.touched.phone ? true : false}
         >
           <FormLabel htmlFor="phone">Nomor Whatsapp</FormLabel>
-          <Input
+          {/* <Input
             name="phone"
             type="text"
             placeholder="Phone"
             onChange={formik.handleChange}
-          />
-
+          /> */}
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents={"none"}
+              color={"gray.300"}
+              fontSize={[12, null, 14]}
+            >
+              +62
+            </InputLeftElement>
+            <Input
+              name="phone"
+              type="text"
+              placeholder="Phone"
+              onChange={formik.handleChange}
+              value={formik.values.phone || ""}
+            />
+          </InputGroup>
           <FormErrorMessage>{formik.errors.phone}</FormErrorMessage>
         </FormControl>
 

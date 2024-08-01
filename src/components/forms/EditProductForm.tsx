@@ -130,7 +130,6 @@ export const EditProductForm = ({ paramsId }: Props) => {
         .typeError("Jumlah stok harus berupa angka"),
     }),
     onSubmit: (values, { resetForm }) => {
-      console.log(values);
       const valueVariant: ProductVariantInterface = {
         variantId: Date.now(),
         variantName: values.variantName!,
@@ -183,7 +182,6 @@ export const EditProductForm = ({ paramsId }: Props) => {
       }),
     }),
     onSubmit: (values, { resetForm }) => {
-      console.log("ini values submit:", values);
       setLoading(true);
       const token = getCookie("token");
 
@@ -201,10 +199,12 @@ export const EditProductForm = ({ paramsId }: Props) => {
           formData.append(`outletId[${i}]`, dataArray[i]);
         }
       }
+
       formData.append("name", values.name || "");
       formData.append("price", `${values.price}` || "");
       formData.append("categoryId", JSON.parse(category)._id);
       formData.append("stock", `${values.stock}` || "");
+      formData.append("changeImage", "stay" || "");
 
       const newValue = {
         ownerId: getDataUser()._id,
@@ -213,6 +213,7 @@ export const EditProductForm = ({ paramsId }: Props) => {
         price: values.price,
         categoryId: JSON.parse(category)._id,
         stock: values.stock,
+        changeImage: false,
       };
 
       if (values.code) {
@@ -240,12 +241,20 @@ export const EditProductForm = ({ paramsId }: Props) => {
       }
 
       if (values.imageProduct) {
-        formData.append("imageProduct", values.imageProduct || "");
-        Object.assign(newValue, { imageProduct: values.imageProduct });
+        if ((values.imageProduct as any) instanceof File) {
+          newValue.changeImage = true;
+          formData.set("changeImage", "change" || "");
+          formData.append("imageProduct", values.imageProduct || "");
+          Object.assign(newValue, { imageProduct: values.imageProduct });
+        } else {
+          formData.set("changeImage", "delete" || "");
+        }
       }
 
+      console.log("newvalue", newValue);
+
       axios
-        .put(
+        .post(
           `${process.env.REACT_APP_API_URL}/v1/product/updateProduct/${paramsId}`,
           formData,
           {
@@ -273,8 +282,6 @@ export const EditProductForm = ({ paramsId }: Props) => {
             duration: 2000,
             isClosable: true,
           });
-
-          console.log(error);
         })
         .finally(() => {
           setLoading(false);
@@ -287,8 +294,6 @@ export const EditProductForm = ({ paramsId }: Props) => {
       return <Heading>ID Produk tidak ditemukan</Heading>;
     }
   }
-
-  console.log(variants);
 
   return (
     <form

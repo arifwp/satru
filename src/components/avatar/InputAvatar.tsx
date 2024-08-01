@@ -1,4 +1,4 @@
-import { Avatar, Box, BoxProps, Input } from "@chakra-ui/react";
+import { Avatar, Box, BoxProps, Image, Input } from "@chakra-ui/react";
 import {
   forwardRef,
   useEffect,
@@ -11,8 +11,8 @@ import { CButton } from "../CButton";
 import { getDataUser } from "../../utils/helperFunction";
 
 interface Props extends BoxProps {
-  onFileChange: (file: any | undefined) => void;
-  onHandleDrop: (file: any | undefined) => void;
+  onFileChange: (file: File | undefined) => void;
+  onHandleDrop: (file: File | undefined) => void;
   initValue?: string;
   alt: string | undefined;
 }
@@ -64,7 +64,7 @@ export const InputAvatar = forwardRef(
       <>
         <Box
           p={2}
-          borderRadius={"md"}
+          borderRadius={"full"}
           display={"flex"}
           alignItems={"center"}
           justifyContent={"center"}
@@ -77,15 +77,17 @@ export const InputAvatar = forwardRef(
           {...rest}
         >
           {previewImage ? (
-            <Avatar
-              size={{ base: "lg", sm: "xl", md: "xl", lg: "2xl", xl: "2xl" }}
-              name={getDataUser().name && getDataUser().name}
+            <Image
               src={previewImage}
+              objectFit={"cover"}
+              boxSize={"160px"}
+              borderRadius={"full"}
+              style={{ aspectRatio: 1 }}
             />
           ) : (
             <Avatar
-              size={{ base: "lg", sm: "xl", md: "xl", lg: "2xl", xl: "2xl" }}
-              name={getDataUser().name && getDataUser().name}
+              size={["lg", "xl", "xl", "2xl", "2xl"]}
+              name={getDataUser().name}
               bg={"teal.400"}
             />
           )}
@@ -96,9 +98,7 @@ export const InputAvatar = forwardRef(
           type="file"
           name="imageProduct"
           accept="image/jpeg, image/png"
-          onChange={(event) => {
-            handleFileChange(event);
-          }}
+          onChange={handleFileChange}
           display={"none"}
         />
 

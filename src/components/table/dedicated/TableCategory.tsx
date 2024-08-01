@@ -10,6 +10,7 @@ import { CButton } from "../../CButton";
 import { Confirmation } from "../../modal/Confirmation";
 import { TableSkeleton } from "../../TableSkeleton";
 import { CTable } from "../CTable";
+import { Empty } from "../../Empty";
 
 interface Props extends TableProps {
   filterSearch: string;
@@ -177,6 +178,8 @@ export const TableCategory = ({ filterSearch, ...rest }: Props) => {
 
   if (!loaded) {
     return <TableSkeleton row={5} column={10} />;
+  } else if (loaded && value && value.length < 1) {
+    return <Empty title="Kategori tidak ditemukan" mt={6} />;
   }
 
   return (

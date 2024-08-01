@@ -4,12 +4,13 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { getCookie } from "typescript-cookie";
+import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 import { formatDateToId, getDataUser } from "../../../utils/helperFunction";
 import { CButton } from "../../CButton";
+import { Empty } from "../../Empty";
 import { Confirmation } from "../../modal/Confirmation";
 import { TableSkeleton } from "../../TableSkeleton";
 import { CTable } from "../CTable";
-import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 
 interface Props extends TableProps {
   filterSearch: string;
@@ -175,6 +176,8 @@ export const TableBrand = ({ filterSearch, ...rest }: Props) => {
 
   if (!loaded) {
     return <TableSkeleton row={5} column={10} />;
+  } else if (loaded && value && value.length < 1) {
+    return <Empty title="Merk tidak ditemukan" mt={6} />;
   }
 
   return (

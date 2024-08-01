@@ -55,7 +55,6 @@ export const DetailProduct = ({ _id }: Props) => {
         )
         .then((response: AxiosResponse) => {
           setData(JSON.parse(response.request.response).data);
-          console.log(JSON.parse(response.request.response).data);
         })
         .catch((error: AxiosError) => {
           toast({
@@ -86,15 +85,6 @@ export const DetailProduct = ({ _id }: Props) => {
         <DrawerOverlay bg="none" backdropFilter="auto" backdropBlur="5px" />
         <DrawerContent bg={bgComponent}>
           <DrawerHeader>
-            {/* <Skeleton isLoaded={loaded}>
-              <Image
-                minW={"75px"}
-                src={`http://localhost:3000/uploads/products/${
-                  data && data.imageProduct
-                }`}
-                objectFit={"contain"}
-              />
-            </Skeleton> */}
             <Text as={"b"} fontSize={"xs"} variant={"secondary"}>
               DETAIL PRODUK
             </Text>
@@ -102,17 +92,19 @@ export const DetailProduct = ({ _id }: Props) => {
           <DrawerCloseButton />
           <DrawerBody className="box-table scrollY">
             <VStack align={"stretch"}>
-              <Skeleton width={!loaded ? "full" : ""} isLoaded={loaded}>
-                <Image
-                  minW={"75px"}
-                  maxW={"150px"}
-                  src={`http://localhost:3000/uploads/products/${
-                    data && data.imageProduct
-                  }`}
-                  objectFit={"contain"}
-                  mx={"auto"}
-                />
-              </Skeleton>
+              {data?.imageProduct && (
+                <Skeleton width={!loaded ? "full" : ""} isLoaded={loaded}>
+                  <Image
+                    minW={"75px"}
+                    maxW={"150px"}
+                    src={`http://localhost:3000/uploads/products/${
+                      data && data.imageProduct
+                    }`}
+                    objectFit={"contain"}
+                    mx={"auto"}
+                  />
+                </Skeleton>
+              )}
 
               <SkeletonText
                 noOfLines={2}
@@ -120,7 +112,12 @@ export const DetailProduct = ({ _id }: Props) => {
                 skeletonHeight={4}
                 isLoaded={loaded}
               >
-                <VStack fontSize={"xs"} align={"stretch"} spacing={1} mt={6}>
+                <VStack
+                  fontSize={"xs"}
+                  align={"stretch"}
+                  spacing={1}
+                  mt={data?.imageProduct && 6}
+                >
                   <Text variant={"secondary"}>Nama</Text>
 
                   <Text fontSize={"sm"}>{data?.name}</Text>

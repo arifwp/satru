@@ -47,7 +47,7 @@ export const LoginForm = () => {
             status: "success",
             isClosable: true,
           });
-          if (response.data.data.outlet) {
+          if (response.data.data.outlet.length !== 0) {
             navigate("/dashboard");
           } else {
             navigate("/fill-data");

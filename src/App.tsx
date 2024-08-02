@@ -14,6 +14,8 @@ import { AddProductPage } from "./pages/dashboard/product/productroot/AddProduct
 import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
 import { FillData } from "./pages/FillDataPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
+import { TransactionPage } from "./pages/dashboard/transaction/TransactionPage";
+import { ProductTransactionPage } from "./pages/dashboard/transaction/ProductTransactionPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -104,6 +106,28 @@ export const App = () => (
             <RequiredAuth>
               <ContentContainer label="Merk" isSubPage={false}>
                 <BrandPage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/transaction"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Tranksasi" isSubPage={false}>
+                <TransactionPage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/transaction/product"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Tranksasi" isSubPage={false}>
+                <ProductTransactionPage />
               </ContentContainer>
             </RequiredAuth>
           }

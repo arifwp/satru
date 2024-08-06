@@ -1,23 +1,18 @@
-import {
-  Heading,
-  HStack,
-  Stack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  VStack,
-} from "@chakra-ui/react";
-import { PageContainer } from "../../../components/containers/PageContainer";
-import { pageNavsTransaction } from "../../../constant/pageNavs";
+import { StackProps, Text, VStack } from "@chakra-ui/react";
+import { Cart } from "../../../components/Cart";
 
-export const TransactionPage = () => {
+interface Props extends StackProps {
+  children?: any;
+}
+
+export const TransactionPage = ({ children, ...rest }: Props) => {
   return (
-    <PageContainer navs={pageNavsTransaction}>
-      <VStack className="manual-container" w={"100%"} p={4}>
-        <Heading>Manual transaction</Heading>
-      </VStack>
-    </PageContainer>
+    <VStack className="transaction-container" w={"100%"} mt={4} {...rest}>
+      <Text fontWeight={700} fontSize={[18, null, 20]}>
+        Keranjang
+      </Text>
+
+      <Cart />
+    </VStack>
   );
 };

@@ -1,51 +1,72 @@
-import { HStack, VStack } from "@chakra-ui/react";
-import { RiBox3Line } from "@remixicon/react";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import {
+  Box,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  VStack,
+} from "@chakra-ui/react";
+import { useState } from "react";
 import { ProductCard } from "../../../components/card/ProductCard";
-import { PageContainer } from "../../../components/containers/PageContainer";
-import { SearchInput } from "../../../components/input/SearchInput";
-import { SelectButtonCategory } from "../../../components/modal/dedicated/SelectButtonCategory";
-import { pageNavsTransaction } from "../../../constant/pageNavs";
+import { useTextPrimaryColor } from "../../../constant/colors";
 import { ProductInterface } from "../../../constant/Product";
 import { SelectOption } from "../../../constant/SelectOption";
+
+const tabList = [
+  { _id: 1, name: "Manual", key: "manual" },
+  { _id: 2, name: "Product", key: "product" },
+];
 
 export const ProductTransactionPage = () => {
   const [data, setData] = useState<ProductInterface[] | undefined>(undefined);
   const [filterCategory, setFilterCategory] = useState<
     SelectOption[] | undefined
   >(undefined);
+  const [filterOutlet, setFilterOutlet] = useState<SelectOption[] | undefined>(
+    undefined
+  );
   const [filterSearch, setfilterSearch] = useState<string>("");
-
-  useEffect(() => {
-    // axios.get("");
-  }, []);
+  const txtColor = useTextPrimaryColor();
 
   return (
-    <PageContainer navs={pageNavsTransaction}>
-      <VStack className="product-container" w={"100%"} p={4}>
-        <HStack w={"100%"}>
-          <SearchInput
-            placeholder="Cari nama..."
-            onConfirm={(inputValue) => {
-              setfilterSearch(inputValue);
-            }}
-            w={"fit-content"}
-          />
-
-          <SelectButtonCategory
-            name="category"
-            placeholder="Filter Kategori"
-            withSearch={true}
-            icon={RiBox3Line}
-            onConfirm={(inputValue) => {
-              setFilterCategory(inputValue);
-            }}
-          />
-        </HStack>
-
-        <ProductCard />
-      </VStack>
-    </PageContainer>
+    <VStack
+      className="product-container"
+      // w={"100%"}
+      // h={"100vh"}
+      align={"stretch"}
+    >
+      <Tabs variant="unstyled" colorScheme="green" size={"sm"}>
+        <TabList px={4}>
+          {tabList.map((item, i) => (
+            <Tab
+              key={item.key}
+              color={"#ffffff60"}
+              _selected={{
+                color: txtColor,
+                bg: "#38B2AC40",
+                borderRadius: "md",
+              }}
+            >
+              {item.name}
+            </Tab>
+          ))}
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <ProductCard
+              filterCategory={filterCategory}
+              filterOutlet={filterOutlet}
+              filterSearch={filterSearch}
+            />
+          </TabPanel>
+          <TabPanel>
+            <Box w={"100%"}>
+              <p>two!</p>
+            </Box>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </VStack>
   );
 };

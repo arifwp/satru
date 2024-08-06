@@ -1,23 +1,22 @@
-import { Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { getCookie } from "typescript-cookie";
-import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import { useTextPrimaryColor } from "../../constant/colors";
+import { getDataUser } from "../../utils/helperFunction";
+import { Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { CButton } from "../CButton";
+import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 
 interface Props {
   children?: any;
 }
-export const RequiredAuth = ({ children, ...rest }: Props) => {
-  const token = getCookie("token");
+
+export const RequiredOwner = ({ children, ...rest }: Props) => {
   const txtColor = useTextPrimaryColor();
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate("/login");
   };
-
-  if (!token) {
+  if (!getDataUser().owner) {
     return (
       <VStack w={"100%"} h={"100vh"} position={"relative"} justify={"center"}>
         <Image
@@ -28,10 +27,10 @@ export const RequiredAuth = ({ children, ...rest }: Props) => {
 
         <VStack>
           <Heading fontSize={"32px"} as={"h4"}>
-            Login Terlebih dahulu!
+            Tidak mendapat izin!
           </Heading>
           <Text fontSize={"14px"}>
-            Anda harus login terlebih dahulu untuk dapat mengakses halaman ini
+            Tidak mendapat izin, sistem mendeteksi anda bukan owner
           </Text>
 
           <CButton

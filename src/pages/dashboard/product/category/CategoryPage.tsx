@@ -6,6 +6,7 @@ import { ModalSingleForm } from "../../../../components/modal/dedicated/ModalSin
 import { TableCategory } from "../../../../components/table/dedicated/TableCategory";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
 import { useTriggerRenderStore } from "../../../../store/useTriggerRenderStore";
+import { getDataUser } from "../../../../utils/helperFunction";
 
 export const CategoryPage = () => {
   const [filterSearch, setfilterSearch] = useState<string>("");
@@ -35,15 +36,17 @@ export const CategoryPage = () => {
             />
           </HStack>
 
-          <ModalSingleForm
-            btnText="Tambah Kategori"
-            placeholder="Tambah kategori"
-            formValue="category"
-            url="/v1/category/createCategory"
-            onConfirm={(inputValue) => {
-              setStatusData();
-            }}
-          />
+          {getDataUser().owner && (
+            <ModalSingleForm
+              btnText="Tambah Kategori"
+              placeholder="Tambah kategori"
+              formValue="category"
+              url="/v1/category/createCategory"
+              onConfirm={(inputValue) => {
+                setStatusData();
+              }}
+            />
+          )}
         </Stack>
 
         <TableCategory filterSearch={filterSearch} mt={4} />

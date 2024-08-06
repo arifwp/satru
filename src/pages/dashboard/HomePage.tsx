@@ -21,7 +21,7 @@ import { DoughnutChart } from "../../components/chart/DoughnutChart";
 import { LineChart } from "../../components/chart/LineChart";
 import { SelectDateRange } from "../../components/modal/dedicated/SelectDateRange";
 import { SelectOutlet } from "../../components/modal/dedicated/SelectOutlet";
-import { useBgComponentBaseColor } from "../../constant/colors";
+import { useBgBaseColor, useBgComponentBaseColor } from "../../constant/colors";
 
 export const HomePage = () => {
   const bgComponent = useBgComponentBaseColor();
@@ -29,9 +29,10 @@ export const HomePage = () => {
   const now = new Date();
   const initialStartDate = new Date(now.getFullYear(), now.getMonth(), 1);
   const initialEndDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  const bgBase = useBgBaseColor();
 
   return (
-    <VStack className="home-container" w={"100%"} p={4}>
+    <VStack className="home-container" w={"100%"} p={4} bg={bgBase}>
       <Stack
         w={"100%"}
         direction={["column", "row"]}

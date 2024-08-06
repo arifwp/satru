@@ -1,7 +1,16 @@
 import { useColorModeValue } from "@chakra-ui/react";
 
+// export const useBgComponentBaseColor = () => {
+//   return useColorModeValue("#F8F9FA", "#1C1C1E");
+// };
+export const useBgBaseColor = () => {
+  // return useColorModeValue("#F0F0F0", "#121212");
+
+  return useColorModeValue("#F0F0F0", "#151515");
+};
+
 export const useBgComponentBaseColor = () => {
-  return useColorModeValue("#F8F9FA", "#1C1C1E");
+  return useColorModeValue("white", "dark");
 };
 
 export const useBgHover = () => {
@@ -18,4 +27,8 @@ export const useBorderColorInput = () => {
 
 export const useGreyColor = () => {
   return useColorModeValue("RGBA(0, 0, 0, 0.36)", "RGBA(255, 255, 255, 0.36)");
+};
+
+export const useTextPrimaryColor = () => {
+  return useColorModeValue("teal.600", "teal.400");
 };

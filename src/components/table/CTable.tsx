@@ -12,6 +12,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { RiArrowDownLine, RiArrowUpLine } from "@remixicon/react";
+import { useBgComponentBaseColor } from "../../constant/colors";
 
 export const CTable = ({
   columnHeader,
@@ -20,6 +21,8 @@ export const CTable = ({
   sortOrder,
   ...rest
 }: any) => {
+  const bgComp = useBgComponentBaseColor();
+
   return (
     <TableContainer
       className="table-container"
@@ -46,7 +49,7 @@ export const CTable = ({
         overflowY={"hidden"}
       >
         <Table variant={"primary"}>
-          <Thead borderBottomWidth={"1px"}>
+          <Thead borderBottomWidth={"1px"} bg={bgComp}>
             <Tr>
               {columnHeader.map((item: any, i: any) => (
                 <Th

@@ -29,33 +29,37 @@ export const SelectButtonOutlet = ({
   const toast = useToast();
 
   useEffect(() => {
-    const ownerId = getDataUser()._id;
-    const token = getCookie("token");
+    if (isOpen) {
+      const ownerId = getDataUser().ownerId
+        ? getDataUser().ownerId
+        : getDataUser()._id;
+      const token = getCookie("token");
 
-    axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/v1/outlet/getAllOutlet/${ownerId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response: AxiosResponse) => {
-        setData(JSON.parse(response.request.response).data);
-      })
-      .catch((error: AxiosError) => {
-        toast({
-          title: JSON.parse(error.request.response).message,
-          status: "error",
-          isClosable: true,
+      axios
+        .get(
+          `${process.env.REACT_APP_API_URL}/v1/outlet/getAllOutlet/${ownerId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response: AxiosResponse) => {
+          setData(JSON.parse(response.request.response).data);
+        })
+        .catch((error: AxiosError) => {
+          toast({
+            title: JSON.parse(error.request.response).message,
+            status: "error",
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setLoaded(true);
         });
-      })
-      .finally(() => {
-        setLoaded(true);
-      });
-  }, []);
+    }
+  }, [isOpen]);
 
   return (
     <MultiPickerButton

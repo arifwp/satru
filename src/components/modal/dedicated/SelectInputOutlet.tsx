@@ -32,7 +32,9 @@ export const SelectInputOutlet = ({
   const toast = useToast();
 
   useEffect(() => {
-    const ownerId = getDataUser()._id;
+    const ownerId = getDataUser().ownerId
+      ? getDataUser().ownerId
+      : getDataUser()._id;
     const token = getCookie("token");
 
     axios

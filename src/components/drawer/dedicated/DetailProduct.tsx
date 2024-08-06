@@ -25,7 +25,7 @@ import { getCookie } from "typescript-cookie";
 import { ProductInterface } from "../../../constant/Product";
 import { useBgComponentBaseColor } from "../../../constant/colors";
 import formatNumber from "../../../lib/formatNumber";
-import { formatDateToId } from "../../../utils/helperFunction";
+import { formatDateToId, getDataUser } from "../../../utils/helperFunction";
 import { CButton } from "../../CButton";
 
 interface Props extends ButtonProps {
@@ -290,20 +290,22 @@ export const DetailProduct = ({ _id }: Props) => {
             <CButton variant="ghost" mr={3} onClick={onClose}>
               Tutup
             </CButton>
-            <ChakraLink
-              as={ReactRouterLink}
-              to={`edit-product/${data && data._id}`}
-              textDecoration={"none"}
-              _hover={{ textDecoration: "none" }}
-            >
-              <CButton
-                variant={"solid"}
-                colorScheme={"yellow"}
-                icon={RiEdit2Line}
+            {getDataUser().owner && (
+              <ChakraLink
+                as={ReactRouterLink}
+                to={`edit-product/${data && data._id}`}
+                textDecoration={"none"}
+                _hover={{ textDecoration: "none" }}
               >
-                Edit
-              </CButton>
-            </ChakraLink>
+                <CButton
+                  variant={"solid"}
+                  colorScheme={"yellow"}
+                  icon={RiEdit2Line}
+                >
+                  Edit
+                </CButton>
+              </ChakraLink>
+            )}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

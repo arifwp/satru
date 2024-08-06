@@ -1,5 +1,6 @@
 export interface UserInterface {
   _id: any;
+  ownerId?: string;
   name: string;
   email: string;
   phone: string;

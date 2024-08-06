@@ -50,7 +50,11 @@ export const LoginForm = () => {
           if (response.data.data.outlet.length !== 0) {
             navigate("/dashboard");
           } else {
-            navigate("/fill-data");
+            if (response.data.data.dataUser.owner) {
+              navigate("/fill-data");
+            } else {
+              navigate("/transaction");
+            }
           }
         })
         .catch((error: AxiosError) => {

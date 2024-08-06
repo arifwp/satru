@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import { getCookie, removeCookie } from "typescript-cookie";
 import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import { getDataUser } from "../../utils/helperFunction";
+import { useBgBaseColor, useBgComponentBaseColor } from "../../constant/colors";
 
 interface Props extends StackProps {
   children?: any;
@@ -39,7 +40,8 @@ export const MenuHeader = ({ children, label, isSubPage }: Props) => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const bgComponent = useColorModeValue("#F8F9FA", "#1C1C1E");
+  const bgBase = useBgBaseColor();
+  const bgComponent = useBgComponentBaseColor();
 
   const handleBack = () => {
     window.history.back();
@@ -88,6 +90,7 @@ export const MenuHeader = ({ children, label, isSubPage }: Props) => {
     <HStack
       className="header"
       p={3}
+      bg={bgBase}
       align={"center"}
       w={"100%"}
       h={"72px"}
@@ -124,7 +127,7 @@ export const MenuHeader = ({ children, label, isSubPage }: Props) => {
           >
             <Avatar
               size="xs"
-              name="Arif Wahyu"
+              name={getDataUser().name}
               src={
                 getDataUser().avatar &&
                 `http://localhost:3000/uploads/users/avatars/${

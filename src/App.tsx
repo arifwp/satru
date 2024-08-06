@@ -1,21 +1,24 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, HStack } from "@chakra-ui/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ContentContainer } from "./components/containers/ContentContainer";
 import { RequiredAuth } from "./components/middleware/RequiredAuth";
+import { RequiredOwner } from "./components/middleware/RequiredOwner";
 import customTheme from "./customTheme";
 import "./index.css";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
+import { AddEmployeePage } from "./pages/dashboard/employee/AddEmployeePage";
+import { EmployeePage } from "./pages/dashboard/employee/EmployeePage";
 import { HomePage } from "./pages/dashboard/HomePage";
 import { BrandPage } from "./pages/dashboard/product/brand/BrandPage";
 import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
 import { EditProductPage } from "./pages/dashboard/product/edit/EditProductPage";
 import { AddProductPage } from "./pages/dashboard/product/productroot/AddProductPage";
 import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
+import { ProductTransactionPage } from "./pages/dashboard/transaction/ProductTransactionPage";
 import { FillData } from "./pages/FillDataPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
 import { TransactionPage } from "./pages/dashboard/transaction/TransactionPage";
-import { ProductTransactionPage } from "./pages/dashboard/transaction/ProductTransactionPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -111,13 +114,27 @@ export const App = () => (
           }
         />
 
-        <Route
+        {/* <Route
           path="/transaction"
           element={
             <RequiredAuth>
               <ContentContainer label="Tranksasi" isSubPage={false}>
                 <TransactionPage />
               </ContentContainer>
+            </RequiredAuth>
+          }
+        /> */}
+
+        <Route
+          path="/transaction"
+          element={
+            <RequiredAuth>
+              <HStack w={"100%"} align={"start"}>
+                <ContentContainer label="Tranksasi" isSubPage={false} w={"70%"}>
+                  <ProductTransactionPage />
+                </ContentContainer>
+                <TransactionPage w={"30%"} />
+              </HStack>
             </RequiredAuth>
           }
         />
@@ -129,6 +146,32 @@ export const App = () => (
               <ContentContainer label="Tranksasi" isSubPage={false}>
                 <ProductTransactionPage />
               </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/employee"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Karyawan" isSubPage={false}>
+                  <EmployeePage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/employee/add-employee"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Tambah Karyawan" isSubPage={true}>
+                  <AddEmployeePage />
+                </ContentContainer>
+              </RequiredOwner>
             </RequiredAuth>
           }
         />

@@ -3,6 +3,7 @@ import { MenuHeader } from "../menu/MenuHeader";
 import { AdminContainer } from "./AdminContainer";
 import { MenuHeaderShrink } from "../menu/MenuHeaderShrink";
 import useScreenWidth from "../../lib/useScreenWidth";
+import { useBgBaseColor } from "../../constant/colors";
 
 interface Props extends StackProps {
   children?: any;
@@ -10,21 +11,27 @@ interface Props extends StackProps {
   isSubPage: boolean;
 }
 
-export const ContentContainer = ({ children, label, isSubPage }: Props) => {
+export const ContentContainer = ({
+  children,
+  label,
+  isSubPage,
+  ...rest
+}: Props) => {
   const sw = useScreenWidth();
+  const bg = useBgBaseColor();
 
   return (
-    <AdminContainer>
+    <AdminContainer {...rest}>
       <VStack
         className="content-container"
+        bg={bg}
         ml={"auto"}
         w={"100%"}
         maxW={"calc(100% - 72px)"}
-        h={"100vh"}
+        // h={"100vh"}
         spacing={0}
         justify={"start"}
       >
-        {/* <MenuHeader label={label} /> */}
         {sw >= 600 ? (
           <MenuHeader label={label} isSubPage={isSubPage} />
         ) : (

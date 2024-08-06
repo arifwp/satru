@@ -1,14 +1,24 @@
-import { HStack, Text, VStack } from "@chakra-ui/react";
+import { HStack, StackProps, Text, VStack } from "@chakra-ui/react";
+import { useBgBaseColor, useTextPrimaryColor } from "../../constant/colors";
 import { PageNavsProps } from "../../constant/pageNavs";
 import NavButton from "../navbar/NavButton";
 
-interface Props {
+interface Props extends StackProps {
   children: any;
   navs: PageNavsProps[];
 }
 export const PageContainer = ({ children, navs, ...rest }: Props) => {
+  const bgBase = useBgBaseColor();
+  const txtColor = useTextPrimaryColor();
+
   return (
-    <VStack className="page-container" w={"100%"} align={"stretch"}>
+    <VStack
+      className="page-container"
+      w={"100%"}
+      align={"stretch"}
+      bg={bgBase}
+      {...rest}
+    >
       <HStack px={4}>
         {navs.map((item, i) => (
           <NavButton
@@ -19,12 +29,14 @@ export const PageContainer = ({ children, navs, ...rest }: Props) => {
             to={item.to}
             _activeLink={{
               bg: "#B2F5EA40",
-              color: "teal.300",
+              color: txtColor,
             }}
+            py={1}
+            px={2}
           >
             <Text
               className="label-navbar"
-              fontSize={"sm"}
+              fontSize={[12, null, 14]}
               variant={"secondary"}
             >
               {item.name}

@@ -6,10 +6,12 @@ import {
   Text,
   VStack,
   keyframes,
-  useColorModeValue,
 } from "@chakra-ui/react";
+import { RiUser2Line } from "@remixicon/react";
 import { useRef } from "react";
+import { useBgComponentBaseColor } from "../../constant/colors";
 import { navs } from "../../constant/navs";
+import { getDataUser } from "../../utils/helperFunction";
 import NavButton from "../navbar/NavButton";
 
 interface Props extends StackProps {
@@ -32,13 +34,32 @@ const fadeText = keyframes`
 
 export const AdminContainer = ({ children, ...props }: Props) => {
   const ref = useRef<any>(null);
-  const bg = useColorModeValue("#F8F9FA", "#1C1C1E");
+  const bgComp = useBgComponentBaseColor();
+
+  let navigations = [...navs];
+
+  if (getDataUser().owner) {
+    navigations.push({
+      id: 9,
+      icon: RiUser2Line,
+      label: "Karyawan",
+      to: "/employee",
+    });
+  }
 
   return (
-    <HStack w={"100%"} h={"100%"} minH={"100vh"} {...props} spacing={0}>
+    <HStack
+      className="admin-container"
+      w={"100%"}
+      h={"100%"}
+      minH={"100vh"}
+      spacing={0}
+      align={"start"}
+      {...props}
+    >
       <VStack
         className="navbar"
-        bgColor={bg}
+        bg={bgComp}
         ref={ref}
         h={"100vh"}
         p={4}
@@ -69,7 +90,7 @@ export const AdminContainer = ({ children, ...props }: Props) => {
         </HStack>
 
         <VStack w={"100%"}>
-          {navs.map((item, index) => (
+          {navigations.map((item, index) => (
             <NavButton to={item.to} key={index}>
               <HStack whiteSpace={"nowrap"}>
                 <Icon

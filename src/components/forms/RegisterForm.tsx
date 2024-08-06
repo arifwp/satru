@@ -60,6 +60,7 @@ export const RegisterForm = () => {
         name: values.name,
         email: values.email,
         password: values.password,
+        owner: true,
         phone: values.phone,
         bornDate: formattedDate,
       };
@@ -169,12 +170,6 @@ export const RegisterForm = () => {
           isInvalid={formik.errors.phone && formik.touched.phone ? true : false}
         >
           <FormLabel htmlFor="phone">Nomor Whatsapp</FormLabel>
-          {/* <Input
-            name="phone"
-            type="text"
-            placeholder="Phone"
-            onChange={formik.handleChange}
-          /> */}
           <InputGroup>
             <InputLeftElement
               pointerEvents={"none"}

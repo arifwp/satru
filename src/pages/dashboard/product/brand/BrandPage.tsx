@@ -6,6 +6,7 @@ import { ModalSingleForm } from "../../../../components/modal/dedicated/ModalSin
 import { TableBrand } from "../../../../components/table/dedicated/TableBrand";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
 import { useTriggerRenderStore } from "../../../../store/useTriggerRenderStore";
+import { getDataUser } from "../../../../utils/helperFunction";
 
 export const BrandPage = () => {
   const [filterSearch, setfilterSearch] = useState<string>("");
@@ -35,15 +36,17 @@ export const BrandPage = () => {
             />
           </HStack>
 
-          <ModalSingleForm
-            btnText="Tambah Merk"
-            placeholder="Tambah merk"
-            formValue="brand"
-            url="/v1/brand/createBrand"
-            onConfirm={(inputValue) => {
-              setStatusData();
-            }}
-          />
+          {getDataUser().owner && (
+            <ModalSingleForm
+              btnText="Tambah Merk"
+              placeholder="Tambah merk"
+              formValue="brand"
+              url="/v1/brand/createBrand"
+              onConfirm={(inputValue) => {
+                setStatusData();
+              }}
+            />
+          )}
         </Stack>
 
         <TableBrand filterSearch={filterSearch} mt={4} />

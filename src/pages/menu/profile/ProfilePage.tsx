@@ -15,7 +15,11 @@ import { EditEmailForm } from "../../../components/forms/EditEmailForm";
 import { EditPasswordForm } from "../../../components/forms/EditPasswordForm";
 import { EditProfileForm } from "../../../components/forms/EditProfileForm";
 import { EditWhatsappForm } from "../../../components/forms/EditWhatsappForm";
-import { useBgComponentBaseColor, useBgHover } from "../../../constant/colors";
+import {
+  useBgBaseColor,
+  useBgComponentBaseColor,
+  useBgHover,
+} from "../../../constant/colors";
 import { UserInterface } from "../../../constant/User";
 import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 import { getDataUser } from "../../../utils/helperFunction";
@@ -33,7 +37,7 @@ export const ProfilePage = () => {
   // const paramsId = location.state.userId;
   const bgHover = useBgHover();
   const { statusData } = useTriggerRenderStore();
-  const bgComponent = useBgComponentBaseColor();
+  const bgBase = useBgBaseColor();
   const [data, setData] = useState<UserInterface | undefined>(undefined);
   const toast = useToast();
 
@@ -75,7 +79,6 @@ export const ProfilePage = () => {
     <VStack
       className="profile-container"
       w={"100%"}
-      p={4}
       fontSize={"sm"}
       align={"stretch"}
     >
@@ -85,7 +88,7 @@ export const ProfilePage = () => {
         position={"relative"}
         orientation="vertical"
         colorScheme="teal"
-        bg={bgComponent}
+        bg={bgBase}
         p={4}
         borderRadius={"md"}
       >

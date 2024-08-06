@@ -14,6 +14,7 @@ import { SelectButtonOutlet } from "../../../../components/modal/dedicated/Selec
 import { TableProduct } from "../../../../components/table/dedicated/TableProduct";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
 import { SelectOption } from "../../../../constant/SelectOption";
+import { getDataUser } from "../../../../utils/helperFunction";
 
 export const ProductPage = () => {
   const [filterCategory, setFilterCategory] = useState<
@@ -68,21 +69,23 @@ export const ProductPage = () => {
             }}
           />
 
-          <ChakraLink
-            as={ReactRouterLink}
-            to={"/product/add-product"}
-            textDecoration={"none"}
-            _hover={{ textDecoration: "none" }}
-          >
-            <CButton
-              w={"100%"}
-              variant={"outline"}
-              colorScheme="teal"
-              icon={RiAddCircleLine}
+          {getDataUser().owner && (
+            <ChakraLink
+              as={ReactRouterLink}
+              to={"/product/add-product"}
+              textDecoration={"none"}
+              _hover={{ textDecoration: "none" }}
             >
-              Tambah Produk
-            </CButton>
-          </ChakraLink>
+              <CButton
+                w={"100%"}
+                variant={"outline"}
+                colorScheme="teal"
+                icon={RiAddCircleLine}
+              >
+                Tambah Produk
+              </CButton>
+            </ChakraLink>
+          )}
         </Stack>
 
         <TableProduct

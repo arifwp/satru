@@ -36,7 +36,9 @@ export const TableProduct = ({
 
   useEffect(() => {
     const token = getCookie("token");
-    const ownerId = getDataUser()._id;
+    const ownerId = getDataUser().ownerId
+      ? getDataUser().ownerId
+      : getDataUser()._id;
     let url;
 
     if (

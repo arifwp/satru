@@ -1,5 +1,6 @@
 import {
   Image,
+  SimpleGrid,
   StackProps,
   Text,
   useToast,
@@ -28,9 +29,6 @@ export const ProductCard = ({ filterOutlet, filterSearch, ...rest }: Props) => {
   const [data, setData] = useState<ProductInterface[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false);
   const toast = useToast();
-  const [dataCategory, setDataCategory] = useState<
-    CategoryInterface | undefined
-  >(undefined);
   const [filterCategory, setFilterCategory] = useState<
     SelectOption[] | undefined
   >(undefined);
@@ -94,7 +92,7 @@ export const ProductCard = ({ filterOutlet, filterSearch, ...rest }: Props) => {
   }, [filterOutlet, filterSearch, filterCategory, toast]);
 
   return (
-    <VStack w={"100%"}>
+    <VStack w={"100%"} {...rest}>
       <Text fontSize={[12, null, 14]} fontWeight={600} alignSelf={"stretch"}>
         Kategori
       </Text>
@@ -112,7 +110,8 @@ export const ProductCard = ({ filterOutlet, filterSearch, ...rest }: Props) => {
       >
         Produk
       </Text>
-      <Wrap align={"center"} justify={"center"} {...rest}>
+
+      <Wrap align={"center"} justify={"center"}>
         {data?.map((item, i) => (
           <WrapItem key={item._id}>
             <VStack

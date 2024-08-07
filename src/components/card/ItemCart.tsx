@@ -19,7 +19,7 @@ export const ItemCart = () => {
         maxW={"72px"}
         borderRadius={"md"}
       />
-      <VStack align={"stretch"}>
+      <VStack w={"100%"} align={"stretch"}>
         <Text
           fontSize={[12, null, 14]}
           noOfLines={1}

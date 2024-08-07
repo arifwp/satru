@@ -19,7 +19,7 @@ import { useRef, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
 import { ProductVariantInterface } from "../../constant/Product";
-import { useBgComponentBaseColor } from "../../constant/colors";
+import { useBgBaseColor, useBgComponentBaseColor } from "../../constant/colors";
 import formatNumber from "../../lib/formatNumber";
 import useScreenWidth from "../../lib/useScreenWidth";
 import { useProductVariantStore } from "../../store/useProductVariantStore";
@@ -59,7 +59,7 @@ export const AddProductForm = () => {
     useProductVariantStore();
   const toast = useToast();
   const sw = useScreenWidth();
-  const bgComponent = useBgComponentBaseColor();
+  const bgBase = useBgBaseColor();
   const fileInputRef = useRef<{ reset: () => void }>(null);
 
   const handleRemoveVariant = (variantId: any) => {
@@ -268,7 +268,7 @@ export const AddProductForm = () => {
             p={4}
             borderRadius={"md"}
             spacing={6}
-            bg={bgComponent}
+            bg={bgBase}
             align={"stretch"}
           >
             <Text as={"b"}>Informasi umum</Text>
@@ -337,7 +337,7 @@ export const AddProductForm = () => {
             p={4}
             borderRadius={"md"}
             spacing={6}
-            bg={bgComponent}
+            bg={bgBase}
             align={"stretch"}
           >
             <VStack className="category" align={"stretch"} spacing={6}>
@@ -423,7 +423,7 @@ export const AddProductForm = () => {
             p={4}
             borderRadius={"md"}
             spacing={6}
-            bg={bgComponent}
+            bg={bgBase}
             align={"stretch"}
           >
             <VStack className="stock-form" align={"stretch"} spacing={6}>
@@ -483,7 +483,7 @@ export const AddProductForm = () => {
             p={4}
             borderRadius={"md"}
             spacing={6}
-            bg={bgComponent}
+            bg={bgBase}
             align={"stretch"}
           >
             <VStack className="stock-form" align={"stretch"} spacing={6}>
@@ -654,7 +654,7 @@ export const AddProductForm = () => {
             p={4}
             borderRadius={"md"}
             spacing={6}
-            bg={bgComponent}
+            bg={bgBase}
             align={"stretch"}
           >
             <Text as={"b"}>Media</Text>

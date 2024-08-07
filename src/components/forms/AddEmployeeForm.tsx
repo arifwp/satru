@@ -18,7 +18,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
-import { useBgComponentBaseColor } from "../../constant/colors";
+import { useBgBaseColor } from "../../constant/colors";
 import { getDataUser } from "../../utils/helperFunction";
 import { CButton } from "../CButton";
 import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
@@ -37,7 +37,7 @@ export const AddEmployeeForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<string>("hide");
   const toast = useToast();
-  const bgComp = useBgComponentBaseColor();
+  const bgBase = useBgBaseColor();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -137,7 +137,7 @@ export const AddEmployeeForm = () => {
       onSubmit={formik.handleSubmit}
       style={{ width: "100%" }}
     >
-      <VStack spacing={6} bg={bgComp} p={4} borderRadius={"md"}>
+      <VStack spacing={6} bg={bgBase} p={4} borderRadius={"md"}>
         <FormControl
           isInvalid={formik.errors.name && formik.touched.name ? true : false}
         >

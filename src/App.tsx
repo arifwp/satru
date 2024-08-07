@@ -15,7 +15,7 @@ import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
 import { EditProductPage } from "./pages/dashboard/product/edit/EditProductPage";
 import { AddProductPage } from "./pages/dashboard/product/productroot/AddProductPage";
 import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
-import { ProductTransactionPage } from "./pages/dashboard/transaction/ProductTransactionPage";
+import { TransactionContainer } from "./pages/dashboard/transaction/TransactionContainer";
 import { FillData } from "./pages/FillDataPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
 import { TransactionPage } from "./pages/dashboard/transaction/TransactionPage";
@@ -52,7 +52,7 @@ export const App = () => (
           path="/profile"
           element={
             <RequiredAuth>
-              <ContentContainer label="Profil" isSubPage={true}>
+              <ContentContainer label="Profil" isSubPage={true} height="100vh">
                 <ProfilePage />
               </ContentContainer>
             </RequiredAuth>
@@ -96,7 +96,11 @@ export const App = () => (
           path="/product/category"
           element={
             <RequiredAuth>
-              <ContentContainer label="Kategori" isSubPage={false}>
+              <ContentContainer
+                label="Kategori"
+                isSubPage={false}
+                height="100vh"
+              >
                 <CategoryPage />
               </ContentContainer>
             </RequiredAuth>
@@ -130,8 +134,15 @@ export const App = () => (
           element={
             <RequiredAuth>
               <HStack w={"100%"} align={"start"}>
-                <ContentContainer label="Tranksasi" isSubPage={false} w={"70%"}>
-                  <ProductTransactionPage />
+                <ContentContainer
+                  label="Tranksasi"
+                  isSubPage={false}
+                  w={"70%"}
+                  h={"100vh"}
+                  overflowY={"scroll"}
+                  className="scrollY"
+                >
+                  <TransactionContainer />
                 </ContentContainer>
                 <TransactionPage w={"30%"} />
               </HStack>
@@ -144,7 +155,7 @@ export const App = () => (
           element={
             <RequiredAuth>
               <ContentContainer label="Tranksasi" isSubPage={false}>
-                <ProductTransactionPage />
+                <TransactionContainer />
               </ContentContainer>
             </RequiredAuth>
           }
@@ -155,7 +166,11 @@ export const App = () => (
           element={
             <RequiredAuth>
               <RequiredOwner>
-                <ContentContainer label="Karyawan" isSubPage={false}>
+                <ContentContainer
+                  label="Karyawan"
+                  isSubPage={false}
+                  height="100vh"
+                >
                   <EmployeePage />
                 </ContentContainer>
               </RequiredOwner>

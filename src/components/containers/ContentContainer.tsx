@@ -29,8 +29,9 @@ export const ContentContainer = ({
         bg={bg}
         ml={"auto"}
         w={"100%"}
+        minH={"100vh"}
         maxW={"calc(100% - 72px)"}
-        h={height ? height : undefined}
+        // h={height ? height : undefined}
         spacing={0}
         justify={"start"}
       >

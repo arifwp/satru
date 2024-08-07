@@ -15,11 +15,7 @@ import { EditEmailForm } from "../../../components/forms/EditEmailForm";
 import { EditPasswordForm } from "../../../components/forms/EditPasswordForm";
 import { EditProfileForm } from "../../../components/forms/EditProfileForm";
 import { EditWhatsappForm } from "../../../components/forms/EditWhatsappForm";
-import {
-  useBgBaseColor,
-  useBgComponentBaseColor,
-  useBgHover,
-} from "../../../constant/colors";
+import { useBgBaseColor, useBgHover } from "../../../constant/colors";
 import { UserInterface } from "../../../constant/User";
 import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 import { getDataUser } from "../../../utils/helperFunction";
@@ -88,7 +84,6 @@ export const ProfilePage = () => {
         position={"relative"}
         orientation="vertical"
         colorScheme="teal"
-        bg={bgBase}
         p={4}
         borderRadius={"md"}
       >

@@ -10,6 +10,7 @@ interface Props extends StackProps {
   label: string;
   isSubPage: boolean;
   height?: string | undefined;
+  minHeight?: string | undefined;
 }
 
 export const ContentContainer = ({
@@ -17,6 +18,7 @@ export const ContentContainer = ({
   label,
   isSubPage,
   height,
+  minHeight,
   ...rest
 }: Props) => {
   const sw = useScreenWidth();
@@ -25,15 +27,16 @@ export const ContentContainer = ({
   return (
     <AdminContainer {...rest}>
       <VStack
-        className="content-container"
+        className="content-container scrollY"
         bg={bg}
         ml={"auto"}
         w={"100%"}
+        h={"10%"}
         minH={"100vh"}
         maxW={"calc(100% - 72px)"}
-        // h={height ? height : undefined}
         spacing={0}
         justify={"start"}
+        overflow={"auto"}
       >
         {sw >= 600 ? (
           <MenuHeader label={label} isSubPage={isSubPage} />

@@ -52,7 +52,7 @@ export const App = () => (
           path="/profile"
           element={
             <RequiredAuth>
-              <ContentContainer label="Profil" isSubPage={true} height="100vh">
+              <ContentContainer label="Profil" isSubPage={true}>
                 <ProfilePage />
               </ContentContainer>
             </RequiredAuth>
@@ -96,11 +96,7 @@ export const App = () => (
           path="/product/category"
           element={
             <RequiredAuth>
-              <ContentContainer
-                label="Kategori"
-                isSubPage={false}
-                height="100vh"
-              >
+              <ContentContainer label="Kategori" isSubPage={false}>
                 <CategoryPage />
               </ContentContainer>
             </RequiredAuth>
@@ -118,17 +114,6 @@ export const App = () => (
           }
         />
 
-        {/* <Route
-          path="/transaction"
-          element={
-            <RequiredAuth>
-              <ContentContainer label="Tranksasi" isSubPage={false}>
-                <TransactionPage />
-              </ContentContainer>
-            </RequiredAuth>
-          }
-        /> */}
-
         <Route
           path="/transaction"
           element={
@@ -138,10 +123,9 @@ export const App = () => (
                   label="Tranksasi"
                   isSubPage={false}
                   w={"70%"}
-                  // h={"100vh"}
+                  h={"100vh"}
                   overflowY={"scroll"}
                   className="scrollY"
-                  height="100vh"
                 >
                   <TransactionContainer />
                 </ContentContainer>
@@ -167,11 +151,7 @@ export const App = () => (
           element={
             <RequiredAuth>
               <RequiredOwner>
-                <ContentContainer
-                  label="Karyawan"
-                  isSubPage={false}
-                  height="100vh"
-                >
+                <ContentContainer label="Karyawan" isSubPage={false}>
                   <EmployeePage />
                 </ContentContainer>
               </RequiredOwner>

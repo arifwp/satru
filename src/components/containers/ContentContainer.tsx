@@ -9,12 +9,14 @@ interface Props extends StackProps {
   children?: any;
   label: string;
   isSubPage: boolean;
+  height?: string | undefined;
 }
 
 export const ContentContainer = ({
   children,
   label,
   isSubPage,
+  height,
   ...rest
 }: Props) => {
   const sw = useScreenWidth();
@@ -28,7 +30,7 @@ export const ContentContainer = ({
         ml={"auto"}
         w={"100%"}
         maxW={"calc(100% - 72px)"}
-        // h={"100vh"}
+        h={height ? height : undefined}
         spacing={0}
         justify={"start"}
       >

@@ -7,12 +7,18 @@ interface Props extends StackProps {
 
 export const TransactionPage = ({ children, ...rest }: Props) => {
   return (
-    <VStack className="transaction-container" w={"100%"} mt={4} {...rest}>
-      <Text fontWeight={700} fontSize={[18, null, 20]}>
+    <VStack
+      className="transaction-container scrollY"
+      w={"100%"}
+      h={"100vh"}
+      overflowY={"scroll"}
+      {...rest}
+    >
+      <Text fontWeight={700} fontSize={[18, null, 20]} mt={4}>
         Keranjang
       </Text>
 
-      <Cart />
+      <Cart mt={4} />
     </VStack>
   );
 };

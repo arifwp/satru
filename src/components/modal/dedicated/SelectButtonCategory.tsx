@@ -30,7 +30,9 @@ export const SelectButtonCategory = ({
 
   useEffect(() => {
     if (isOpen) {
-      const ownerId = getDataUser()._id;
+      const ownerId = getDataUser().ownerId
+        ? getDataUser().ownerId
+        : getDataUser()._id;
       const token = getCookie("token");
 
       axios
@@ -57,7 +59,7 @@ export const SelectButtonCategory = ({
           setLoaded(true);
         });
     }
-  }, []);
+  }, [isOpen, toast]);
 
   return (
     <MultiPickerButton

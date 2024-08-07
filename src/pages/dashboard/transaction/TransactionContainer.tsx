@@ -36,7 +36,7 @@ export const TransactionContainer = ({ ...rest }) => {
       align={"stretch"}
       {...rest}
     >
-      <Tabs variant="unstyled" colorScheme="green" size={"sm"}>
+      <Tabs className="tabs" variant="unstyled" colorScheme="green" size={"sm"}>
         <TabList px={4}>
           {tabList.map((item, i) => (
             <Tab

@@ -31,13 +31,22 @@ export const TransactionContainer = ({ ...rest }) => {
 
   return (
     <VStack
-      className="product-container"
+      className="product-container scrollY"
       w={"100%"}
       align={"stretch"}
+      overflowY={"auto"}
       {...rest}
     >
-      <Tabs className="tabs" variant="unstyled" colorScheme="green" size={"sm"}>
-        <TabList px={4}>
+      <Tabs
+        overflowY={"auto"}
+        className="tabs"
+        variant="unstyled"
+        colorScheme="green"
+        size={"sm"}
+        display={"flex"}
+        flexDir={"column"}
+      >
+        <TabList px={4} pb={2}>
           {tabList.map((item, i) => (
             <Tab
               key={item.key}
@@ -55,11 +64,12 @@ export const TransactionContainer = ({ ...rest }) => {
             </Tab>
           ))}
         </TabList>
-        <TabPanels>
-          <TabPanel>
+
+        <TabPanels className="scrollY" overflowY={"auto"}>
+          <TabPanel overflowY={"auto"}>
             <Text>manual transaction</Text>
           </TabPanel>
-          <TabPanel>
+          <TabPanel overflowY={"auto"}>
             <ProductCard
               filterOutlet={filterOutlet}
               filterSearch={filterSearch}

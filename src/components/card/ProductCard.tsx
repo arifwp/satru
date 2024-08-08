@@ -1,8 +1,8 @@
 import {
   Image,
-  SimpleGrid,
   StackProps,
   Text,
+  useDisclosure,
   useToast,
   VStack,
   Wrap,
@@ -11,13 +11,13 @@ import {
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
-import { CategoryInterface } from "../../constant/Category";
 import { useBgComponentBaseColor } from "../../constant/colors";
 import { ProductInterface } from "../../constant/Product";
 import { SelectOption } from "../../constant/SelectOption";
 import formatNumber from "../../lib/formatNumber";
 import { getDataUser } from "../../utils/helperFunction";
 import { CategoryCard } from "./CategoryCard";
+import { TransactionDrawer } from "../drawer/dedicated/TransactionDrawer";
 
 interface Props extends StackProps {
   filterOutlet: SelectOption[] | undefined;
@@ -27,11 +27,13 @@ interface Props extends StackProps {
 export const ProductCard = ({ filterOutlet, filterSearch, ...rest }: Props) => {
   const bgComp = useBgComponentBaseColor();
   const [data, setData] = useState<ProductInterface[]>([]);
+  const [selectedData, setSelectedData] = useState<ProductInterface>();
   const [loaded, setLoaded] = useState<boolean>(false);
   const toast = useToast();
   const [filterCategory, setFilterCategory] = useState<
     SelectOption[] | undefined
   >(undefined);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const token = getCookie("token");
@@ -91,67 +93,91 @@ export const ProductCard = ({ filterOutlet, filterSearch, ...rest }: Props) => {
         });
   }, [filterOutlet, filterSearch, filterCategory, toast]);
 
+  const selectItem = (item: ProductInterface) => {
+    if (item.variants && item.variants?.length > 0) {
+      setSelectedData(item);
+      onOpen();
+    }
+  };
+
   return (
-    <VStack w={"100%"} {...rest}>
-      <Text fontSize={[12, null, 14]} fontWeight={600} alignSelf={"stretch"}>
-        Kategori
-      </Text>
-      <CategoryCard
-        onConfirm={(inputValue) => {
-          setFilterCategory(inputValue);
-        }}
-      />
+    <>
+      <VStack w={"100%"} overflowY={"auto"} {...rest}>
+        <Text
+          fontSize={[12, null, 14]}
+          fontWeight={600}
+          alignSelf={"stretch"}
+          overflowY={"auto"}
+        >
+          Kategori
+        </Text>
+        <CategoryCard
+          onConfirm={(inputValue) => {
+            setFilterCategory(inputValue);
+          }}
+          overflowY={"auto"}
+        />
 
-      <Text
-        mt={4}
-        fontSize={[12, null, 14]}
-        fontWeight={600}
-        alignSelf={"stretch"}
-      >
-        Produk
-      </Text>
+        <Text
+          mt={4}
+          fontSize={[12, null, 14]}
+          fontWeight={600}
+          alignSelf={"stretch"}
+          overflowY={"auto"}
+        >
+          Produk
+        </Text>
 
-      <Wrap align={"center"} justify={"center"}>
-        {data?.map((item, i) => (
-          <WrapItem key={item._id}>
-            <VStack
-              className="product-card"
-              w={"140px"}
-              borderRadius={"md"}
-              bg={bgComp}
-              textAlign={"center"}
-              p={2}
-              cursor={"pointer"}
-              overflow={"hidden"}
-            >
-              <Image
-                src={`http://localhost:3000/uploads/products/${item?.imageProduct}`}
-                fallbackSrc="https://placehold.co/600x400"
+        <Wrap overflowY={"auto"} align={"center"} justify={"center"}>
+          {data?.map((item, i) => (
+            <WrapItem key={item._id} onClick={() => selectItem(item)}>
+              <VStack
+                className="product-card"
+                w={"140px"}
                 borderRadius={"md"}
-                overflow={"clip"}
-                objectFit={"cover"}
-                w={"120px"}
-                h={"120px"}
-              />
-
-              <Text
-                fontSize={[12, null, 14]}
-                fontWeight={700}
-                mt={2}
-                maxW={"200px"}
-                noOfLines={1}
+                bg={bgComp}
+                textAlign={"center"}
+                p={2}
+                cursor={"pointer"}
                 overflow={"hidden"}
-                textOverflow={"ellipsis"}
               >
-                {item?.name}
-              </Text>
-              <Text fontSize={[12, null, 14]} color={"teal.400"} mb={1}>
-                Rp {item && formatNumber(item?.price)}
-              </Text>
-            </VStack>
-          </WrapItem>
-        ))}
-      </Wrap>
-    </VStack>
+                <Image
+                  src={`http://localhost:3000/uploads/products/${item?.imageProduct}`}
+                  fallbackSrc="https://placehold.co/600x400"
+                  borderRadius={"md"}
+                  overflow={"clip"}
+                  objectFit={"cover"}
+                  w={"120px"}
+                  h={"120px"}
+                />
+
+                <Text
+                  fontSize={[12, null, 14]}
+                  fontWeight={700}
+                  mt={2}
+                  maxW={"200px"}
+                  noOfLines={1}
+                  overflow={"hidden"}
+                  textOverflow={"ellipsis"}
+                >
+                  {item?.name}
+                </Text>
+                <Text fontSize={[12, null, 14]} mb={1}>
+                  Rp {item && formatNumber(item?.price)}
+                </Text>
+              </VStack>
+            </WrapItem>
+          ))}
+        </Wrap>
+      </VStack>
+
+      <TransactionDrawer
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        children={undefined}
+        data={selectedData}
+      />
+    </>
   );
 };

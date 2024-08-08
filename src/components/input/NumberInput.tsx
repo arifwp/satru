@@ -33,12 +33,13 @@ export const NumberInput = ({
   if (isCurrency) {
     return (
       <InputGroup>
-        <InputLeftElement pointerEvents="none" fontSize={"xs"}>
+        <InputLeftElement pointerEvents="none" fontSize={"sm"}>
           Rp
         </InputLeftElement>
         <Input
           name={name}
           type="text"
+          autoComplete="off"
           placeholder={placeholder}
           value={formattedPrice}
           onChange={handleInput}
@@ -54,6 +55,7 @@ export const NumberInput = ({
       type="text"
       placeholder={placeholder}
       value={formattedPrice}
+      autoComplete="off"
       onChange={handleInput}
       maxLength={20}
     />

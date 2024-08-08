@@ -118,14 +118,19 @@ export const App = () => (
           path="/transaction"
           element={
             <RequiredAuth>
-              <HStack className="root-transaction" w={"100%"} align={"start"}>
+              <HStack
+                className="root-transaction"
+                w={"100%"}
+                overflowY={"auto"}
+                align={"start"}
+              >
                 <ContentContainer
                   label="Tranksasi"
                   isSubPage={false}
                   w={"70%"}
                   h={"100vh"}
-                  overflowY={"scroll"}
-                  className="scrollY"
+                  overflowY={"auto"}
+                  // className="scrollY"
                 >
                   <TransactionContainer />
                 </ContentContainer>

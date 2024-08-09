@@ -14,26 +14,45 @@ import { getCookie } from "typescript-cookie";
 import { useBgComponentBaseColor } from "../../constant/colors";
 import { ProductInterface } from "../../constant/Product";
 import { SelectOption } from "../../constant/SelectOption";
+import {
+  ProductCartInterface,
+  TransactionInterface,
+} from "../../constant/Transaction";
 import formatNumber from "../../lib/formatNumber";
+import { useTransactionStore } from "../../store/useTransactionStore";
 import { getDataUser } from "../../utils/helperFunction";
-import { CategoryCard } from "./CategoryCard";
 import { TransactionDrawer } from "../drawer/dedicated/TransactionDrawer";
 
 interface Props extends StackProps {
   filterOutlet: SelectOption[] | undefined;
+  filterCategory: SelectOption[] | undefined;
   filterSearch: string;
 }
 
-export const ProductCard = ({ filterOutlet, filterSearch, ...rest }: Props) => {
+export const ProductCard = ({
+  filterOutlet,
+  filterSearch,
+  filterCategory,
+  ...rest
+}: Props) => {
   const bgComp = useBgComponentBaseColor();
   const [data, setData] = useState<ProductInterface[]>([]);
   const [selectedData, setSelectedData] = useState<ProductInterface>();
+  const [listProduct, setListProduct] = useState<ProductCartInterface[]>([]);
+  const [cart, setCart] = useState<TransactionInterface>();
   const [loaded, setLoaded] = useState<boolean>(false);
   const toast = useToast();
-  const [filterCategory, setFilterCategory] = useState<
-    SelectOption[] | undefined
-  >(undefined);
+  // const [filterCategory, setFilterCategory] = useState<
+  //   SelectOption[] | undefined
+  // >(undefined);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    transactions,
+    addTransaction,
+    updateTransaction,
+    removeTransaction,
+    clearTransaction,
+  } = useTransactionStore();
 
   useEffect(() => {
     const token = getCookie("token");
@@ -93,42 +112,43 @@ export const ProductCard = ({ filterOutlet, filterSearch, ...rest }: Props) => {
         });
   }, [filterOutlet, filterSearch, filterCategory, toast]);
 
-  const selectItem = (item: ProductInterface) => {
-    if (item.variants && item.variants?.length > 0) {
-      setSelectedData(item);
-      onOpen();
-    }
+  useEffect(() => {
+    let total = 0;
+    listProduct.map((item, i) => {
+      total += item.price;
+    });
+
+    const val = {
+      userId: getDataUser()._id,
+      ownerId: getDataUser().ownerId
+        ? getDataUser().ownerId
+        : getDataUser()._id,
+      totalPrice: total,
+      product: listProduct,
+      createdAt: new Date(Date.now()),
+    };
+
+    addTransaction(val);
+  }, [listProduct]);
+
+  const selectItem = (item: any) => {
+    setListProduct([...listProduct, item]);
+    // if (item.variants && item.variants?.length > 0) {
+    //   setSelectedData(item);
+
+    //   onOpen();
+    // }
   };
 
   return (
     <>
-      <VStack w={"100%"} overflowY={"auto"} {...rest}>
-        <Text
-          fontSize={[12, null, 14]}
-          fontWeight={600}
-          alignSelf={"stretch"}
+      <VStack w={"100%"} mt={2} overflowY={"auto"} {...rest}>
+        <Wrap
+          className="scrollY"
           overflowY={"auto"}
+          align={"center"}
+          justify={"center"}
         >
-          Kategori
-        </Text>
-        <CategoryCard
-          onConfirm={(inputValue) => {
-            setFilterCategory(inputValue);
-          }}
-          overflowY={"auto"}
-        />
-
-        <Text
-          mt={4}
-          fontSize={[12, null, 14]}
-          fontWeight={600}
-          alignSelf={"stretch"}
-          overflowY={"auto"}
-        >
-          Produk
-        </Text>
-
-        <Wrap overflowY={"auto"} align={"center"} justify={"center"}>
           {data?.map((item, i) => (
             <WrapItem key={item._id} onClick={() => selectItem(item)}>
               <VStack

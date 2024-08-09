@@ -100,7 +100,7 @@ export const TransactionDrawer = ({
     if (isOpen) {
       setInputDiscount("");
     }
-  }, [discountRpPercentage]);
+  }, [discountRpPercentage, isOpen]);
 
   useEffect(() => {
     if (isOpen) {

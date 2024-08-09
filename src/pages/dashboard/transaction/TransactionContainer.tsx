@@ -1,4 +1,6 @@
 import {
+  HStack,
+  Stack,
   Tab,
   TabList,
   TabPanel,
@@ -12,11 +14,10 @@ import { ProductCard } from "../../../components/card/ProductCard";
 import { useTextPrimaryColor } from "../../../constant/colors";
 import { ProductInterface } from "../../../constant/Product";
 import { SelectOption } from "../../../constant/SelectOption";
-
-const tabList = [
-  { _id: 1, name: "Manual", key: "manual" },
-  { _id: 2, name: "Product", key: "product" },
-];
+import { SearchInput } from "../../../components/input/SearchInput";
+import { SelectButtonOutlet } from "../../../components/modal/dedicated/SelectButtonOutlet";
+import { RiBox3Line, RiShoppingBag2Line } from "@remixicon/react";
+import { SelectButtonCategory } from "../../../components/modal/dedicated/SelectButtonCategory";
 
 export const TransactionContainer = ({ ...rest }) => {
   const [data, setData] = useState<ProductInterface[] | undefined>(undefined);
@@ -37,7 +38,52 @@ export const TransactionContainer = ({ ...rest }) => {
       overflowY={"auto"}
       {...rest}
     >
-      <Tabs
+      <Stack
+        w={"100%"}
+        direction={{
+          base: "column",
+          sm: "row",
+          md: "row",
+          lg: "row",
+          xl: "row",
+        }}
+        align={{ base: "stretch", md: "start" }}
+        flexWrap={"wrap"}
+      >
+        <SearchInput
+          placeholder="Cari produk..."
+          onConfirm={(inputValue) => {
+            setfilterSearch(inputValue);
+          }}
+          w={"fit-content"}
+        />
+
+        <SelectButtonOutlet
+          name="outlet"
+          placeholder="Filter Outlet"
+          withSearch={true}
+          icon={RiShoppingBag2Line}
+          onConfirm={(inputValue) => {
+            setFilterOutlet(inputValue);
+          }}
+        />
+
+        <SelectButtonCategory
+          name="category"
+          placeholder="Filter Kategori"
+          withSearch={true}
+          icon={RiBox3Line}
+          onConfirm={(inputValue) => {
+            setFilterCategory(inputValue);
+          }}
+        />
+      </Stack>
+      <ProductCard
+        filterOutlet={filterOutlet}
+        filterSearch={filterSearch}
+        filterCategory={filterCategory}
+      />
+      {/* <Tabs
         overflowY={"auto"}
         className="tabs"
         variant="unstyled"
@@ -76,7 +122,7 @@ export const TransactionContainer = ({ ...rest }) => {
             />
           </TabPanel>
         </TabPanels>
-      </Tabs>
+      </Tabs> */}
     </VStack>
   );
 };

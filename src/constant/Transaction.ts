@@ -1,4 +1,4 @@
-import { ProductInterface, ProductVariantInterface } from "./Product";
+import { ProductVariantInterface } from "./Product";
 
 export interface ProductCartInterface {
   _id?: any;

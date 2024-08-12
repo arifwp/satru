@@ -28,14 +28,16 @@ import {
   ProductInterface,
   ProductVariantInterface,
 } from "../../../constant/Product";
+import { ProductCartInterface } from "../../../constant/Transaction";
 import formatNumber from "../../../lib/formatNumber";
+import { useTransactionStore } from "../../../store/useTransactionStore";
 import { NumberInput } from "../../input/NumberInput";
 
 interface Props extends DrawerProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  data: ProductInterface | undefined;
+  data: ProductInterface | ProductCartInterface | undefined;
 }
 
 interface DiscountTypeInterface {
@@ -68,6 +70,7 @@ export const TransactionDrawer = ({
   const borderColor = useBorderColorInput();
   const bgHover = useBgHover();
   const bgComp = useBgComponentBaseColor();
+  const { products, addProduct, updateProduct } = useTransactionStore();
 
   useEffect(() => {
     if (isOpen) {
@@ -155,9 +158,61 @@ export const TransactionDrawer = ({
   };
 
   const handleSubmit = () => {
-    console.log("discount options", discountOrNot);
-    console.log("diskon berapa", inputDiscount);
-    console.log("discount rp atau %", discountRpPercentage);
+    // console.log("discount options", discountOrNot);
+    // console.log("diskon berapa", inputDiscount);
+    // console.log("discount rp atau %", discountRpPercentage);
+
+    // console.log(selectedVariant);
+    const existingProductIndex = finalData.findIndex(
+      (product) => product._id === (selectedVariant as any)._id
+    );
+    console.log(existingProductIndex);
+    if (existingProductIndex === 0) {
+      const existingProduct = products.filter(
+        (product) => product._id === (data as ProductCartInterface)._id
+      );
+
+      const itemProduct = products.find(
+        (p) => p._id === (data as ProductCartInterface)._id
+      );
+
+      if (existingProduct.length > 0) {
+        updateProduct((data as ProductCartInterface)._id, {
+          qty: (itemProduct?.qty ?? 0) + 1,
+        });
+      } else {
+        addProduct(data as ProductCartInterface);
+      }
+    } else {
+      const selectItem = {
+        ...data,
+        variants: data?.variants?.filter(
+          (variant) => variant._id === selectedVariant?._id
+        ),
+      };
+
+      console.log(selectItem);
+
+      addProduct(selectItem as ProductCartInterface);
+    }
+
+    onClose();
+    // const existingProduct = products.filter(
+    //   (product) => product._id === (data as ProductCartInterface)._id
+    // );
+
+    // const itemProduct = products.find(
+    //   (p) => p._id === (data as ProductCartInterface)._id
+    // );
+
+    // if (existingProduct.length > 0) {
+    //   updateProduct((data as ProductCartInterface)._id, {
+    //     qty: (itemProduct?.qty ?? 0) + 1,
+    //   });
+    // } else {
+    //   addProduct(data as ProductCartInterface);
+    // }
+    // onClose();
   };
 
   return (

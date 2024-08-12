@@ -11,22 +11,6 @@ interface ProductVariantState {
 
 export const useProductVariantStore = create<ProductVariantState>((set) => ({
   variants: [],
-  // addVariant: (variant, note) =>
-
-  //   set((state) => ({
-  //     variants: [...state.variants, variant],
-  //   })),
-  // addVariant: (variant,note) =>
-  //   set((state) => {
-  //     if (note) {
-
-  //     }
-  //     const exists = state.variants.some((v) => v._id === variant._id);
-  //     if (!exists) {
-  //       return { variants: [...state.variants, variant] };
-  //     }
-  //     return state;
-  //   }),
   addVariant: (variant, note) =>
     set((state) => {
       if (note) {

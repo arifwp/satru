@@ -42,13 +42,13 @@ export const ProductCard = ({
   const [cart, setCart] = useState<TransactionInterface>();
   const [loaded, setLoaded] = useState<boolean>(false);
   const toast = useToast();
-  // const [filterCategory, setFilterCategory] = useState<
-  //   SelectOption[] | undefined
-  // >(undefined);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    transactions,
+    transaction,
+    products,
     addTransaction,
+    addProduct,
+    updateProduct,
     updateTransaction,
     removeTransaction,
     clearTransaction,
@@ -119,6 +119,7 @@ export const ProductCard = ({
     });
 
     const val = {
+      _id: "",
       userId: getDataUser()._id,
       ownerId: getDataUser().ownerId
         ? getDataUser().ownerId
@@ -132,13 +133,32 @@ export const ProductCard = ({
   }, [listProduct]);
 
   const selectItem = (item: any) => {
-    setListProduct([...listProduct, item]);
+    const existingProduct = products.filter(
+      (product) => product._id === item._id
+    );
+
+    const itemProduct = products.find((p) => p._id === item._id);
+
+    if (item.variants && item.variants?.length > 0) {
+      setSelectedData(item);
+      onOpen();
+    } else {
+      if (existingProduct.length > 0) {
+        updateProduct(item._id, { qty: (itemProduct?.qty ?? 0) + 1 });
+      } else {
+        addProduct(item);
+      }
+    }
     // if (item.variants && item.variants?.length > 0) {
     //   setSelectedData(item);
 
     //   onOpen();
     // }
   };
+
+  useEffect(() => {
+    // console.log(products);
+  }, [products]);
 
   return (
     <>

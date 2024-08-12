@@ -1,8 +1,15 @@
 import { create } from "zustand";
-import { TransactionInterface } from "../constant/Transaction";
+import {
+  ProductCartInterface,
+  TransactionInterface,
+} from "../constant/Transaction";
 
 interface TransactionState {
-  transactions: TransactionInterface | undefined;
+  transaction: TransactionInterface | undefined;
+  products: ProductCartInterface[];
+  addProduct: (product: ProductCartInterface) => void;
+  updateProduct: (id: string, updatedFields: any) => void;
+  removeProduct: (id: string) => void;
   addTransaction: (transaction: TransactionInterface) => void;
   updateTransaction: (transaction: TransactionInterface) => void;
   removeTransaction: (transactionId: any) => void;
@@ -10,64 +17,51 @@ interface TransactionState {
 }
 
 export const useTransactionStore = create<TransactionState>((set) => ({
-  transactions: undefined,
-  // addTransaction: (transaction : TransactionInterface) =>
-  //   set((state) => {
-  //     const existingProduct =
-  //       state.transactions &&
-  //       (state.transactions as any).find(
-  //         (trx: any) => trx._id === transaction._id
-  //       );
-
-  //     if (existingProduct) {
-
-  //       const updatedTrx = state.transactions?.product.map((item) =>
-  //         item._id === transaction.product[0]._id
-  //           ? { ...item, qty: item.qty + 1 }
-  //           : item
-  //       );
-
-  //       return { transactions: { ...state.transactions, product: updatedTrx } };
-  //     }
-
-  //     return { transactions: transaction };
-  //   }),
-  addTransaction: (newTransaction: TransactionInterface) =>
+  transaction: undefined,
+  products: [],
+  addProduct: (newProduct: ProductCartInterface) =>
     set((state) => {
-      if (state.transactions && state.transactions._id === newTransaction._id) {
-        // Jika ID transaksi sudah ada, perbarui qty dari produk yang ada
-        const updatedProducts = state.transactions.product.map((item) =>
-          item._id === newTransaction.product[0]._id
-            ? { ...item, qty: item.qty + 1 }
-            : item
-        );
+      const updatedProducts = [...state.products];
+      const existingProductIndex = updatedProducts.findIndex(
+        (product) => product._id === newProduct._id
+      );
 
-        return {
-          transactions: {
-            ...state.transactions,
-            product: updatedProducts,
-          },
-        };
+      if (existingProductIndex === -1) {
+        updatedProducts.push({ ...newProduct, qty: 1 });
       } else {
-        // Jika transaksi baru, tetapkan transaksi baru
-        return {
-          transactions: newTransaction,
-        };
+        // Optional: Update quantity if you want to handle existing products differently
       }
+
+      return { products: updatedProducts };
+    }),
+  updateProduct: (_id: string, updatedFields: any) =>
+    set((state) => ({
+      products: state.products.map((product) =>
+        product._id === _id ? { ...product, ...updatedFields } : product
+      ),
+    })),
+  removeProduct: (id: string) =>
+    set((state) => ({
+      products: state.products.filter((v: any) => v._id !== id),
+    })),
+  addTransaction: (transaction: TransactionInterface) =>
+    set((state) => {
+      // Simply set or update the transaction without modifying the products
+      return { transaction };
     }),
   updateTransaction: (updatedTransaction) =>
     set((state) => ({
-      transactions:
-        state.transactions &&
-        (state.transactions as any).map((item: any) =>
+      transaction:
+        state.transaction &&
+        (state.transaction as any).map((item: any) =>
           item._id === updatedTransaction._id ? updatedTransaction : item
         ),
     })),
   removeTransaction: (transactionId) =>
     set((state) => ({
-      transactions:
-        state.transactions &&
-        (state.transactions as any).filter((v: any) => v._id !== transactionId),
+      transaction:
+        state.transaction &&
+        (state.transaction as any).filter((v: any) => v._id !== transactionId),
     })),
-  clearTransaction: () => set(() => ({ transactions: undefined })),
+  clearTransaction: () => set(() => ({ transaction: undefined })),
 }));

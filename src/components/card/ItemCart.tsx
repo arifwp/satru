@@ -4,6 +4,7 @@ import {
   useTextPrimaryColor,
 } from "../../constant/colors";
 import { ProductCartInterface } from "../../constant/Transaction";
+import formatNumber from "../../lib/formatNumber";
 import { useTransactionStore } from "../../store/useTransactionStore";
 
 interface Props extends StackProps {
@@ -17,21 +18,43 @@ export const ItemCart = ({ data, ...rest }: Props) => {
 
   const increment = (item: ProductCartInterface) => {
     if (item.qty < item.stock) {
-      updateProduct(item._id, { qty: (item?.qty ?? 0) + 1 });
+      updateProduct(item.indexProduct, { qty: (item?.qty ?? 0) + 1 });
     }
   };
 
   const decrement = (item: ProductCartInterface) => {
     if (item.qty > 1) {
-      updateProduct(item._id, { qty: (item?.qty ?? 0) - 1 });
+      updateProduct(item.indexProduct, { qty: (item?.qty ?? 0) - 1 });
     }
+  };
+
+  const showPrice = (item: ProductCartInterface) => {
+    let total = 0;
+    // data.map((item, i) => {
+    //   total += item.price * item.qty;
+    //   if (item.variants && item.variants.length > 0) {
+    //     item.variants.map((variant) => {
+    //       total += variant.variantPrice;
+    //     });
+    //   }
+    // });
+
+    total += item.price * item.qty;
+    if (item.variants && item.variants.length > 0) {
+      item.variants.map((variant) => {
+        total += variant.variantPrice;
+      });
+    }
+
+    return `Rp ${formatNumber(total)}`;
   };
 
   return (
     <VStack w={"100%"}>
       {data.map((item, i) => (
         <VStack
-          key={item._id}
+          // key={item._id}
+          key={i}
           w={"100%"}
           pb={2}
           align={"stretch"}
@@ -123,6 +146,25 @@ export const ItemCart = ({ data, ...rest }: Props) => {
             </HStack>
           )}
 
+          <HStack
+            justify={"space-between"}
+            mt={2}
+            px={2}
+            fontSize={[10, null, 12]}
+          >
+            <Text variant={"secondary"}>Harga</Text>
+
+            <Text
+              w={"100%"}
+              align={"end"}
+              fontSize={[12, null, 14]}
+              noOfLines={1}
+              textOverflow={"ellipsis"}
+            >
+              {showPrice(item)}
+            </Text>
+          </HStack>
+
           <Button
             w={"fit-content"}
             size={"xs"}
@@ -131,7 +173,7 @@ export const ItemCart = ({ data, ...rest }: Props) => {
             colorScheme="teal"
             fontSize={[10, null, 12]}
             fontWeight={"normal"}
-            onClick={() => removeProduct(item._id)}
+            onClick={() => removeProduct(item.indexProduct)}
           >
             Hapus
           </Button>

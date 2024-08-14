@@ -158,109 +158,159 @@ export const TransactionDrawer = ({
   };
 
   const handleSubmit = () => {
-    const existingProductIndex = finalData.findIndex(
-      (product) => product._id === (selectedVariant as any)._id
+    const productInStore = products.find(
+      (product) => product._id === (data as ProductCartInterface)._id
     );
 
-    if (existingProductIndex === 0) {
-      const existingProduct = products.filter(
-        (product) => product._id === (data as ProductCartInterface)._id
+    console.log("data awal", finalData);
+
+    console.log("product in store", productInStore);
+
+    if (productInStore) {
+      const variantInStore = productInStore.variants?.find(
+        (variant) => variant._id === selectedVariant?._id
       );
 
-      const findVariant = products.find((item) =>
-        item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
-      );
+      console.log("variant in store", variantInStore);
 
-      console.log("existingproduct", existingProduct);
-      console.log("findvariant", findVariant);
-
-      const itemProduct = products.find(
-        (p) => p._id === (data as ProductCartInterface)._id
-      );
-      // console.log("ini pertama", data);
-
-      if (existingProduct.length > 0 && !!findVariant) {
-        console.log("cuman nambah qty");
-        updateProduct((itemProduct as ProductCartInterface).indexProduct, {
-          qty: (itemProduct?.qty ?? 0) + 1,
+      if (variantInStore) {
+        // Jika varian ada, update kuantitasnya
+        updateProduct(productInStore.indexProduct, {
+          qty: (productInStore.qty ?? 0) + 1,
         });
-      } else if (
-        existingProduct.length > 0 &&
-        (existingProduct[0].variants as any)?.length > 0
-      ) {
-        const findSelected = products.filter(
-          (product) =>
-            product._id === (data as ProductCartInterface)._id &&
-            product.variants?.length === 0
-        );
-        console.log("findselected", findSelected.length > 0);
-
-        if (existingProduct.length > 0 && findSelected.length > 0) {
-          console.log("ini nih satu");
-          updateProduct((findSelected as any)[0].indexProduct, {
-            qty: (findSelected[0].qty ?? 0) + 1,
-          });
-        } else {
-          console.log("ini nih dua");
-          const dataProduct = {
-            indexProduct: products.length + 1,
-            ...data,
-          };
-          (dataProduct as ProductCartInterface).variants = [];
-
-          addProduct(dataProduct as ProductCartInterface);
-        }
+      } else if (!productInStore.variants?.length) {
+        // Jika produk ada tetapi tidak memiliki varian, tambah kuantitasnya
+        updateProduct(productInStore.indexProduct, {
+          qty: (productInStore.qty ?? 0) + 1,
+        });
       } else {
-        // addProduct(data as ProductCartInterface);
-        console.log("add product baru dong");
-        const originalVariants = [...(data as any).variants];
-
-        const dataProduct = {
+        console.log("tambah varian");
+        // Jika produk ada, tetapi varian baru, tambahkan produk baru dengan varian ini
+        const newProduct = {
           indexProduct: products.length + 1,
           ...data,
+          variants: [selectedVariant],
         };
-
-        (dataProduct as ProductCartInterface).variants = [];
-
-        addProduct(dataProduct as ProductCartInterface);
-        // (data as ProductCartInterface).variants = originalVariants;
+        addProduct(newProduct as ProductCartInterface);
       }
     } else {
-      const existingVariant = products.find((item) =>
-        item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
-      );
-
-      const itemProduct =
-        existingVariant?.variants &&
-        existingVariant?.variants.find(
-          (item) => item._id === selectedVariant?._id
-        );
-
-      if (!!itemProduct) {
-        const findItem = products.find(
-          (p) => p._id === (data as ProductCartInterface)._id
-        );
-
-        console.log("finditem", findItem);
-        updateProduct((findItem as ProductCartInterface).indexProduct, {
-          qty: ((findItem as ProductCartInterface).qty ?? 0) + 1,
-        });
-      } else {
-        const selectItem = {
-          indexProduct: products.length + 1,
-          ...data,
-          variants: data?.variants?.filter(
-            (variant) => variant._id === selectedVariant?._id
-          ),
-        };
-        console.log("selain index 0", selectItem);
-
-        addProduct(selectItem as ProductCartInterface);
-      }
+      console.log("produk baru gan");
+      // Jika produk tidak ada, tambahkan produk baru
+      const newProduct = {
+        indexProduct: products.length + 1,
+        ...data,
+        variants: selectedVariant ? [selectedVariant] : [],
+      };
+      addProduct(newProduct as ProductCartInterface);
     }
 
     onClose();
   };
+
+  // const handleSubmit = () => {
+  //   const existingProductIndex = finalData.findIndex(
+  //     (product) => product._id === (selectedVariant as any)._id
+  //   );
+
+  //   if (existingProductIndex === 0) {
+  //     const existingProduct = products.filter(
+  //       (product) => product._id === (data as ProductCartInterface)._id
+  //     );
+
+  //     const findVariant = products.find((item) =>
+  //       item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
+  //     );
+
+  //     console.log("existingproduct", existingProduct);
+  //     console.log("findvariant", findVariant);
+
+  //     const itemProduct = products.find(
+  //       (p) => p._id === (data as ProductCartInterface)._id
+  //     );
+  //     // console.log("ini pertama", data);
+
+  //     if (existingProduct.length > 0 && !!findVariant) {
+  //       console.log("cuman nambah qty");
+  //       updateProduct((itemProduct as ProductCartInterface).indexProduct, {
+  //         qty: (itemProduct?.qty ?? 0) + 1,
+  //       });
+  //     } else if (
+  //       existingProduct.length > 0 &&
+  //       (existingProduct[0].variants as any)?.length > 0
+  //     ) {
+  //       const findSelected = products.filter(
+  //         (product) =>
+  //           product._id === (data as ProductCartInterface)._id &&
+  //           product.variants?.length === 0
+  //       );
+  //       console.log("findselected", findSelected.length > 0);
+
+  //       if (existingProduct.length > 0 && findSelected.length > 0) {
+  //         console.log("ini nih satu");
+  //         updateProduct((findSelected as any)[0].indexProduct, {
+  //           qty: (findSelected[0].qty ?? 0) + 1,
+  //         });
+  //       } else {
+  //         console.log("ini nih dua");
+  //         const dataProduct = {
+  //           indexProduct: products.length + 1,
+  //           ...data,
+  //         };
+  //         (dataProduct as ProductCartInterface).variants = [];
+
+  //         addProduct(dataProduct as ProductCartInterface);
+  //       }
+  //     } else {
+  //       // addProduct(data as ProductCartInterface);
+  //       console.log("add product baru dong");
+  //       const originalVariants = [...(data as any).variants];
+
+  //       const dataProduct = {
+  //         indexProduct: products.length + 1,
+  //         ...data,
+  //       };
+
+  //       (dataProduct as ProductCartInterface).variants = [];
+
+  //       addProduct(dataProduct as ProductCartInterface);
+  //       // (data as ProductCartInterface).variants = originalVariants;
+  //     }
+  //   } else {
+  //     const existingVariant = products.find((item) =>
+  //       item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
+  //     );
+
+  //     const itemProduct =
+  //       existingVariant?.variants &&
+  //       existingVariant?.variants.find(
+  //         (item) => item._id === selectedVariant?._id
+  //       );
+
+  //     if (!!itemProduct) {
+  //       const findItem = products.find(
+  //         (p) => p._id === (data as ProductCartInterface)._id
+  //       );
+
+  //       console.log("finditem", findItem);
+  //       updateProduct((findItem as ProductCartInterface).indexProduct, {
+  //         qty: ((findItem as ProductCartInterface).qty ?? 0) + 1,
+  //       });
+  //     } else {
+  //       const selectItem = {
+  //         indexProduct: products.length + 1,
+  //         ...data,
+  //         variants: data?.variants?.filter(
+  //           (variant) => variant._id === selectedVariant?._id
+  //         ),
+  //       };
+  //       console.log("selain index 0", selectItem);
+
+  //       addProduct(selectItem as ProductCartInterface);
+  //     }
+  //   }
+
+  //   onClose();
+  // };
 
   return (
     <Drawer

@@ -37,7 +37,7 @@ export const ProductCard = ({
 }: Props) => {
   const bgComp = useBgComponentBaseColor();
   const [data, setData] = useState<ProductInterface[]>([]);
-  const [selectedData, setSelectedData] = useState<ProductInterface>();
+  const [selectedData, setSelectedData] = useState<ProductCartInterface>();
   const [listProduct, setListProduct] = useState<ProductCartInterface[]>([]);
   const [cart, setCart] = useState<TransactionInterface>();
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -140,13 +140,22 @@ export const ProductCard = ({
     const itemProduct = products.find((p) => p._id === item._id);
 
     if (item.variants && item.variants?.length > 0) {
+      console.log("item yang dilempar", item);
       setSelectedData(item);
       onOpen();
     } else {
       if (existingProduct.length > 0) {
-        updateProduct(item._id, { qty: (itemProduct?.qty ?? 0) + 1 });
+        updateProduct(itemProduct && itemProduct.indexProduct, {
+          qty: (itemProduct?.qty ?? 0) + 1,
+        });
       } else {
-        addProduct(item);
+        const dataProduct: ProductCartInterface = {
+          indexProduct: products.length + 1,
+          ...item,
+        };
+
+        console.log("data baru", dataProduct);
+        addProduct(dataProduct);
       }
     }
     // if (item.variants && item.variants?.length > 0) {
@@ -156,9 +165,9 @@ export const ProductCard = ({
     // }
   };
 
-  useEffect(() => {
-    // console.log(products);
-  }, [products]);
+  // useEffect(() => {
+  //   console.log("zustand produk", products);
+  // }, [products]);
 
   return (
     <>

@@ -27,22 +27,44 @@ export const useTransactionStore = create<TransactionState>((set) => ({
       );
 
       if (existingProductIndex === -1) {
+        // console.log("ini zustand masuk");
         updatedProducts.push({ ...newProduct, qty: 1 });
       } else {
         // Optional: Update quantity if you want to handle existing products differently
+        updatedProducts.push({ ...newProduct, qty: 1 });
       }
+      // else {
+      // Optional: Update quantity if you want to handle existing products differently
+      // if (newProduct.variants && newProduct.variants?.length > 0) {
+      //   // updatedProducts.push({ ...newProduct, qty: 1 });
+      //   const existingVariantIndex = updatedProducts.findIndex((product) =>
+      //     product.variants?.map(
+      //       (item) =>
+      //         item._id ===
+      //         newProduct.variants?.map((val) => val._id)
+      //     )
+      //   );
+      //   console.log("adalah", existingVariantIndex);
+      //   if (existingVariantIndex === 0) {
+      //     console.log("varian sama tambah lagi");
+      //     return { products: updatedProducts };
+      //   }
+      // }
+      // }
 
       return { products: updatedProducts };
     }),
-  updateProduct: (_id: string, updatedFields: any) =>
+  updateProduct: (indexProduct: string, updatedFields: any) =>
     set((state) => ({
       products: state.products.map((product) =>
-        product._id === _id ? { ...product, ...updatedFields } : product
+        product.indexProduct === indexProduct
+          ? { ...product, ...updatedFields }
+          : product
       ),
     })),
   removeProduct: (id: string) =>
     set((state) => ({
-      products: state.products.filter((v: any) => v._id !== id),
+      products: state.products.filter((v: any) => v.indexProduct !== id),
     })),
   addTransaction: (transaction: TransactionInterface) =>
     set((state) => {

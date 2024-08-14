@@ -2,6 +2,7 @@ import { ProductVariantInterface } from "./Product";
 
 export interface ProductCartInterface {
   _id?: any;
+  indexProduct: any;
   userId: any;
   ownerId: any;
   outletId: any;

@@ -158,61 +158,108 @@ export const TransactionDrawer = ({
   };
 
   const handleSubmit = () => {
-    // console.log("discount options", discountOrNot);
-    // console.log("diskon berapa", inputDiscount);
-    // console.log("discount rp atau %", discountRpPercentage);
-
-    // console.log(selectedVariant);
     const existingProductIndex = finalData.findIndex(
       (product) => product._id === (selectedVariant as any)._id
     );
-    console.log(existingProductIndex);
+
     if (existingProductIndex === 0) {
       const existingProduct = products.filter(
         (product) => product._id === (data as ProductCartInterface)._id
       );
 
+      const findVariant = products.find((item) =>
+        item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
+      );
+
+      console.log("existingproduct", existingProduct);
+      console.log("findvariant", findVariant);
+
       const itemProduct = products.find(
         (p) => p._id === (data as ProductCartInterface)._id
       );
+      // console.log("ini pertama", data);
 
-      if (existingProduct.length > 0) {
-        updateProduct((data as ProductCartInterface)._id, {
+      if (existingProduct.length > 0 && !!findVariant) {
+        console.log("cuman nambah qty");
+        updateProduct((itemProduct as ProductCartInterface).indexProduct, {
           qty: (itemProduct?.qty ?? 0) + 1,
         });
+      } else if (
+        existingProduct.length > 0 &&
+        (existingProduct[0].variants as any)?.length > 0
+      ) {
+        const findSelected = products.filter(
+          (product) =>
+            product._id === (data as ProductCartInterface)._id &&
+            product.variants?.length === 0
+        );
+        console.log("findselected", findSelected.length > 0);
+
+        if (existingProduct.length > 0 && findSelected.length > 0) {
+          console.log("ini nih satu");
+          updateProduct((findSelected as any)[0].indexProduct, {
+            qty: (findSelected[0].qty ?? 0) + 1,
+          });
+        } else {
+          console.log("ini nih dua");
+          const dataProduct = {
+            indexProduct: products.length + 1,
+            ...data,
+          };
+          (dataProduct as ProductCartInterface).variants = [];
+
+          addProduct(dataProduct as ProductCartInterface);
+        }
       } else {
-        addProduct(data as ProductCartInterface);
+        // addProduct(data as ProductCartInterface);
+        console.log("add product baru dong");
+        const originalVariants = [...(data as any).variants];
+
+        const dataProduct = {
+          indexProduct: products.length + 1,
+          ...data,
+        };
+
+        (dataProduct as ProductCartInterface).variants = [];
+
+        addProduct(dataProduct as ProductCartInterface);
+        // (data as ProductCartInterface).variants = originalVariants;
       }
     } else {
-      const selectItem = {
-        ...data,
-        variants: data?.variants?.filter(
-          (variant) => variant._id === selectedVariant?._id
-        ),
-      };
+      const existingVariant = products.find((item) =>
+        item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
+      );
 
-      console.log(selectItem);
+      const itemProduct =
+        existingVariant?.variants &&
+        existingVariant?.variants.find(
+          (item) => item._id === selectedVariant?._id
+        );
 
-      addProduct(selectItem as ProductCartInterface);
+      if (!!itemProduct) {
+        const findItem = products.find(
+          (p) => p._id === (data as ProductCartInterface)._id
+        );
+
+        console.log("finditem", findItem);
+        updateProduct((findItem as ProductCartInterface).indexProduct, {
+          qty: ((findItem as ProductCartInterface).qty ?? 0) + 1,
+        });
+      } else {
+        const selectItem = {
+          indexProduct: products.length + 1,
+          ...data,
+          variants: data?.variants?.filter(
+            (variant) => variant._id === selectedVariant?._id
+          ),
+        };
+        console.log("selain index 0", selectItem);
+
+        addProduct(selectItem as ProductCartInterface);
+      }
     }
 
     onClose();
-    // const existingProduct = products.filter(
-    //   (product) => product._id === (data as ProductCartInterface)._id
-    // );
-
-    // const itemProduct = products.find(
-    //   (p) => p._id === (data as ProductCartInterface)._id
-    // );
-
-    // if (existingProduct.length > 0) {
-    //   updateProduct((data as ProductCartInterface)._id, {
-    //     qty: (itemProduct?.qty ?? 0) + 1,
-    //   });
-    // } else {
-    //   addProduct(data as ProductCartInterface);
-    // }
-    // onClose();
   };
 
   return (

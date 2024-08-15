@@ -5,11 +5,9 @@ import { ProductCard } from "../../../components/card/ProductCard";
 import { SearchInput } from "../../../components/input/SearchInput";
 import { SelectButtonCategory } from "../../../components/modal/dedicated/SelectButtonCategory";
 import { SelectButtonOutlet } from "../../../components/modal/dedicated/SelectButtonOutlet";
-import { ProductInterface } from "../../../constant/Product";
 import { SelectOption } from "../../../constant/SelectOption";
 
 export const TransactionContainer = ({ ...rest }) => {
-  const [data, setData] = useState<ProductInterface[] | undefined>(undefined);
   const [filterCategory, setFilterCategory] = useState<
     SelectOption[] | undefined
   >(undefined);

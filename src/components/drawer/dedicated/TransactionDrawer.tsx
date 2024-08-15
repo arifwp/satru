@@ -57,6 +57,7 @@ export const TransactionDrawer = ({
   data,
   ...rest
 }: Props) => {
+  const [newestData, setNewestData] = useState<ProductCartInterface[]>([]);
   const [finalData, setFinalData] = useState<ProductVariantInterface[]>([]);
   const [selectedVariant, setSelectedVariant] = useState<
     ProductVariantInterface | undefined
@@ -71,6 +72,10 @@ export const TransactionDrawer = ({
   const bgHover = useBgHover();
   const bgComp = useBgComponentBaseColor();
   const { products, addProduct, updateProduct } = useTransactionStore();
+
+  useEffect(() => {
+    setNewestData(products);
+  }, [products]);
 
   useEffect(() => {
     if (isOpen) {
@@ -130,10 +135,6 @@ export const TransactionDrawer = ({
   };
 
   const selectdiscountRpPercentage = (val: DiscountTypeInterface) => {
-    // val.id === discountRpPercentage?.id
-    //   ? setDiscountRpPercentage(undefined)
-    //   : setDiscountRpPercentage(val);
-
     setDiscountRpPercentage(val);
   };
 
@@ -162,10 +163,6 @@ export const TransactionDrawer = ({
       (product) => product._id === (data as ProductCartInterface)._id
     );
 
-    console.log("data awal", finalData);
-
-    console.log("product in store", productInStore);
-
     if (productInStore) {
       const variantInStore = productInStore.variants?.find(
         (variant) => variant._id === selectedVariant?._id
@@ -174,9 +171,6 @@ export const TransactionDrawer = ({
       const findVariant = products.find((item) =>
         item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
       );
-
-      console.log("variant in store", variantInStore);
-      console.log("findvariant", findVariant);
 
       if (variantInStore) {
         // Jika varian ada, update kuantitasnya
@@ -189,20 +183,18 @@ export const TransactionDrawer = ({
           qty: (findVariant.qty ?? 0) + 1,
         });
       } else {
-        console.log("tambah varian");
         // Jika produk ada, tetapi varian baru, tambahkan produk baru dengan varian ini
         const newProduct = {
-          indexProduct: products.length + 1,
+          indexProduct: newestData && (newestData as any).length + 1,
           ...data,
           variants: [selectedVariant],
         };
         addProduct(newProduct as ProductCartInterface);
       }
     } else {
-      console.log("produk baru gan");
       // Jika produk tidak ada, tambahkan produk baru
       const newProduct = {
-        indexProduct: products.length + 1,
+        indexProduct: newestData && (newestData as any).length + 1,
         ...data,
         variants: selectedVariant ? [selectedVariant] : [],
       };

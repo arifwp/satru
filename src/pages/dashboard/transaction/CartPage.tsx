@@ -1,11 +1,14 @@
 import { StackProps, Text, VStack } from "@chakra-ui/react";
 import { Cart } from "../../../components/Cart";
+import { useTransactionStore } from "../../../store/useTransactionStore";
 
 interface Props extends StackProps {
   children?: any;
 }
 
 export const CartPage = ({ children, ...rest }: Props) => {
+  const { products } = useTransactionStore();
+
   return (
     <VStack
       className="transaction-container scrollY"
@@ -15,7 +18,7 @@ export const CartPage = ({ children, ...rest }: Props) => {
       {...rest}
     >
       <Text fontWeight={700} fontSize={[18, null, 20]} mt={4}>
-        Keranjang
+        {`Keranjang (${products.length})`}
       </Text>
 
       <Cart mt={4} />

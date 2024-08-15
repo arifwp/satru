@@ -5,7 +5,7 @@ interface Props extends StackProps {
   children?: any;
 }
 
-export const TransactionPage = ({ children, ...rest }: Props) => {
+export const CartPage = ({ children, ...rest }: Props) => {
   return (
     <VStack
       className="transaction-container scrollY"

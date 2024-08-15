@@ -18,7 +18,7 @@ import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
 import { TransactionContainer } from "./pages/dashboard/transaction/TransactionContainer";
 import { FillData } from "./pages/FillDataPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
-import { TransactionPage } from "./pages/dashboard/transaction/TransactionPage";
+import { CartPage } from "./pages/dashboard/transaction/CartPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -134,7 +134,7 @@ export const App = () => (
                 >
                   <TransactionContainer />
                 </ContentContainer>
-                <TransactionPage w={"30%"} />
+                <CartPage w={"30%"} />
               </HStack>
             </RequiredAuth>
           }

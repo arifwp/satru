@@ -171,17 +171,22 @@ export const TransactionDrawer = ({
         (variant) => variant._id === selectedVariant?._id
       );
 
+      const findVariant = products.find((item) =>
+        item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
+      );
+
       console.log("variant in store", variantInStore);
+      console.log("findvariant", findVariant);
 
       if (variantInStore) {
         // Jika varian ada, update kuantitasnya
         updateProduct(productInStore.indexProduct, {
           qty: (productInStore.qty ?? 0) + 1,
         });
-      } else if (!productInStore.variants?.length) {
+      } else if (!!findVariant) {
         // Jika produk ada tetapi tidak memiliki varian, tambah kuantitasnya
-        updateProduct(productInStore.indexProduct, {
-          qty: (productInStore.qty ?? 0) + 1,
+        updateProduct(findVariant.indexProduct, {
+          qty: (findVariant.qty ?? 0) + 1,
         });
       } else {
         console.log("tambah varian");

@@ -132,6 +132,15 @@ export const ProductCard = ({
     addTransaction(val);
   }, [listProduct]);
 
+  const finalData =
+    data &&
+    data.filter((item) => {
+      const searchTerm = filterSearch.toLowerCase();
+      const nameTerm = item.name.toLowerCase();
+
+      return nameTerm.includes(searchTerm);
+    });
+
   const selectItem = (item: any) => {
     const existingProduct = products.filter(
       (product) => product._id === item._id
@@ -140,7 +149,6 @@ export const ProductCard = ({
     const itemProduct = products.find((p) => p._id === item._id);
 
     if (item.variants && item.variants?.length > 0) {
-      console.log("item yang dilempar", item);
       setSelectedData(item);
       onOpen();
     } else {
@@ -178,7 +186,7 @@ export const ProductCard = ({
           align={"center"}
           justify={"center"}
         >
-          {data?.map((item, i) => (
+          {finalData?.map((item, i) => (
             <WrapItem key={item._id} onClick={() => selectItem(item)}>
               <VStack
                 className="product-card"

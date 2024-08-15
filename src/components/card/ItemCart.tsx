@@ -17,10 +17,31 @@ import {
 import { ProductCartInterface } from "../../constant/Transaction";
 import formatNumber from "../../lib/formatNumber";
 import { useTransactionStore } from "../../store/useTransactionStore";
+import { motion } from "framer-motion";
 
 interface Props extends StackProps {
   data: ProductCartInterface[];
 }
+
+const containerAnimation = {
+  hidden: { opacity: 1, scale: 0 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+const itemAnimation = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+  },
+};
 
 export const ItemCart = ({ data, ...rest }: Props) => {
   const borderColor = useBorderColorInput();
@@ -70,11 +91,12 @@ export const ItemCart = ({ data, ...rest }: Props) => {
   };
 
   return (
-    <VStack w={"100%"}>
+    <VStack as={motion.div} variants={containerAnimation} w={"100%"}>
       {data.map((item, i) => (
         <VStack
-          // key={item._id}
           key={i}
+          as={motion.div}
+          variants={itemAnimation}
           w={"100%"}
           pb={2}
           align={"stretch"}
@@ -213,4 +235,148 @@ export const ItemCart = ({ data, ...rest }: Props) => {
       ))}
     </VStack>
   );
+
+  // return (
+  //   <VStack w={"100%"}>
+  //     {data.map((item, i) => (
+  //       <VStack
+  //         key={i}
+  //         w={"100%"}
+  //         pb={2}
+  //         align={"stretch"}
+  //         borderBottomWidth={"1px"}
+  //         borderBottomColor={borderColor}
+  //       >
+  //         <HStack px={2} w={"100%"} justify={"space-between"}>
+  //           <Text
+  //             fontSize={[12, null, 14]}
+  //             noOfLines={1}
+  //             textOverflow={"ellipsis"}
+  //             fontWeight={600}
+  //           >
+  //             {item.name}
+  //           </Text>
+
+  //           <IconButton
+  //             aria-label="Delete product"
+  //             size={"md"}
+  //             variant={"ghost"}
+  //             color={txtColor}
+  //             colorScheme="teal"
+  //             fontWeight={"normal"}
+  //             onClick={() => removeProduct(item.indexProduct)}
+  //             icon={<Icon as={RiDeleteBin4Line} />}
+  //           />
+  //         </HStack>
+
+  //         <HStack justify={"space-between"} px={2} fontSize={[10, null, 12]}>
+  //           <Text variant={"secondary"}>Qty</Text>
+  //           <HStack
+  //             borderWidth={"1px"}
+  //             borderColor={borderColor}
+  //             w={"fit-content"}
+  //           >
+  //             <HStack
+  //               borderRightWidth={"1px"}
+  //               borderColor={borderColor}
+  //               cursor={"pointer"}
+  //               onClick={() => decrement(item)}
+  //             >
+  //               <Button
+  //                 py={0.5}
+  //                 px={2}
+  //                 borderRadius={"none"}
+  //                 size={"xs"}
+  //                 variant={"ghost"}
+  //                 colorScheme="teal"
+  //                 fontSize={[10, null, 12]}
+  //                 fontWeight={"bold"}
+  //               >
+  //                 -
+  //               </Button>
+  //             </HStack>
+  //             <HStack py={2}>
+  //               <Input
+  //                 name="itemQty"
+  //                 type="text"
+  //                 size={"xs"}
+  //                 w={"40px"}
+  //                 autoComplete="off"
+  //                 value={item.qty}
+  //                 border={"none"}
+  //                 onChange={(event) => handleChangeQty(item, event)}
+  //                 onBlur={() => handleBlurQty(item)}
+  //                 p={0}
+  //                 m={0}
+  //                 textAlign={"center"}
+  //               />
+  //             </HStack>
+  //             <HStack
+  //               borderLeftWidth={"1px"}
+  //               borderColor={borderColor}
+  //               cursor={"pointer"}
+  //               onClick={() => increment(item)}
+  //             >
+  //               <Button
+  //                 py={0.5}
+  //                 px={2}
+  //                 borderRadius={"none"}
+  //                 size={"xs"}
+  //                 variant={"ghost"}
+  //                 colorScheme="teal"
+  //                 fontSize={[10, null, 12]}
+  //                 fontWeight={"bold"}
+  //               >
+  //                 +
+  //               </Button>
+  //             </HStack>
+  //           </HStack>
+  //         </HStack>
+
+  //         {(item.variants as any)?.length > 0 && (
+  //           <HStack
+  //             justify={"space-between"}
+  //             mt={2}
+  //             px={2}
+  //             fontSize={[10, null, 12]}
+  //           >
+  //             <Text variant={"secondary"}>Varian</Text>
+
+  //             {item.variants?.map((variant) => (
+  //               <Text
+  //                 key={variant._id}
+  //                 w={"100%"}
+  //                 align={"end"}
+  //                 fontSize={[12, null, 14]}
+  //                 noOfLines={1}
+  //                 textOverflow={"ellipsis"}
+  //               >
+  //                 {variant.variantName}
+  //               </Text>
+  //             ))}
+  //           </HStack>
+  //         )}
+
+  //         <HStack
+  //           justify={"space-between"}
+  //           mt={2}
+  //           px={2}
+  //           fontSize={[10, null, 12]}
+  //         >
+  //           <Text variant={"secondary"}>Harga</Text>
+
+  //           <Text
+  //             w={"100%"}
+  //             align={"end"}
+  //             fontSize={[12, null, 14]}
+  //             noOfLines={1}
+  //             textOverflow={"ellipsis"}
+  //           >
+  //             {showPrice(item)}
+  //           </Text>
+  //         </HStack>
+  //       </VStack>
+  //     ))}
+  //   </VStack>
+  // );
 };

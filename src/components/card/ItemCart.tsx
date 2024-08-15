@@ -1,4 +1,15 @@
-import { Button, HStack, StackProps, Text, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  Icon,
+  IconButton,
+  Input,
+  StackProps,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { RiDeleteBin4Line } from "@remixicon/react";
+import React from "react";
 import {
   useBorderColorInput,
   useTextPrimaryColor,
@@ -30,14 +41,6 @@ export const ItemCart = ({ data, ...rest }: Props) => {
 
   const showPrice = (item: ProductCartInterface) => {
     let total = 0;
-    // data.map((item, i) => {
-    //   total += item.price * item.qty;
-    //   if (item.variants && item.variants.length > 0) {
-    //     item.variants.map((variant) => {
-    //       total += variant.variantPrice;
-    //     });
-    //   }
-    // });
 
     total += item.price * item.qty;
     if (item.variants && item.variants.length > 0) {
@@ -47,6 +50,23 @@ export const ItemCart = ({ data, ...rest }: Props) => {
     }
 
     return `Rp ${formatNumber(total)}`;
+  };
+
+  const handleChangeQty = (
+    item: ProductCartInterface,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    let newQty = parseInt(event.target.value, 10) || 0;
+
+    if (!isNaN(newQty)) {
+      updateProduct(item.indexProduct, { qty: newQty });
+    }
+  };
+
+  const handleBlurQty = (item: ProductCartInterface) => {
+    if (item.qty < 1) {
+      updateProduct(item.indexProduct, { qty: 1 });
+    }
   };
 
   return (
@@ -61,15 +81,27 @@ export const ItemCart = ({ data, ...rest }: Props) => {
           borderBottomWidth={"1px"}
           borderBottomColor={borderColor}
         >
-          <Text
-            w={"100%"}
-            fontSize={[12, null, 14]}
-            noOfLines={1}
-            textOverflow={"ellipsis"}
-            fontWeight={600}
-          >
-            {item.name}
-          </Text>
+          <HStack px={2} w={"100%"} justify={"space-between"}>
+            <Text
+              fontSize={[12, null, 14]}
+              noOfLines={1}
+              textOverflow={"ellipsis"}
+              fontWeight={600}
+            >
+              {item.name}
+            </Text>
+
+            <IconButton
+              aria-label="Delete product"
+              size={"md"}
+              variant={"ghost"}
+              color={txtColor}
+              colorScheme="teal"
+              fontWeight={"normal"}
+              onClick={() => removeProduct(item.indexProduct)}
+              icon={<Icon as={RiDeleteBin4Line} />}
+            />
+          </HStack>
 
           <HStack justify={"space-between"} px={2} fontSize={[10, null, 12]}>
             <Text variant={"secondary"}>Qty</Text>
@@ -97,8 +129,21 @@ export const ItemCart = ({ data, ...rest }: Props) => {
                   -
                 </Button>
               </HStack>
-              <HStack p={2}>
-                <Text fontSize={[10, null, 12]}>{item.qty}</Text>
+              <HStack py={2}>
+                <Input
+                  name="itemQty"
+                  type="text"
+                  size={"xs"}
+                  w={"40px"}
+                  autoComplete="off"
+                  value={item.qty}
+                  border={"none"}
+                  onChange={(event) => handleChangeQty(item, event)}
+                  onBlur={() => handleBlurQty(item)}
+                  p={0}
+                  m={0}
+                  textAlign={"center"}
+                />
               </HStack>
               <HStack
                 borderLeftWidth={"1px"}
@@ -164,19 +209,6 @@ export const ItemCart = ({ data, ...rest }: Props) => {
               {showPrice(item)}
             </Text>
           </HStack>
-
-          <Button
-            w={"fit-content"}
-            size={"xs"}
-            variant={"ghost"}
-            color={txtColor}
-            colorScheme="teal"
-            fontSize={[10, null, 12]}
-            fontWeight={"normal"}
-            onClick={() => removeProduct(item.indexProduct)}
-          >
-            Hapus
-          </Button>
         </VStack>
       ))}
     </VStack>

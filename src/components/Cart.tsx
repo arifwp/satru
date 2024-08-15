@@ -5,9 +5,5 @@ import { ItemCart } from "./card/ItemCart";
 export const Cart = ({ ...rest }) => {
   const { products } = useTransactionStore();
 
-  return (
-    <VStack w={"100%"} {...rest}>
-      {products && <ItemCart data={products} />}
-    </VStack>
-  );
+  return products && <ItemCart data={products} />;
 };

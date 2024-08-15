@@ -42,7 +42,7 @@ export const ItemCart = ({ data, ...rest }: Props) => {
     total += item.price * item.qty;
     if (item.variants && item.variants.length > 0) {
       item.variants.map((variant) => {
-        total += variant.variantPrice;
+        total = variant.variantPrice * item.qty;
       });
     }
 

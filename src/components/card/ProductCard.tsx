@@ -14,10 +14,7 @@ import { getCookie } from "typescript-cookie";
 import { useBgComponentBaseColor } from "../../constant/colors";
 import { ProductInterface } from "../../constant/Product";
 import { SelectOption } from "../../constant/SelectOption";
-import {
-  ProductCartInterface,
-  TransactionInterface,
-} from "../../constant/Transaction";
+import { ProductCartInterface } from "../../constant/Transaction";
 import formatNumber from "../../lib/formatNumber";
 import { useTransactionStore } from "../../store/useTransactionStore";
 import { getDataUser } from "../../utils/helperFunction";
@@ -39,20 +36,11 @@ export const ProductCard = ({
   const [data, setData] = useState<ProductInterface[]>([]);
   const [selectedData, setSelectedData] = useState<ProductCartInterface>();
   const [listProduct, setListProduct] = useState<ProductCartInterface[]>([]);
-  const [cart, setCart] = useState<TransactionInterface>();
   const [loaded, setLoaded] = useState<boolean>(false);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    transaction,
-    products,
-    addTransaction,
-    addProduct,
-    updateProduct,
-    updateTransaction,
-    removeTransaction,
-    clearTransaction,
-  } = useTransactionStore();
+  const { products, addTransaction, addProduct, updateProduct } =
+    useTransactionStore();
 
   useEffect(() => {
     const token = getCookie("token");
@@ -162,20 +150,14 @@ export const ProductCard = ({
           ...item,
         };
 
-        console.log("data baru", dataProduct);
         addProduct(dataProduct);
       }
     }
-    // if (item.variants && item.variants?.length > 0) {
-    //   setSelectedData(item);
-
-    //   onOpen();
-    // }
   };
 
-  // useEffect(() => {
-  //   console.log("zustand produk", products);
-  // }, [products]);
+  useEffect(() => {
+    console.log("zustand produk", products);
+  }, [products]);
 
   return (
     <>

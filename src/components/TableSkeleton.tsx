@@ -1,19 +1,11 @@
-import {
-  Box,
-  HStack,
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
-  Stack,
-  VStack,
-} from "@chakra-ui/react";
+import { HStack, Skeleton, StackProps, VStack } from "@chakra-ui/react";
 
-interface Props {
+interface Props extends StackProps {
   row: number;
   column: number;
 }
 
-export const TableSkeleton = ({ row, column }: Props) => {
+export const TableSkeleton = ({ row, column, ...rest }: Props) => {
   const value = "x";
   const rowLength = row;
   const columnLength = column;
@@ -21,7 +13,7 @@ export const TableSkeleton = ({ row, column }: Props) => {
   const columnArr = Array(columnLength).fill(value);
 
   return (
-    <VStack w={"100%"} py={4}>
+    <VStack w={"100%"} py={4} {...rest}>
       {columnArr.map((item, indexColumn) => (
         <HStack key={indexColumn} w={"100%"} h={"25px"}>
           {rowArr.map((item, indexRow) => (

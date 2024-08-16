@@ -33,6 +33,10 @@ export const TableProduct = ({
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const toast = useToast();
   const { statusData, setStatusData } = useTriggerRenderStore();
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalItems, setTotalItems] = useState<number | undefined>(undefined);
+  const [limitPagination, setLimitPagination] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
     const token = getCookie("token");
@@ -40,6 +44,8 @@ export const TableProduct = ({
       ? getDataUser().ownerId
       : getDataUser()._id;
     let url;
+    let outletIds;
+    let categoryIds;
 
     if (
       filterOutlet &&
@@ -56,27 +62,41 @@ export const TableProduct = ({
       url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByOutletCategory/${ownerId}/${outletIds}/${categoryIds}`;
     } else if (filterCategory && filterCategory.length > 0) {
       const ctgIds = filterCategory.map((item) => item._id);
-      const categoryIds = ctgIds.join(",");
+      categoryIds = ctgIds.join(",");
 
-      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByCategory/${ownerId}/${categoryIds}`;
+      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByCategory`;
     } else if (filterOutlet && filterOutlet.length > 0) {
       const otltIds =
         filterOutlet && (filterOutlet as any[]).map((item) => item._id);
-      const outletIds = otltIds && (otltIds as string[]).join(",");
+      outletIds = otltIds && (otltIds as string[]).join(",");
 
-      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByOutlet/${ownerId}/${outletIds}`;
+      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByOutlet`;
     } else {
-      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProduct/${ownerId}`;
+      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProduct`;
     }
 
+    const request = {
+      ownerId: ownerId,
+      page: currentPage,
+      limit: limitPagination,
+      outletIds: outletIds,
+      categoryIds: categoryIds,
+    };
+
     axios
-      .get(url, {
+      .post(url, request, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response: AxiosResponse) => {
+        setTotalItems(
+          JSON.parse(response.request.response).pagination.totalItems
+        );
+        setTotalPages(
+          JSON.parse(response.request.response).pagination.totalPages
+        );
         setData(JSON.parse(response.request.response).data);
       })
       .catch((error: AxiosError) => {
@@ -89,7 +109,15 @@ export const TableProduct = ({
       .finally(() => {
         setLoaded(true);
       });
-  }, [filterOutlet, filterCategory, filterSearch, toast, statusData]);
+  }, [
+    filterOutlet,
+    filterCategory,
+    filterSearch,
+    toast,
+    statusData,
+    currentPage,
+    limitPagination,
+  ]);
 
   useEffect(() => {
     if (data) {
@@ -275,6 +303,16 @@ export const TableProduct = ({
       data={value}
       sortedColumn={sortedColumn}
       sortOrder={sortOrder}
+      totalPages={totalPages}
+      totalItems={totalItems}
+      onPageChange={(inputValue) => {
+        console.log(inputValue);
+        setCurrentPage(inputValue);
+      }}
+      onLimitChange={(inputValue) => {
+        console.log(inputValue);
+        setLimitPagination(inputValue);
+      }}
       {...rest}
     />
   );

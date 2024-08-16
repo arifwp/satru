@@ -39,6 +39,10 @@ export const TableProduct = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
+    console.log(filterSearch);
+  }, [filterSearch]);
+
+  useEffect(() => {
     const token = getCookie("token");
     const ownerId = getDataUser().ownerId
       ? getDataUser().ownerId
@@ -54,12 +58,12 @@ export const TableProduct = ({
       filterCategory.length !== 0
     ) {
       const otltIds = filterOutlet.map((item) => item._id);
-      const outletIds = otltIds.join(",");
+      outletIds = otltIds.join(",");
 
       const ctgIds = filterCategory.map((item) => item._id);
-      const categoryIds = ctgIds.join(",");
+      categoryIds = ctgIds.join(",");
 
-      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByOutletCategory/${ownerId}/${outletIds}/${categoryIds}`;
+      url = `${process.env.REACT_APP_API_URL}/v1/product/getAllProductByOutletCategory`;
     } else if (filterCategory && filterCategory.length > 0) {
       const ctgIds = filterCategory.map((item) => item._id);
       categoryIds = ctgIds.join(",");
@@ -81,6 +85,7 @@ export const TableProduct = ({
       limit: limitPagination,
       outletIds: outletIds,
       categoryIds: categoryIds,
+      search: filterSearch,
     };
 
     axios

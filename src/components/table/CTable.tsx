@@ -124,40 +124,46 @@ export const CTable = ({
       </TableContainer>
 
       <HStack w={"100%"} mt={4} justify={"space-between"}>
-        <HStack>
-          <Select
-            w={"fit-content"}
-            onChange={handleSelect}
-            isDisabled={(totalItems as any) > rowOptions[0].name ? false : true}
-          >
-            {rowOptions[0].name < (totalItems as any) ? (
-              rowOptions.map((item, i) => (
-                <option key={i} value={item.name}>
-                  {item.name}
-                </option>
-              ))
-            ) : (
-              <option value={totalItems}>{totalItems}</option>
-            )}
-          </Select>
-
-          <Text>{`dari ${totalItems}`}</Text>
-        </HStack>
-
-        <HStack>
-          {pagesArr.map((page: any, i: any) => (
-            <Button
-              key={i}
-              size={"sm"}
-              colorScheme="teal"
-              borderRadius={"md"}
-              variant={"outline"}
-              onClick={() => (onPageChange as any)(page)}
+        {totalItems && (
+          <HStack>
+            <Select
+              w={"fit-content"}
+              onChange={handleSelect}
+              isDisabled={
+                (totalItems as any) > rowOptions[0].name ? false : true
+              }
             >
-              {page}
-            </Button>
-          ))}
-        </HStack>
+              {rowOptions[0].name < (totalItems as any) ? (
+                rowOptions.map((item, i) => (
+                  <option key={i} value={item.name}>
+                    {item.name}
+                  </option>
+                ))
+              ) : (
+                <option value={totalItems}>{totalItems}</option>
+              )}
+            </Select>
+
+            <Text>{`dari ${totalItems}`}</Text>
+          </HStack>
+        )}
+
+        {totalPages && (
+          <HStack>
+            {pagesArr.map((page: any, i: any) => (
+              <Button
+                key={i}
+                size={"sm"}
+                colorScheme="teal"
+                borderRadius={"md"}
+                variant={"outline"}
+                onClick={() => (onPageChange as any)(page)}
+              >
+                {page}
+              </Button>
+            ))}
+          </HStack>
+        )}
       </HStack>
     </VStack>
   );

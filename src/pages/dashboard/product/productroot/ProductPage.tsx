@@ -4,7 +4,7 @@ import {
   RiBox3Line,
   RiShoppingBag2Line,
 } from "@remixicon/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { CButton } from "../../../../components/CButton";
 import { PageContainer } from "../../../../components/containers/PageContainer";
@@ -14,7 +14,7 @@ import { SelectButtonOutlet } from "../../../../components/modal/dedicated/Selec
 import { TableProduct } from "../../../../components/table/dedicated/TableProduct";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
 import { SelectOption } from "../../../../constant/SelectOption";
-import { getDataUser } from "../../../../utils/helperFunction";
+import { debounce, getDataUser } from "../../../../utils/helperFunction";
 
 export const ProductPage = () => {
   const [filterCategory, setFilterCategory] = useState<
@@ -24,6 +24,15 @@ export const ProductPage = () => {
     undefined
   );
   const [filterSearch, setfilterSearch] = useState<string>("");
+
+  const debouncedSearch = useCallback(
+    debounce((searchQuery: string) => setfilterSearch(searchQuery), 500),
+    []
+  );
+
+  const handleSearch = (inputValue: string) => {
+    debouncedSearch(inputValue);
+  };
 
   return (
     <PageContainer navs={pageNavsProduct}>
@@ -44,7 +53,7 @@ export const ProductPage = () => {
             <SearchInput
               placeholder="Cari nama..."
               onConfirm={(inputValue) => {
-                setfilterSearch(inputValue);
+                handleSearch(inputValue);
               }}
             />
           </HStack>

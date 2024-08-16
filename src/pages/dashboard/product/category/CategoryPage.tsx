@@ -1,16 +1,24 @@
 import { HStack, Stack, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { PageContainer } from "../../../../components/containers/PageContainer";
 import { SearchInput } from "../../../../components/input/SearchInput";
 import { ModalSingleForm } from "../../../../components/modal/dedicated/ModalSingleForm";
 import { TableCategory } from "../../../../components/table/dedicated/TableCategory";
 import { pageNavsProduct } from "../../../../constant/pageNavs";
 import { useTriggerRenderStore } from "../../../../store/useTriggerRenderStore";
-import { getDataUser } from "../../../../utils/helperFunction";
+import { debounce, getDataUser } from "../../../../utils/helperFunction";
 
 export const CategoryPage = () => {
   const [filterSearch, setfilterSearch] = useState<string>("");
   const { setStatusData } = useTriggerRenderStore();
+  const debouncedSearch = useCallback(
+    debounce((searchQuery: string) => setfilterSearch(searchQuery), 500),
+    []
+  );
+
+  const handleSearch = (inputValue: string) => {
+    debouncedSearch(inputValue);
+  };
 
   return (
     <PageContainer navs={pageNavsProduct}>
@@ -31,7 +39,7 @@ export const CategoryPage = () => {
             <SearchInput
               placeholder="Cari kategori..."
               onConfirm={(inputValue) => {
-                setfilterSearch(inputValue);
+                handleSearch(inputValue);
               }}
             />
           </HStack>

@@ -23,6 +23,10 @@ export const TableCategory = ({ filterSearch, ...rest }: Props) => {
   const [sortedColumn, setSortedColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const { statusData, setStatusData } = useTriggerRenderStore();
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalItems, setTotalItems] = useState<number | undefined>(undefined);
+  const [limitPagination, setLimitPagination] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const toast = useToast();
 
   useEffect(() => {
@@ -31,9 +35,17 @@ export const TableCategory = ({ filterSearch, ...rest }: Props) => {
       : getDataUser()._id;
     const token = getCookie("token");
 
+    const request = {
+      ownerId: ownerId,
+      page: currentPage,
+      limit: limitPagination,
+      search: filterSearch,
+    };
+
     axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/v1/category/getAllCategory/${ownerId}`,
+      .post(
+        `${process.env.REACT_APP_API_URL}/v1/category/getAllCategory`,
+        request,
         {
           headers: {
             "Content-Type": "application/json",
@@ -42,6 +54,12 @@ export const TableCategory = ({ filterSearch, ...rest }: Props) => {
         }
       )
       .then((response: AxiosResponse) => {
+        setTotalItems(
+          JSON.parse(response.request.response).pagination.totalItems
+        );
+        setTotalPages(
+          JSON.parse(response.request.response).pagination.totalPages
+        );
         setData(JSON.parse(response.request.response).data);
       })
       .catch((error: AxiosError) => {
@@ -54,7 +72,7 @@ export const TableCategory = ({ filterSearch, ...rest }: Props) => {
       .finally(() => {
         setLoaded(true);
       });
-  }, [statusData, toast]);
+  }, [statusData, toast, currentPage, limitPagination, filterSearch]);
 
   useEffect(() => {
     if (data && data.length > 0) {
@@ -190,6 +208,16 @@ export const TableCategory = ({ filterSearch, ...rest }: Props) => {
       data={value}
       sortedColumn={sortedColumn}
       sortOrder={sortOrder}
+      totalPages={totalPages}
+      totalItems={totalItems}
+      onPageChange={(inputValue) => {
+        console.log(inputValue);
+        setCurrentPage(inputValue);
+      }}
+      onLimitChange={(inputValue) => {
+        console.log(inputValue);
+        setLimitPagination(inputValue);
+      }}
       {...rest}
     />
   );

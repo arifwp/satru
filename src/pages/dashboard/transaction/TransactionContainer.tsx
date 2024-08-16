@@ -1,11 +1,12 @@
 import { Stack, VStack } from "@chakra-ui/react";
 import { RiBox3Line, RiShoppingBag2Line } from "@remixicon/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { ProductCard } from "../../../components/card/ProductCard";
 import { SearchInput } from "../../../components/input/SearchInput";
 import { SelectButtonCategory } from "../../../components/modal/dedicated/SelectButtonCategory";
 import { SelectButtonOutlet } from "../../../components/modal/dedicated/SelectButtonOutlet";
 import { SelectOption } from "../../../constant/SelectOption";
+import { debounce } from "../../../utils/helperFunction";
 
 export const TransactionContainer = ({ ...rest }) => {
   const [filterCategory, setFilterCategory] = useState<
@@ -15,6 +16,14 @@ export const TransactionContainer = ({ ...rest }) => {
     undefined
   );
   const [filterSearch, setfilterSearch] = useState<string>("");
+  const debouncedSearch = useCallback(
+    debounce((searchQuery: string) => setfilterSearch(searchQuery), 500),
+    []
+  );
+
+  const handleSearch = (inputValue: string) => {
+    debouncedSearch(inputValue);
+  };
 
   return (
     <VStack
@@ -39,7 +48,7 @@ export const TransactionContainer = ({ ...rest }) => {
         <SearchInput
           placeholder="Cari produk..."
           onConfirm={(inputValue) => {
-            setfilterSearch(inputValue);
+            handleSearch(inputValue);
           }}
           w={"fit-content"}
         />

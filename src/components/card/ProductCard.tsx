@@ -190,6 +190,7 @@ export const ProductCard = ({
       } else {
         const dataProduct: ProductCartInterface = {
           indexProduct: products.length + 1,
+          qty: 1,
           ...item,
         };
 

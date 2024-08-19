@@ -219,7 +219,7 @@ export const ItemCart = ({ data, ...rest }: Props) => {
             px={2}
             fontSize={[10, null, 12]}
           >
-            <Text variant={"secondary"}>Harga</Text>
+            <Text variant={"secondary"}>Total</Text>
 
             <Text
               w={"100%"}

@@ -11,6 +11,8 @@ export interface ProductCartInterface {
   qty: number;
   price: number;
   stock: number;
+  discount: number;
+  discountType: string;
   variants?: Array<ProductVariantInterface>;
 }
 
@@ -27,6 +29,7 @@ export interface TransactionInterface {
   code?: string;
   customerName?: string;
   totalPrice: number;
+  totalDiscount?: number;
   product: ProductCartInterface[];
   manualTransaction?: ManualTransactionInterface[];
   createdAt: Date;

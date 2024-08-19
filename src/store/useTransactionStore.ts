@@ -26,13 +26,15 @@ export const useTransactionStore = create<TransactionState>((set) => ({
         (product) => product._id === newProduct._id
       );
 
-      if (existingProductIndex === -1) {
-        // console.log("ini zustand masuk");
-        updatedProducts.push({ ...newProduct, qty: 1 });
-      } else {
-        // Optional: Update quantity if you want to handle existing products differently
-        updatedProducts.push({ ...newProduct, qty: 1 });
-      }
+      // if (existingProductIndex === -1) {
+      //   // console.log("ini zustand masuk");
+      //   updatedProducts.push({ ...newProduct, qty: 1 });
+      // } else {
+      //   // Optional: Update quantity if you want to handle existing products differently
+      //   updatedProducts.push({ ...newProduct, qty: 1 });
+      // }
+
+      updatedProducts.push({ ...newProduct });
 
       return { products: updatedProducts };
     }),

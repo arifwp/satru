@@ -16,6 +16,7 @@ import {
   Radio,
   RadioGroup,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -72,6 +73,7 @@ export const TransactionDrawer = ({
   const bgHover = useBgHover();
   const bgComp = useBgComponentBaseColor();
   const { products, addProduct, updateProduct } = useTransactionStore();
+  const toast = useToast();
 
   useEffect(() => {
     setNewestData(products);
@@ -159,6 +161,14 @@ export const TransactionDrawer = ({
   };
 
   const handleSubmit = () => {
+    if (!!!selectedVariant) {
+      return toast({
+        title: "Pilih variant terlebih dahulu",
+        duration: 2000,
+        status: "error",
+        isClosable: true,
+      });
+    }
     const productInStore = products.find(
       (product) => product._id === (data as ProductCartInterface)._id
     );
@@ -184,20 +194,68 @@ export const TransactionDrawer = ({
         });
       } else {
         // Jika produk ada, tetapi varian baru, tambahkan produk baru dengan varian ini
+        const idx = newestData && (newestData as any).length + 1;
+        let finalPrice = totalItem * (data as ProductCartInterface).price;
+        if (discountOrNot === "1") {
+          console.log(discountOrNot);
+          if (discountRpPercentage?.id === 1) {
+            finalPrice =
+              totalItem * (data as ProductCartInterface).price -
+              parseInt(inputDiscount);
+          } else {
+            const discountAmount =
+              (totalItem *
+                (data as ProductCartInterface).price *
+                parseInt(inputDiscount)) /
+              100;
+            finalPrice =
+              totalItem * (data as ProductCartInterface).price - discountAmount;
+          }
+        }
+
         const newProduct = {
-          indexProduct: newestData && (newestData as any).length + 1,
+          indexProduct: idx,
+          qty: totalItem,
+          discountType: discountRpPercentage,
+          discount: inputDiscount,
+          price: finalPrice,
           ...data,
           variants: [selectedVariant],
         };
+
         addProduct(newProduct as ProductCartInterface);
       }
     } else {
       // Jika produk tidak ada, tambahkan produk baru
+      const idx = newestData && (newestData as any).length + 1;
+      let finalPrice = totalItem * (data as ProductCartInterface).price;
+      if (discountOrNot === "1") {
+        console.log(discountOrNot);
+        if (discountRpPercentage?.id === 1) {
+          finalPrice =
+            totalItem * (data as ProductCartInterface).price -
+            parseInt(inputDiscount);
+        } else {
+          const discountAmount =
+            (totalItem *
+              (data as ProductCartInterface).price *
+              parseInt(inputDiscount)) /
+            100;
+          finalPrice =
+            totalItem * (data as ProductCartInterface).price - discountAmount;
+        }
+      }
+
       const newProduct = {
-        indexProduct: newestData && (newestData as any).length + 1,
+        indexProduct: idx,
+        qty: totalItem,
+        discountType: discountRpPercentage,
+        discount: inputDiscount,
+        price: finalPrice,
         ...data,
         variants: selectedVariant ? [selectedVariant] : [],
       };
+
       addProduct(newProduct as ProductCartInterface);
     }
 

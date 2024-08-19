@@ -199,6 +199,10 @@ export const ProductCard = ({
     }
   };
 
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
+
   const handleSelect = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     setLimitPagination(parseInt(value));
@@ -213,18 +217,20 @@ export const ProductCard = ({
   return (
     <>
       <VStack
+        className="product-card"
         w={"100%"}
         h={"100vh"}
         mt={2}
         overflowY={"auto"}
-        position={"relative"}
         {...rest}
       >
         <Wrap
+          h={"calc(100vh - 16px)"}
           className="scrollY"
           overflowY={"auto"}
           align={"center"}
           justify={"center"}
+          mb={10}
         >
           {finalData?.map((item, i) => (
             <WrapItem key={item._id} onClick={() => selectItem(item)}>
@@ -267,56 +273,60 @@ export const ProductCard = ({
           ))}
         </Wrap>
 
-        <HStack
-          w={"100%"}
-          bg={"transparent"}
-          backdropFilter="blur(5px)"
-          px={4}
-          pb={4}
-          position={"absolute"}
-          bottom={0}
-          justify={"space-between"}
-        >
-          {totalItems && (
-            <HStack>
-              <Select
-                w={"fit-content"}
-                onChange={handleSelect}
-                isDisabled={
-                  (totalItems as any) > rowOptions[0].name ? false : true
-                }
-              >
-                {rowOptions[0].name < (totalItems as any) ? (
-                  rowOptions.map((item, i) => (
-                    <option key={i} value={item.name}>
-                      {item.name}
-                    </option>
-                  ))
-                ) : (
-                  <option value={totalItems}>{totalItems}</option>
-                )}
-              </Select>
-
-              <Text>{`dari ${totalItems}`}</Text>
-            </HStack>
-          )}
-
-          {totalPages && (
-            <HStack>
-              {pagesArr.map((page: any, i: any) => (
-                <Button
-                  key={i}
-                  size={"sm"}
-                  colorScheme="teal"
-                  borderRadius={"md"}
-                  variant={"outline"}
-                  onClick={() => setCurrentPage(page)}
+        <HStack w={"100%"} position={"relative"} justify={"center"}>
+          <HStack
+            w={"100%"}
+            px={4}
+            py={2}
+            bg="rgba(0, 0 ,0 ,0.5)"
+            zIndex={999}
+            backdropFilter="auto"
+            backdropBlur={"2px"}
+            position={"absolute"}
+            bottom={0}
+            justify={"space-between"}
+          >
+            {totalItems && (
+              <HStack>
+                <Select
+                  w={"fit-content"}
+                  onChange={handleSelect}
+                  isDisabled={
+                    (totalItems as any) > rowOptions[0].name ? false : true
+                  }
                 >
-                  {page}
-                </Button>
-              ))}
-            </HStack>
-          )}
+                  {rowOptions[0].name < (totalItems as any) ? (
+                    rowOptions.map((item, i) => (
+                      <option key={i} value={item.name}>
+                        {item.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value={totalItems}>{totalItems}</option>
+                  )}
+                </Select>
+
+                <Text>{`dari ${totalItems}`}</Text>
+              </HStack>
+            )}
+
+            {totalPages && (
+              <HStack>
+                {pagesArr.map((page: any, i: any) => (
+                  <Button
+                    key={i}
+                    size={"sm"}
+                    colorScheme="teal"
+                    borderRadius={"md"}
+                    variant={"outline"}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </Button>
+                ))}
+              </HStack>
+            )}
+          </HStack>
         </HStack>
       </VStack>
 

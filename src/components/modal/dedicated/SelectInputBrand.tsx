@@ -34,8 +34,14 @@ export const SelectInputBrand = ({
     const ownerId = getDataUser()._id;
     const token = getCookie("token");
 
+    const request = {
+      ownerId: ownerId,
+      page: 0,
+      limit: 0,
+    };
+
     axios
-      .get(`${process.env.REACT_APP_API_URL}/v1/brand/getAllBrand/${ownerId}`, {
+      .post(`${process.env.REACT_APP_API_URL}/v1/brand/getAllBrand`, request, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -55,20 +61,6 @@ export const SelectInputBrand = ({
         setLoaded(true);
       });
   }, []);
-
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     const timer = setTimeout(() => {
-  //       setLoaded(true);
-  //       // hit api
-  //       setData(brand);
-  //     }, 2000);
-
-  //     return () => {
-  //       clearTimeout(timer);
-  //     };
-  //   }
-  // }, [isOpen]);
 
   return (
     <PickerInput

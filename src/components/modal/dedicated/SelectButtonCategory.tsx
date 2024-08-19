@@ -35,9 +35,16 @@ export const SelectButtonCategory = ({
         : getDataUser()._id;
       const token = getCookie("token");
 
+      const request = {
+        ownerId: ownerId,
+        page: 1,
+        limit: 10,
+      };
+
       axios
-        .get(
-          `${process.env.REACT_APP_API_URL}/v1/category/getAllCategory/${ownerId}`,
+        .post(
+          `${process.env.REACT_APP_API_URL}/v1/category/getAllCategory`,
+          request,
           {
             headers: {
               "Content-Type": "application/json",

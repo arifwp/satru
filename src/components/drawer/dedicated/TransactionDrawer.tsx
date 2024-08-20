@@ -102,7 +102,13 @@ export const TransactionDrawer = ({
 
   useEffect(() => {
     if (isOpen) {
-      setTotalItem(1);
+      let qty;
+      products.map((item, i) => {
+        if (data?._id === item._id) {
+          qty = item.qty;
+        }
+      });
+      qty && setTotalItem(qty);
     }
   }, [selectedVariant, isOpen]);
 
@@ -186,18 +192,21 @@ export const TransactionDrawer = ({
         // Jika varian ada, update kuantitasnya
         updateProduct(productInStore.indexProduct, {
           qty: (productInStore.qty ?? 0) + 1,
+          discountType: discountRpPercentage,
+          discount: inputDiscount,
         });
       } else if (!!findVariant) {
         // Jika produk ada tetapi tidak memiliki varian, tambah kuantitasnya
         updateProduct(findVariant.indexProduct, {
           qty: (findVariant.qty ?? 0) + 1,
+          discountType: discountRpPercentage,
+          discount: inputDiscount,
         });
       } else {
         // Jika produk ada, tetapi varian baru, tambahkan produk baru dengan varian ini
         const idx = newestData && (newestData as any).length + 1;
         let finalPrice = totalItem * (data as ProductCartInterface).price;
         if (discountOrNot === "1") {
-          console.log(discountOrNot);
           if (discountRpPercentage?.id === 1) {
             finalPrice =
               totalItem * (data as ProductCartInterface).price -
@@ -230,7 +239,6 @@ export const TransactionDrawer = ({
       const idx = newestData && (newestData as any).length + 1;
       let finalPrice = totalItem * (data as ProductCartInterface).price;
       if (discountOrNot === "1") {
-        console.log(discountOrNot);
         if (discountRpPercentage?.id === 1) {
           finalPrice =
             totalItem * (data as ProductCartInterface).price -
@@ -261,111 +269,6 @@ export const TransactionDrawer = ({
 
     onClose();
   };
-
-  // const handleSubmit = () => {
-  //   const existingProductIndex = finalData.findIndex(
-  //     (product) => product._id === (selectedVariant as any)._id
-  //   );
-
-  //   if (existingProductIndex === 0) {
-  //     const existingProduct = products.filter(
-  //       (product) => product._id === (data as ProductCartInterface)._id
-  //     );
-
-  //     const findVariant = products.find((item) =>
-  //       item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
-  //     );
-
-  //     console.log("existingproduct", existingProduct);
-  //     console.log("findvariant", findVariant);
-
-  //     const itemProduct = products.find(
-  //       (p) => p._id === (data as ProductCartInterface)._id
-  //     );
-  //     // console.log("ini pertama", data);
-
-  //     if (existingProduct.length > 0 && !!findVariant) {
-  //       console.log("cuman nambah qty");
-  //       updateProduct((itemProduct as ProductCartInterface).indexProduct, {
-  //         qty: (itemProduct?.qty ?? 0) + 1,
-  //       });
-  //     } else if (
-  //       existingProduct.length > 0 &&
-  //       (existingProduct[0].variants as any)?.length > 0
-  //     ) {
-  //       const findSelected = products.filter(
-  //         (product) =>
-  //           product._id === (data as ProductCartInterface)._id &&
-  //           product.variants?.length === 0
-  //       );
-  //       console.log("findselected", findSelected.length > 0);
-
-  //       if (existingProduct.length > 0 && findSelected.length > 0) {
-  //         console.log("ini nih satu");
-  //         updateProduct((findSelected as any)[0].indexProduct, {
-  //           qty: (findSelected[0].qty ?? 0) + 1,
-  //         });
-  //       } else {
-  //         console.log("ini nih dua");
-  //         const dataProduct = {
-  //           indexProduct: products.length + 1,
-  //           ...data,
-  //         };
-  //         (dataProduct as ProductCartInterface).variants = [];
-
-  //         addProduct(dataProduct as ProductCartInterface);
-  //       }
-  //     } else {
-  //       // addProduct(data as ProductCartInterface);
-  //       console.log("add product baru dong");
-  //       const originalVariants = [...(data as any).variants];
-
-  //       const dataProduct = {
-  //         indexProduct: products.length + 1,
-  //         ...data,
-  //       };
-
-  //       (dataProduct as ProductCartInterface).variants = [];
-
-  //       addProduct(dataProduct as ProductCartInterface);
-  //       // (data as ProductCartInterface).variants = originalVariants;
-  //     }
-  //   } else {
-  //     const existingVariant = products.find((item) =>
-  //       item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
-  //     );
-
-  //     const itemProduct =
-  //       existingVariant?.variants &&
-  //       existingVariant?.variants.find(
-  //         (item) => item._id === selectedVariant?._id
-  //       );
-
-  //     if (!!itemProduct) {
-  //       const findItem = products.find(
-  //         (p) => p._id === (data as ProductCartInterface)._id
-  //       );
-
-  //       console.log("finditem", findItem);
-  //       updateProduct((findItem as ProductCartInterface).indexProduct, {
-  //         qty: ((findItem as ProductCartInterface).qty ?? 0) + 1,
-  //       });
-  //     } else {
-  //       const selectItem = {
-  //         indexProduct: products.length + 1,
-  //         ...data,
-  //         variants: data?.variants?.filter(
-  //           (variant) => variant._id === selectedVariant?._id
-  //         ),
-  //       };
-  //       console.log("selain index 0", selectItem);
-
-  //       addProduct(selectItem as ProductCartInterface);
-  //     }
-  //   }
-
-  //   onClose();
-  // };
 
   return (
     <Drawer

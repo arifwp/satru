@@ -273,11 +273,16 @@ export const ProductCard = ({
           ))}
         </Wrap>
 
-        <HStack w={"100%"} position={"relative"} justify={"center"}>
+        <HStack
+          className="footer"
+          w={"100%"}
+          position={"relative"}
+          justify={"center"}
+        >
           <HStack
             w={"100%"}
             px={4}
-            py={2}
+            py={1}
             bg="rgba(0, 0 ,0 ,0.5)"
             zIndex={999}
             backdropFilter="auto"

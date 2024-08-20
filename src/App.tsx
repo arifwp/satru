@@ -134,7 +134,7 @@ export const App = () => (
                 >
                   <TransactionContainer />
                 </ContentContainer>
-                <CartPage w={"30%"} />
+                <CartPage w={"30%"} overflowY={"auto"} />
               </HStack>
             </RequiredAuth>
           }

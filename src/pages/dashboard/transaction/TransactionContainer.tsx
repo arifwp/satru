@@ -31,11 +31,12 @@ export const TransactionContainer = ({ ...rest }) => {
       w={"100%"}
       align={"stretch"}
       overflowY={"auto"}
-      p={4}
+      // p={4}
       {...rest}
     >
       <Stack
         w={"100%"}
+        p={4}
         direction={{
           base: "column",
           sm: "row",

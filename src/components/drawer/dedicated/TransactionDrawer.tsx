@@ -41,7 +41,7 @@ interface Props extends DrawerProps {
   data: ProductInterface | ProductCartInterface | undefined;
 }
 
-interface DiscountTypeInterface {
+export interface DiscountTypeInterface {
   id: any;
   name: string;
 }

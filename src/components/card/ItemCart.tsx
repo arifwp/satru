@@ -1,15 +1,4 @@
-import {
-  Button,
-  HStack,
-  Icon,
-  IconButton,
-  Input,
-  StackProps,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { RiDeleteBin4Line } from "@remixicon/react";
-import { motion } from "framer-motion";
+import { Button, HStack, StackProps, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import {
   useBgBaseColor,
@@ -106,176 +95,98 @@ export const ItemCart = ({ data, transaction, ...rest }: Props) => {
   };
 
   return (
-    <VStack w={"100%"} px={2} overflowY={"auto"} {...rest}>
+    <VStack
+      className="item-container"
+      w={"100%"}
+      // px={2}
+      overflowY={"auto"}
+      spacing={0}
+      {...rest}
+    >
       <VStack
-        className="item-cart scrollY"
+        className="cart scrollY"
         w={"100%"}
-        mb={"160px"}
+        h={"100vh"}
         overflowY={"auto"}
       >
-        {data.map((item, i) => (
-          <VStack
-            key={i}
-            as={motion.div}
-            variants={itemAnimation}
-            w={"100%"}
-            pb={2}
-            align={"stretch"}
-            borderBottomWidth={"1px"}
-            borderBottomColor={borderColor}
-          >
-            <HStack w={"100%"} justify={"space-between"}>
+        <VStack
+          className="cart-body scrollY"
+          w={"100%"}
+          px={2}
+          h={"calc(100vh - 270px)"}
+          overflowY={"auto"}
+        >
+          {data.map((item, i) => (
+            <VStack
+              key={item.indexProduct}
+              w={"100%"}
+              p={2}
+              borderRadius={"md"}
+              borderWidth={"2px"}
+              borderColor={borderColor}
+              fontSize={[10, null, 12]}
+              align={"stretch"}
+            >
               <Text
                 fontSize={[12, null, 14]}
-                noOfLines={1}
+                noOfLines={2}
                 textOverflow={"ellipsis"}
-                fontWeight={600}
+                fontWeight={"semibold"}
               >
                 {item.name}
               </Text>
 
-              <IconButton
-                aria-label="Delete product"
-                size={"md"}
-                variant={"ghost"}
-                color={txtColor}
-                colorScheme="teal"
-                fontWeight={"normal"}
-                onClick={() => removeProduct(item.indexProduct)}
-                icon={<Icon as={RiDeleteBin4Line} />}
-              />
-            </HStack>
+              {(item.variants as any)?.length > 0 && (
+                <HStack justify={"space-between"}>
+                  <Text variant={"secondary"}>Varian</Text>
 
-            <HStack justify={"space-between"} fontSize={[10, null, 12]}>
-              <Text variant={"secondary"}>Qty</Text>
-              <HStack
-                borderWidth={"1px"}
-                borderColor={borderColor}
-                w={"fit-content"}
-              >
-                <HStack
-                  borderRightWidth={"1px"}
-                  borderColor={borderColor}
-                  cursor={"pointer"}
-                  onClick={() => decrement(item)}
-                >
-                  <Button
-                    py={0.5}
-                    px={2}
-                    borderRadius={"none"}
-                    size={"xs"}
-                    variant={"ghost"}
-                    colorScheme="teal"
-                    fontSize={[10, null, 12]}
-                    fontWeight={"bold"}
-                  >
-                    -
-                  </Button>
+                  {item.variants?.map((variant) => (
+                    <Text
+                      key={variant._id}
+                      w={"100%"}
+                      align={"end"}
+                      noOfLines={1}
+                      textOverflow={"ellipsis"}
+                    >
+                      {variant.variantName}
+                    </Text>
+                  ))}
                 </HStack>
-                <HStack py={2}>
-                  <Input
-                    name="itemQty"
-                    type="text"
-                    size={"xs"}
-                    w={"40px"}
-                    autoComplete="off"
-                    value={item.qty}
-                    border={"none"}
-                    onChange={(event) => handleChangeQty(item, event)}
-                    onBlur={() => handleBlurQty(item)}
-                    p={0}
-                    m={0}
-                    textAlign={"center"}
-                  />
-                </HStack>
-                <HStack
-                  borderLeftWidth={"1px"}
-                  borderColor={borderColor}
-                  cursor={"pointer"}
-                  onClick={() => increment(item)}
-                >
-                  <Button
-                    py={0.5}
-                    px={2}
-                    borderRadius={"none"}
-                    size={"xs"}
-                    variant={"ghost"}
-                    colorScheme="teal"
-                    fontSize={[10, null, 12]}
-                    fontWeight={"bold"}
-                  >
-                    +
-                  </Button>
-                </HStack>
+              )}
+
+              <HStack justify={"space-between"}>
+                <Text variant={"secondary"}>Qty</Text>
+
+                <Text>{item.qty}</Text>
               </HStack>
-            </HStack>
 
-            {(item.variants as any)?.length > 0 && (
-              <HStack justify={"space-between"} fontSize={[10, null, 12]}>
-                <Text variant={"secondary"}>Varian</Text>
+              {item.discountType && (
+                <HStack justify={"space-between"}>
+                  <Text variant={"secondary"}>Diskon</Text>
 
-                {item.variants?.map((variant) => (
-                  <Text
-                    key={variant._id}
-                    w={"100%"}
-                    align={"end"}
-                    fontSize={[12, null, 14]}
-                    noOfLines={1}
-                    textOverflow={"ellipsis"}
-                  >
-                    {variant.variantName}
-                  </Text>
-                ))}
-              </HStack>
-            )}
-
-            {item.discountType && (
-              <HStack justify={"space-between"} fontSize={[10, null, 12]}>
-                <Text variant={"secondary"}>Diskon</Text>
-
-                {item.variants?.map((variant) => (
-                  <Text
-                    key={variant._id}
-                    w={"100%"}
-                    align={"end"}
-                    fontSize={[12, null, 14]}
-                    noOfLines={1}
-                    textOverflow={"ellipsis"}
-                  >
+                  <Text>
                     {item.discountType.id === 1
                       ? `Rp ${formatNumber(item.discount)}`
                       : `${item.discount}%`}
                   </Text>
-                ))}
+                </HStack>
+              )}
+
+              <HStack justify={"space-between"}>
+                <Text variant={"secondary"}>Total</Text>
+
+                <Text>{showPrice(item)}</Text>
               </HStack>
-            )}
-
-            <HStack justify={"space-between"} fontSize={[10, null, 12]}>
-              <Text variant={"secondary"}>Total</Text>
-
-              <Text
-                w={"100%"}
-                align={"end"}
-                fontSize={[12, null, 14]}
-                noOfLines={1}
-                textOverflow={"ellipsis"}
-              >
-                {showPrice(item)}
-              </Text>
-            </HStack>
-          </VStack>
-        ))}
+            </VStack>
+          ))}
+        </VStack>
       </VStack>
 
-      <VStack
-        className="footer-container"
-        w={"100%"}
-        mb={4}
-        position={"relative"}
-      >
+      <VStack className="footer-container" w={"100%"} position={"relative"}>
         <VStack
           className="footer-item-cart"
           w={"100%"}
+          p={2}
           align={"stretch"}
           bottom={0}
           position={"absolute"}
@@ -283,7 +194,7 @@ export const ItemCart = ({ data, transaction, ...rest }: Props) => {
           <VStack
             p={2}
             borderRadius={"md"}
-            mb={4}
+            mb={2}
             bg={bgBase}
             align={"stretch"}
           >
@@ -291,6 +202,12 @@ export const ItemCart = ({ data, transaction, ...rest }: Props) => {
               <Text variant={"secondary"}>Sub Total</Text>
 
               <Text>{transaction?.totalPrice}</Text>
+            </HStack>
+
+            <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+              <Text variant={"secondary"}>Total Diskon</Text>
+
+              <Text>Rp 12.000</Text>
             </HStack>
 
             <HStack justify={"space-between"} fontSize={[10, null, 12]}>
@@ -316,7 +233,12 @@ export const ItemCart = ({ data, transaction, ...rest }: Props) => {
             </HStack>
           </VStack>
 
-          <Button w={"100%"} size={"md"} colorScheme="teal" variant={"solid"}>
+          <Button
+            w={"100%"}
+            size={["sm", "md"]}
+            colorScheme="teal"
+            variant={"solid"}
+          >
             Bayar
           </Button>
         </VStack>

@@ -144,7 +144,7 @@ export const CTable = ({
               )}
             </Select>
 
-            <Text>{`dari ${totalItems}`}</Text>
+            <Text fontSize={[12, null, 14]}>{`dari ${totalItems}`}</Text>
           </HStack>
         )}
 

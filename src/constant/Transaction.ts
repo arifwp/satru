@@ -1,3 +1,4 @@
+import { DiscountTypeInterface } from "../components/drawer/dedicated/TransactionDrawer";
 import { ProductVariantInterface } from "./Product";
 
 export interface ProductCartInterface {
@@ -12,7 +13,7 @@ export interface ProductCartInterface {
   price: number;
   stock: number;
   discount: number;
-  discountType: string;
+  discountType: DiscountTypeInterface;
   variants?: Array<ProductVariantInterface>;
 }
 

@@ -31,6 +31,7 @@ export const TransactionContainer = ({ ...rest }) => {
       w={"100%"}
       align={"stretch"}
       overflowY={"auto"}
+      p={4}
       {...rest}
     >
       <Stack
@@ -50,7 +51,13 @@ export const TransactionContainer = ({ ...rest }) => {
           onConfirm={(inputValue) => {
             handleSearch(inputValue);
           }}
-          w={"fit-content"}
+          w={[
+            "100%",
+            "fit-content",
+            "fit-content",
+            "fit-content",
+            "fit-content",
+          ]}
         />
 
         <SelectButtonOutlet

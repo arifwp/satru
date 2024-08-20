@@ -9,18 +9,24 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { RiDeleteBin4Line } from "@remixicon/react";
+import { motion } from "framer-motion";
 import React from "react";
 import {
+  useBgBaseColor,
+  useBgComponentBaseColor,
   useBorderColorInput,
   useTextPrimaryColor,
 } from "../../constant/colors";
-import { ProductCartInterface } from "../../constant/Transaction";
+import {
+  ProductCartInterface,
+  TransactionInterface,
+} from "../../constant/Transaction";
 import formatNumber from "../../lib/formatNumber";
 import { useTransactionStore } from "../../store/useTransactionStore";
-import { motion } from "framer-motion";
 
 interface Props extends StackProps {
   data: ProductCartInterface[];
+  transaction?: TransactionInterface;
 }
 
 const containerAnimation = {
@@ -43,8 +49,10 @@ const itemAnimation = {
   },
 };
 
-export const ItemCart = ({ data, ...rest }: Props) => {
+export const ItemCart = ({ data, transaction, ...rest }: Props) => {
   const borderColor = useBorderColorInput();
+  const bgBase = useBgBaseColor();
+  const bgComp = useBgComponentBaseColor();
   const txtColor = useTextPrimaryColor();
   const { updateProduct, removeProduct } = useTransactionStore();
 
@@ -66,7 +74,14 @@ export const ItemCart = ({ data, ...rest }: Props) => {
     total += item.price * item.qty;
     if (item.variants && item.variants.length > 0) {
       item.variants.map((variant) => {
-        total = variant.variantPrice * item.qty;
+        const variantPrice = variant.variantPrice * item.qty;
+        if (item.discountType && item.discountType.id === 1) {
+          console.log("ada discount", item.discountType);
+          total = variantPrice - item.discount;
+          return `Rp ${formatNumber(total)}`;
+        }
+
+        total = variantPrice;
       });
     }
 
@@ -91,292 +106,221 @@ export const ItemCart = ({ data, ...rest }: Props) => {
   };
 
   return (
-    <VStack as={motion.div} variants={containerAnimation} w={"100%"}>
-      {data.map((item, i) => (
-        <VStack
-          key={i}
-          as={motion.div}
-          variants={itemAnimation}
-          w={"100%"}
-          pb={2}
-          align={"stretch"}
-          borderBottomWidth={"1px"}
-          borderBottomColor={borderColor}
-        >
-          <HStack px={2} w={"100%"} justify={"space-between"}>
-            <Text
-              fontSize={[12, null, 14]}
-              noOfLines={1}
-              textOverflow={"ellipsis"}
-              fontWeight={600}
-            >
-              {item.name}
-            </Text>
-
-            <IconButton
-              aria-label="Delete product"
-              size={"md"}
-              variant={"ghost"}
-              color={txtColor}
-              colorScheme="teal"
-              fontWeight={"normal"}
-              onClick={() => removeProduct(item.indexProduct)}
-              icon={<Icon as={RiDeleteBin4Line} />}
-            />
-          </HStack>
-
-          <HStack justify={"space-between"} px={2} fontSize={[10, null, 12]}>
-            <Text variant={"secondary"}>Qty</Text>
-            <HStack
-              borderWidth={"1px"}
-              borderColor={borderColor}
-              w={"fit-content"}
-            >
-              <HStack
-                borderRightWidth={"1px"}
-                borderColor={borderColor}
-                cursor={"pointer"}
-                onClick={() => decrement(item)}
+    <VStack w={"100%"} px={2} overflowY={"auto"} {...rest}>
+      <VStack
+        className="item-cart scrollY"
+        w={"100%"}
+        mb={"160px"}
+        overflowY={"auto"}
+      >
+        {data.map((item, i) => (
+          <VStack
+            key={i}
+            as={motion.div}
+            variants={itemAnimation}
+            w={"100%"}
+            pb={2}
+            align={"stretch"}
+            borderBottomWidth={"1px"}
+            borderBottomColor={borderColor}
+          >
+            <HStack w={"100%"} justify={"space-between"}>
+              <Text
+                fontSize={[12, null, 14]}
+                noOfLines={1}
+                textOverflow={"ellipsis"}
+                fontWeight={600}
               >
-                <Button
-                  py={0.5}
-                  px={2}
-                  borderRadius={"none"}
-                  size={"xs"}
-                  variant={"ghost"}
-                  colorScheme="teal"
-                  fontSize={[10, null, 12]}
-                  fontWeight={"bold"}
-                >
-                  -
-                </Button>
-              </HStack>
-              <HStack py={2}>
-                <Input
-                  name="itemQty"
-                  type="text"
-                  size={"xs"}
-                  w={"40px"}
-                  autoComplete="off"
-                  value={item.qty}
-                  border={"none"}
-                  onChange={(event) => handleChangeQty(item, event)}
-                  onBlur={() => handleBlurQty(item)}
-                  p={0}
-                  m={0}
-                  textAlign={"center"}
-                />
-              </HStack>
+                {item.name}
+              </Text>
+
+              <IconButton
+                aria-label="Delete product"
+                size={"md"}
+                variant={"ghost"}
+                color={txtColor}
+                colorScheme="teal"
+                fontWeight={"normal"}
+                onClick={() => removeProduct(item.indexProduct)}
+                icon={<Icon as={RiDeleteBin4Line} />}
+              />
+            </HStack>
+
+            <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+              <Text variant={"secondary"}>Qty</Text>
               <HStack
-                borderLeftWidth={"1px"}
+                borderWidth={"1px"}
                 borderColor={borderColor}
-                cursor={"pointer"}
-                onClick={() => increment(item)}
+                w={"fit-content"}
               >
-                <Button
-                  py={0.5}
-                  px={2}
-                  borderRadius={"none"}
-                  size={"xs"}
-                  variant={"ghost"}
-                  colorScheme="teal"
-                  fontSize={[10, null, 12]}
-                  fontWeight={"bold"}
+                <HStack
+                  borderRightWidth={"1px"}
+                  borderColor={borderColor}
+                  cursor={"pointer"}
+                  onClick={() => decrement(item)}
                 >
-                  +
-                </Button>
+                  <Button
+                    py={0.5}
+                    px={2}
+                    borderRadius={"none"}
+                    size={"xs"}
+                    variant={"ghost"}
+                    colorScheme="teal"
+                    fontSize={[10, null, 12]}
+                    fontWeight={"bold"}
+                  >
+                    -
+                  </Button>
+                </HStack>
+                <HStack py={2}>
+                  <Input
+                    name="itemQty"
+                    type="text"
+                    size={"xs"}
+                    w={"40px"}
+                    autoComplete="off"
+                    value={item.qty}
+                    border={"none"}
+                    onChange={(event) => handleChangeQty(item, event)}
+                    onBlur={() => handleBlurQty(item)}
+                    p={0}
+                    m={0}
+                    textAlign={"center"}
+                  />
+                </HStack>
+                <HStack
+                  borderLeftWidth={"1px"}
+                  borderColor={borderColor}
+                  cursor={"pointer"}
+                  onClick={() => increment(item)}
+                >
+                  <Button
+                    py={0.5}
+                    px={2}
+                    borderRadius={"none"}
+                    size={"xs"}
+                    variant={"ghost"}
+                    colorScheme="teal"
+                    fontSize={[10, null, 12]}
+                    fontWeight={"bold"}
+                  >
+                    +
+                  </Button>
+                </HStack>
               </HStack>
             </HStack>
-          </HStack>
 
-          {(item.variants as any)?.length > 0 && (
+            {(item.variants as any)?.length > 0 && (
+              <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+                <Text variant={"secondary"}>Varian</Text>
+
+                {item.variants?.map((variant) => (
+                  <Text
+                    key={variant._id}
+                    w={"100%"}
+                    align={"end"}
+                    fontSize={[12, null, 14]}
+                    noOfLines={1}
+                    textOverflow={"ellipsis"}
+                  >
+                    {variant.variantName}
+                  </Text>
+                ))}
+              </HStack>
+            )}
+
+            {item.discountType && (
+              <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+                <Text variant={"secondary"}>Diskon</Text>
+
+                {item.variants?.map((variant) => (
+                  <Text
+                    key={variant._id}
+                    w={"100%"}
+                    align={"end"}
+                    fontSize={[12, null, 14]}
+                    noOfLines={1}
+                    textOverflow={"ellipsis"}
+                  >
+                    {item.discountType.id === 1
+                      ? `Rp ${formatNumber(item.discount)}`
+                      : `${item.discount}%`}
+                  </Text>
+                ))}
+              </HStack>
+            )}
+
+            <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+              <Text variant={"secondary"}>Total</Text>
+
+              <Text
+                w={"100%"}
+                align={"end"}
+                fontSize={[12, null, 14]}
+                noOfLines={1}
+                textOverflow={"ellipsis"}
+              >
+                {showPrice(item)}
+              </Text>
+            </HStack>
+          </VStack>
+        ))}
+      </VStack>
+
+      <VStack
+        className="footer-container"
+        w={"100%"}
+        mb={4}
+        position={"relative"}
+      >
+        <VStack
+          className="footer-item-cart"
+          w={"100%"}
+          align={"stretch"}
+          bottom={0}
+          position={"absolute"}
+        >
+          <VStack
+            p={2}
+            borderRadius={"md"}
+            mb={4}
+            bg={bgBase}
+            align={"stretch"}
+          >
+            <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+              <Text variant={"secondary"}>Sub Total</Text>
+
+              <Text>{transaction?.totalPrice}</Text>
+            </HStack>
+
+            <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+              <Text variant={"secondary"}>Pajak</Text>
+
+              <Text>5%</Text>
+            </HStack>
+
+            <HStack
+              w={"100%"}
+              borderBottomColor={borderColor}
+              borderBottomWidth={"1px"}
+            ></HStack>
+
             <HStack
               justify={"space-between"}
-              mt={2}
-              px={2}
-              fontSize={[10, null, 12]}
-            >
-              <Text variant={"secondary"}>Varian</Text>
-
-              {item.variants?.map((variant) => (
-                <Text
-                  key={variant._id}
-                  w={"100%"}
-                  align={"end"}
-                  fontSize={[12, null, 14]}
-                  noOfLines={1}
-                  textOverflow={"ellipsis"}
-                >
-                  {variant.variantName}
-                </Text>
-              ))}
-            </HStack>
-          )}
-
-          <HStack
-            justify={"space-between"}
-            mt={2}
-            px={2}
-            fontSize={[10, null, 12]}
-          >
-            <Text variant={"secondary"}>Total</Text>
-
-            <Text
-              w={"100%"}
-              align={"end"}
+              fontWeight={"semibold"}
               fontSize={[12, null, 14]}
-              noOfLines={1}
-              textOverflow={"ellipsis"}
             >
-              {showPrice(item)}
-            </Text>
-          </HStack>
+              <Text>Total Harga</Text>
+
+              <Text>{transaction?.totalPrice}</Text>
+            </HStack>
+          </VStack>
+
+          <Button w={"100%"} size={"md"} colorScheme="teal" variant={"solid"}>
+            Bayar
+          </Button>
         </VStack>
-      ))}
+      </VStack>
     </VStack>
   );
-
-  // return (
-  //   <VStack w={"100%"}>
-  //     {data.map((item, i) => (
-  //       <VStack
-  //         key={i}
-  //         w={"100%"}
-  //         pb={2}
-  //         align={"stretch"}
-  //         borderBottomWidth={"1px"}
-  //         borderBottomColor={borderColor}
-  //       >
-  //         <HStack px={2} w={"100%"} justify={"space-between"}>
-  //           <Text
-  //             fontSize={[12, null, 14]}
-  //             noOfLines={1}
-  //             textOverflow={"ellipsis"}
-  //             fontWeight={600}
-  //           >
-  //             {item.name}
-  //           </Text>
-
-  //           <IconButton
-  //             aria-label="Delete product"
-  //             size={"md"}
-  //             variant={"ghost"}
-  //             color={txtColor}
-  //             colorScheme="teal"
-  //             fontWeight={"normal"}
-  //             onClick={() => removeProduct(item.indexProduct)}
-  //             icon={<Icon as={RiDeleteBin4Line} />}
-  //           />
-  //         </HStack>
-
-  //         <HStack justify={"space-between"} px={2} fontSize={[10, null, 12]}>
-  //           <Text variant={"secondary"}>Qty</Text>
-  //           <HStack
-  //             borderWidth={"1px"}
-  //             borderColor={borderColor}
-  //             w={"fit-content"}
-  //           >
-  //             <HStack
-  //               borderRightWidth={"1px"}
-  //               borderColor={borderColor}
-  //               cursor={"pointer"}
-  //               onClick={() => decrement(item)}
-  //             >
-  //               <Button
-  //                 py={0.5}
-  //                 px={2}
-  //                 borderRadius={"none"}
-  //                 size={"xs"}
-  //                 variant={"ghost"}
-  //                 colorScheme="teal"
-  //                 fontSize={[10, null, 12]}
-  //                 fontWeight={"bold"}
-  //               >
-  //                 -
-  //               </Button>
-  //             </HStack>
-  //             <HStack py={2}>
-  //               <Input
-  //                 name="itemQty"
-  //                 type="text"
-  //                 size={"xs"}
-  //                 w={"40px"}
-  //                 autoComplete="off"
-  //                 value={item.qty}
-  //                 border={"none"}
-  //                 onChange={(event) => handleChangeQty(item, event)}
-  //                 onBlur={() => handleBlurQty(item)}
-  //                 p={0}
-  //                 m={0}
-  //                 textAlign={"center"}
-  //               />
-  //             </HStack>
-  //             <HStack
-  //               borderLeftWidth={"1px"}
-  //               borderColor={borderColor}
-  //               cursor={"pointer"}
-  //               onClick={() => increment(item)}
-  //             >
-  //               <Button
-  //                 py={0.5}
-  //                 px={2}
-  //                 borderRadius={"none"}
-  //                 size={"xs"}
-  //                 variant={"ghost"}
-  //                 colorScheme="teal"
-  //                 fontSize={[10, null, 12]}
-  //                 fontWeight={"bold"}
-  //               >
-  //                 +
-  //               </Button>
-  //             </HStack>
-  //           </HStack>
-  //         </HStack>
-
-  //         {(item.variants as any)?.length > 0 && (
-  //           <HStack
-  //             justify={"space-between"}
-  //             mt={2}
-  //             px={2}
-  //             fontSize={[10, null, 12]}
-  //           >
-  //             <Text variant={"secondary"}>Varian</Text>
-
-  //             {item.variants?.map((variant) => (
-  //               <Text
-  //                 key={variant._id}
-  //                 w={"100%"}
-  //                 align={"end"}
-  //                 fontSize={[12, null, 14]}
-  //                 noOfLines={1}
-  //                 textOverflow={"ellipsis"}
-  //               >
-  //                 {variant.variantName}
-  //               </Text>
-  //             ))}
-  //           </HStack>
-  //         )}
-
-  //         <HStack
-  //           justify={"space-between"}
-  //           mt={2}
-  //           px={2}
-  //           fontSize={[10, null, 12]}
-  //         >
-  //           <Text variant={"secondary"}>Harga</Text>
-
-  //           <Text
-  //             w={"100%"}
-  //             align={"end"}
-  //             fontSize={[12, null, 14]}
-  //             noOfLines={1}
-  //             textOverflow={"ellipsis"}
-  //           >
-  //             {showPrice(item)}
-  //           </Text>
-  //         </HStack>
-  //       </VStack>
-  //     ))}
-  //   </VStack>
-  // );
 };

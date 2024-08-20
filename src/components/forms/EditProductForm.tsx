@@ -251,8 +251,6 @@ export const EditProductForm = ({ paramsId }: Props) => {
         }
       }
 
-      console.log("newvalue", newValue);
-
       axios
         .post(
           `${process.env.REACT_APP_API_URL}/v1/product/updateProduct/${paramsId}`,

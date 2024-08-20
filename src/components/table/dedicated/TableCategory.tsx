@@ -211,11 +211,9 @@ export const TableCategory = ({ filterSearch, ...rest }: Props) => {
       totalPages={totalPages}
       totalItems={totalItems}
       onPageChange={(inputValue) => {
-        console.log(inputValue);
         setCurrentPage(inputValue);
       }}
       onLimitChange={(inputValue) => {
-        console.log(inputValue);
         setLimitPagination(inputValue);
       }}
       {...rest}

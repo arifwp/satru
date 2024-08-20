@@ -66,7 +66,6 @@ export const TableBrand = ({ filterSearch, ...rest }: Props) => {
         });
       })
       .finally(() => {
-        console.log(statusData);
         setLoaded(true);
       });
   }, [statusData, toast, currentPage, limitPagination, filterSearch]);
@@ -208,11 +207,9 @@ export const TableBrand = ({ filterSearch, ...rest }: Props) => {
       totalPages={totalPages}
       totalItems={totalItems}
       onPageChange={(inputValue) => {
-        console.log(inputValue);
         setCurrentPage(inputValue);
       }}
       onLimitChange={(inputValue) => {
-        console.log(inputValue);
         setLimitPagination(inputValue);
       }}
       {...rest}

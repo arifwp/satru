@@ -19,7 +19,7 @@ import { useRef, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
 import { ProductVariantInterface } from "../../constant/Product";
-import { useBgBaseColor, useBgComponentBaseColor } from "../../constant/colors";
+import { useBgBaseColor } from "../../constant/colors";
 import formatNumber from "../../lib/formatNumber";
 import useScreenWidth from "../../lib/useScreenWidth";
 import { useProductVariantStore } from "../../store/useProductVariantStore";
@@ -93,8 +93,6 @@ export const AddProductForm = () => {
 
       addVariant(valueVariant);
 
-      console.log("isi variants", variants);
-
       toast({
         title: "Varian berhasil ditambahkan",
         status: "success",
@@ -105,8 +103,6 @@ export const AddProductForm = () => {
       resetForm({ values: initialValuesVariant });
     },
   });
-
-  console.log(variants);
 
   const formik = useFormik({
     validateOnChange: true,
@@ -201,8 +197,6 @@ export const AddProductForm = () => {
         formData.append("imageProduct", values.imageProduct || "");
         Object.assign(newValue, { imageProduct: values.imageProduct });
       }
-
-      console.log("isi variant", values);
 
       axios
         .post(
@@ -352,7 +346,6 @@ export const AddProductForm = () => {
                 <SelectInputOutlet
                   name="outlet"
                   onConfirm={(inputValue) => {
-                    console.log(inputValue);
                     formik.setFieldValue("outlet", inputValue);
                   }}
                   inputValue={formik.values.outlet}

@@ -143,8 +143,6 @@ export const PickerButton = ({
               <SearchInput
                 placeholder="Cari nama..."
                 onConfirm={(inputValue) => {
-                  // ADD TODO
-                  // console.log(inputValue);
                   setSearch(inputValue);
                 }}
                 mb={4}

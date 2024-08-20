@@ -39,10 +39,6 @@ export const TableProduct = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
-    console.log(filterSearch);
-  }, [filterSearch]);
-
-  useEffect(() => {
     const token = getCookie("token");
     const ownerId = getDataUser().ownerId
       ? getDataUser().ownerId
@@ -311,11 +307,9 @@ export const TableProduct = ({
       totalPages={totalPages}
       totalItems={totalItems}
       onPageChange={(inputValue) => {
-        console.log(inputValue);
         setCurrentPage(inputValue);
       }}
       onLimitChange={(inputValue) => {
-        console.log(inputValue);
         setLimitPagination(inputValue);
       }}
       {...rest}

@@ -44,7 +44,6 @@ export const EditEmailForm = ({ data, loaded, ...rest }: Props) => {
     }),
     onSubmit: (values, { resetForm }) => {
       setLoading(true);
-      console.log(values);
 
       const finalValue = {
         userId: getDataUser()._id,

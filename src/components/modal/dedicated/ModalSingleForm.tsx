@@ -53,7 +53,6 @@ export const ModalSingleForm = ({
       name: Yup.string().required("Nama harus diisi"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       setLoading(true);
       const token = getCookie("token");
 

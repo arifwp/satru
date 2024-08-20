@@ -104,8 +104,6 @@ export const AddProductForm = () => {
       duration: 2000,
       isClosable: true,
     });
-
-    console.log(formik.values);
   };
 
   const handleRemoveVariant = (variantId: any) => {
@@ -203,7 +201,7 @@ export const AddProductForm = () => {
     }),
     onSubmit: (values, { resetForm }) => {
       setLoading(true);
-      console.log(values);
+
       const token = getCookie("token");
 
       const category = JSON.stringify(values.category);
@@ -426,7 +424,6 @@ export const AddProductForm = () => {
                 <SelectInputOutlet
                   name="outlet"
                   onConfirm={(inputValue) => {
-                    console.log(inputValue);
                     formik.setFieldValue("outlet", inputValue);
                   }}
                   inputValue={formik.values.outlet}

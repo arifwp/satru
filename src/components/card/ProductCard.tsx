@@ -283,8 +283,7 @@ export const ProductCard = ({
             w={"100%"}
             px={4}
             py={1}
-            bg="rgba(0, 0 ,0 ,0.5)"
-            zIndex={999}
+            // bg="rgba(0, 0 ,0 ,0.5)"
             backdropFilter="auto"
             backdropBlur={"2px"}
             position={"absolute"}
@@ -311,7 +310,7 @@ export const ProductCard = ({
                   )}
                 </Select>
 
-                <Text>{`dari ${totalItems}`}</Text>
+                <Text fontSize={[12, null, 14]}>{`dari ${totalItems}`}</Text>
               </HStack>
             )}
 

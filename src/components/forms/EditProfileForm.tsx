@@ -169,7 +169,6 @@ export const EditProfileForm = ({ data, loaded, ...rest }: Props) => {
                 }
                 placeholder="Tanggal lahir"
                 onConfirm={(inputValue) => {
-                  console.log("hasil input", inputValue);
                   formik.setFieldValue("bornDate", inputValue);
                 }}
                 w={"100%"}

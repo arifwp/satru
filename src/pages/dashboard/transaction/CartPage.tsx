@@ -20,7 +20,7 @@ export const CartPage = ({ children, ...rest }: Props) => {
         {`Keranjang (${products.length})`}
       </Text>
 
-      <ItemCart mt={4} data={products} transaction={transaction} />
+      <ItemCart mt={4} data={products} paramsTransaction={transaction} />
     </VStack>
   );
 };

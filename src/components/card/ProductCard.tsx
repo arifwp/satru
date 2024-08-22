@@ -21,7 +21,7 @@ import { ProductCartInterface } from "../../constant/Transaction";
 import formatNumber from "../../lib/formatNumber";
 import { useTransactionStore } from "../../store/useTransactionStore";
 import { getDataUser } from "../../utils/helperFunction";
-import { TransactionDrawer } from "../drawer/dedicated/TransactionDrawer";
+import { DetailItemDrawer } from "../drawer/dedicated/DetailItemDrawer";
 import { Empty } from "../Empty";
 import { TableSkeleton } from "../TableSkeleton";
 
@@ -47,11 +47,10 @@ export const ProductCard = ({
   const bgComp = useBgComponentBaseColor();
   const [data, setData] = useState<ProductInterface[]>([]);
   const [selectedData, setSelectedData] = useState<ProductCartInterface>();
-  const [listProduct, setListProduct] = useState<ProductCartInterface[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { products, addTransaction, addProduct, updateProduct } =
+  const { transaction, products, addTransaction, addProduct, updateProduct } =
     useTransactionStore();
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number | undefined>(undefined);
@@ -143,26 +142,6 @@ export const ProductCard = ({
     limitPagination,
   ]);
 
-  useEffect(() => {
-    let total = 0;
-    listProduct.map((item, i) => {
-      total += item.price;
-    });
-
-    const val = {
-      _id: "",
-      userId: getDataUser()._id,
-      ownerId: getDataUser().ownerId
-        ? getDataUser().ownerId
-        : getDataUser()._id,
-      totalPrice: total,
-      product: listProduct,
-      createdAt: new Date(Date.now()),
-    };
-
-    addTransaction(val);
-  }, [listProduct]);
-
   const finalData =
     data &&
     data.filter((item) => {
@@ -199,10 +178,6 @@ export const ProductCard = ({
     }
   };
 
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
-
   const handleSelect = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     setLimitPagination(parseInt(value));
@@ -232,7 +207,7 @@ export const ProductCard = ({
           justify={"center"}
           mb={10}
         >
-          {finalData?.map((item, i) => (
+          {finalData?.map((item) => (
             <WrapItem key={item._id} onClick={() => selectItem(item)}>
               <VStack
                 className="product-card"
@@ -256,7 +231,7 @@ export const ProductCard = ({
 
                 <Text
                   fontSize={[12, null, 14]}
-                  fontWeight={700}
+                  fontWeight={"semibold"}
                   mt={2}
                   maxW={"200px"}
                   noOfLines={1}
@@ -265,7 +240,7 @@ export const ProductCard = ({
                 >
                   {item?.name}
                 </Text>
-                <Text fontSize={[12, null, 14]} mb={1}>
+                <Text fontSize={[10, null, 12]} mb={1}>
                   Rp {item && formatNumber(item?.price)}
                 </Text>
               </VStack>
@@ -334,7 +309,7 @@ export const ProductCard = ({
         </HStack>
       </VStack>
 
-      <TransactionDrawer
+      <DetailItemDrawer
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}

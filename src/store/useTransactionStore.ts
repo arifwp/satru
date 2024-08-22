@@ -11,7 +11,7 @@ interface TransactionState {
   updateProduct: (id: string, updatedFields: any) => void;
   removeProduct: (id: string) => void;
   addTransaction: (transaction: TransactionInterface) => void;
-  updateTransaction: (transaction: TransactionInterface) => void;
+  updateTransaction: (_id: string, updatedFields: any) => void;
   removeTransaction: (transactionId: any) => void;
   clearTransaction: () => void;
 }
@@ -57,12 +57,12 @@ export const useTransactionStore = create<TransactionState>((set) => ({
       // Simply set or update the transaction without modifying the products
       return { transaction };
     }),
-  updateTransaction: (updatedTransaction) =>
+  updateTransaction: (_id: string, updatedFields: any) =>
     set((state) => ({
       transaction:
         state.transaction &&
-        (state.transaction as any).map((item: any) =>
-          item._id === updatedTransaction._id ? updatedTransaction : item
+        (state.transaction as any).map((trx: any) =>
+          trx._id === _id ? { ...trx, ...updatedFields } : trx
         ),
     })),
   removeTransaction: (transactionId) =>

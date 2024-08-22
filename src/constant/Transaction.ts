@@ -1,4 +1,4 @@
-import { DiscountTypeInterface } from "../components/drawer/dedicated/TransactionDrawer";
+import { DiscountTypeInterface } from "../components/drawer/dedicated/DetailItemDrawer";
 import { ProductVariantInterface } from "./Product";
 
 export interface ProductCartInterface {

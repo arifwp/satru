@@ -32,6 +32,7 @@ import {
 import { ProductCartInterface } from "../../../constant/Transaction";
 import formatNumber from "../../../lib/formatNumber";
 import { useTransactionStore } from "../../../store/useTransactionStore";
+import { TransactionOutlineCard } from "../../card/TransactionOutlineCard";
 import { NumberInput } from "../../input/NumberInput";
 
 interface Props extends DrawerProps {
@@ -51,7 +52,7 @@ const discountType = [
   { id: 2, name: "%" },
 ];
 
-export const TransactionDrawer = ({
+export const DetailItemDrawer = ({
   isOpen,
   onOpen,
   onClose,
@@ -102,13 +103,7 @@ export const TransactionDrawer = ({
 
   useEffect(() => {
     if (isOpen) {
-      let qty;
-      products.map((item, i) => {
-        if (data?._id === item._id) {
-          qty = item.qty;
-        }
-      });
-      qty && setTotalItem(qty);
+      setTotalItem(1);
     }
   }, [selectedVariant, isOpen]);
 
@@ -175,6 +170,7 @@ export const TransactionDrawer = ({
         isClosable: true,
       });
     }
+
     const productInStore = products.find(
       (product) => product._id === (data as ProductCartInterface)._id
     );
@@ -191,14 +187,14 @@ export const TransactionDrawer = ({
       if (variantInStore) {
         // Jika varian ada, update kuantitasnya
         updateProduct(productInStore.indexProduct, {
-          qty: (productInStore.qty ?? 0) + 1,
+          qty: (productInStore.qty ?? 0) + totalItem,
           discountType: discountRpPercentage,
           discount: inputDiscount,
         });
       } else if (!!findVariant) {
         // Jika produk ada tetapi tidak memiliki varian, tambah kuantitasnya
         updateProduct(findVariant.indexProduct, {
-          qty: (findVariant.qty ?? 0) + 1,
+          qty: (findVariant.qty ?? 0) + totalItem,
           discountType: discountRpPercentage,
           discount: inputDiscount,
         });
@@ -290,17 +286,45 @@ export const TransactionDrawer = ({
             {data &&
               data.variants &&
               finalData.map((item, i) => (
-                <HStack
+                // <HStack
+                //   key={item._id}
+                //   w={"100%"}
+                //   as="button"
+                //   px={4}
+                //   py={2}
+                //   textAlign={"start"}
+                //   borderWidth={"1px"}
+                //   borderRadius={"md"}
+                //   fontSize={[12, null, 14]}
+                //   align={"stretch"}
+                //   _hover={{ bg: bgHover }}
+                //   borderColor={
+                //     selectedVariant && selectedVariant._id === item?._id
+                //       ? "teal.400"
+                //       : undefined
+                //   }
+                //   onClick={() => handleSelect(item)}
+                //   justify={"space-between"}
+                // >
+                //   <VStack align={"stretch"}>
+                //     <Text fontSize={[14, null, 16]} fontWeight={"semibold"}>
+                //       {item?.variantName}
+                //     </Text>
+                //     <Text variant={"secondary"} fontSize={[12, null, 14]}>
+                //       {formatNumber(item?.variantPrice)}
+                //     </Text>
+                //   </VStack>
+
+                //   <Text alignSelf={"center"} fontSize={[14, null, 16]}>
+                //     {`${item?.variantStock} Stok`}
+                //   </Text>
+                // </HStack>
+
+                <TransactionOutlineCard
                   key={item._id}
-                  w={"100%"}
-                  as="button"
-                  px={4}
-                  py={2}
-                  textAlign={"start"}
-                  borderWidth={"1px"}
-                  borderRadius={"md"}
-                  fontSize={[12, null, 14]}
-                  align={"stretch"}
+                  title={item?.variantName}
+                  subTitle={`Rp ${formatNumber(item.variantPrice)}`}
+                  rightText={`${item.variantStock} Stok`}
                   _hover={{ bg: bgHover }}
                   borderColor={
                     selectedVariant && selectedVariant._id === item?._id
@@ -308,21 +332,8 @@ export const TransactionDrawer = ({
                       : undefined
                   }
                   onClick={() => handleSelect(item)}
-                  justify={"space-between"}
-                >
-                  <VStack align={"stretch"}>
-                    <Text fontSize={[14, null, 16]} fontWeight={"semibold"}>
-                      {item?.variantName}
-                    </Text>
-                    <Text variant={"secondary"} fontSize={[12, null, 14]}>
-                      {formatNumber(item?.variantPrice)}
-                    </Text>
-                  </VStack>
-
-                  <Text alignSelf={"center"} fontSize={[14, null, 16]}>
-                    {`${item?.variantStock} Stok`}
-                  </Text>
-                </HStack>
+                  as={"button"}
+                />
               ))}
 
             <Text

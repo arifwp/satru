@@ -4,5 +4,7 @@ import { ItemCart } from "./card/ItemCart";
 export const Cart = ({ ...rest }) => {
   const { products, transaction } = useTransactionStore();
 
-  return products && <ItemCart data={products} transaction={transaction} />;
+  return (
+    products && <ItemCart data={products} paramsTransaction={transaction} />
+  );
 };

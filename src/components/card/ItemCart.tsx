@@ -113,20 +113,49 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
     }
   };
 
+  // const showPrice = (item: ProductCartInterface) => {
+  //   let total = 0;
+
+  //   total += item.price * item.qty;
+  //   if (item.variants && item.variants.length > 0) {
+  //     item.variants.map((variant) => {
+  //       const variantPrice = variant.variantPrice * item.qty;
+  //       if (item.discountType && item.discountType.id === 1) {
+  //         total = variantPrice - item.discount;
+  //         return `Rp ${formatNumber(total)}`;
+  //       }
+
+  //       total = variantPrice;
+  //     });
+  //   }
+
+  //   return `Rp ${formatNumber(total)}`;
+  // };
+
   const showPrice = (item: ProductCartInterface) => {
     let total = 0;
 
     total += item.price * item.qty;
-    if (item.variants && item.variants.length > 0) {
+    if (item && item.variants && item.variants.length > 0) {
       item.variants.map((variant) => {
         const variantPrice = variant.variantPrice * item.qty;
         if (item.discountType && item.discountType.id === 1) {
-          total = variantPrice - item.discount;
+          total = variantPrice - item.discount || 0;
+          return `Rp ${formatNumber(total)}`;
+        } else if (item.discount) {
+          total = variantPrice - item.discount || 0;
           return `Rp ${formatNumber(total)}`;
         }
 
         total = variantPrice;
       });
+    } else if (item.discountType && item.discountType.id === 1) {
+      total = item.price - item.discount || 0;
+      return `Rp ${formatNumber(total)}`;
+    } else if (item.discount) {
+      total = item.price * item.qty - item.discount || 0;
+
+      return `Rp ${formatNumber(total)}`;
     }
 
     return `Rp ${formatNumber(total)}`;

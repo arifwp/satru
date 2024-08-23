@@ -155,10 +155,9 @@ export const CartDrawer = ({
     return `Rp ${formatNumber(total)}`;
   };
 
-  useEffect(() => {
-    // console.log("diskon rakkk", discountOrNot);
-    showTotal();
-  }, [inputDiscount]);
+  // useEffect(() => {
+  //   showTotal();
+  // }, [inputDiscount]);
 
   const showTotal = () => {
     let total = 0;
@@ -182,7 +181,7 @@ export const CartDrawer = ({
         total = data.price - parseInt(inputDiscount, 10) || 0;
         return `Rp ${formatNumber(total)}`;
       } else if (inputDiscount) {
-        total = data.price - parseInt(inputDiscount, 10) || 0;
+        total = data.price * totalItem - parseInt(inputDiscount, 10) || 0;
 
         return `Rp ${formatNumber(total)}`;
       }

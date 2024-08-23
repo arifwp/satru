@@ -7,7 +7,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useBgBaseColor, useBorderColorInput } from "../../constant/colors";
+import {
+  useBgBaseColor,
+  useBgComponentBaseColor,
+  useBorderColorInput,
+} from "../../constant/colors";
 import {
   ProductCartInterface,
   TransactionInterface,
@@ -45,6 +49,7 @@ const itemAnimation = {
 export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
   const borderColor = useBorderColorInput();
   const bgBase = useBgBaseColor();
+  const bgComp = useBgComponentBaseColor();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedData, setSelectedData] = useState<
     ProductCartInterface | undefined
@@ -149,7 +154,6 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
       <VStack
         className="item-container"
         w={"100%"}
-        // px={2}
         overflowY={"auto"}
         spacing={0}
         {...rest}
@@ -164,6 +168,7 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
             className="cart-body scrollY"
             w={"100%"}
             px={2}
+            py={6}
             h={"calc(100vh - 270px)"}
             overflowY={"auto"}
           >
@@ -242,7 +247,8 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
           <VStack
             className="footer-item-cart"
             w={"100%"}
-            p={2}
+            p={4}
+            bg={bgComp}
             align={"stretch"}
             bottom={0}
             position={"absolute"}

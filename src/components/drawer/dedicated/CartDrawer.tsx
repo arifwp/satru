@@ -23,7 +23,6 @@ import {
   useBgComponentBaseColor,
   useBorderColorInput,
 } from "../../../constant/colors";
-import { ProductVariantInterface } from "../../../constant/Product";
 import { ProductCartInterface } from "../../../constant/Transaction";
 import formatNumber from "../../../lib/formatNumber";
 import { useTransactionStore } from "../../../store/useTransactionStore";
@@ -50,13 +49,13 @@ export const CartDrawer = ({
   data,
   ...rest
 }: Props) => {
-  const [selectedVariant, setSelectedVariant] = useState<
-    ProductVariantInterface | undefined
-  >(undefined);
+  // const [selectedVariant, setSelectedVariant] = useState<
+  //   ProductVariantInterface | undefined
+  // >(undefined);
   const [totalItem, setTotalItem] = useState<number>(1);
   const [discountOrNot, setDiscountOrNot] = useState<string>("2");
   const [inputDiscount, setInputDiscount] = useState<string>(
-    `${data?.discount}`
+    data?.discount ? `${data.discount}` : ""
   );
   const [discountRpPercentage, setDiscountRpPercentage] = useState<
     DiscountTypeInterface | undefined
@@ -65,8 +64,6 @@ export const CartDrawer = ({
   const bgComp = useBgComponentBaseColor();
   const { products, addProduct, updateProduct, removeProduct } =
     useTransactionStore();
-
-  console.log("isi data", data);
 
   useEffect(() => {
     if (isOpen) {
@@ -103,13 +100,17 @@ export const CartDrawer = ({
   }, [isOpen]);
 
   useEffect(() => {
-    setInputDiscount(inputDiscount);
-  }, [inputDiscount]);
+    if (data?.discount) {
+      setInputDiscount(`${data.discount}`);
+    } else {
+      setInputDiscount("");
+    }
+  }, [data?.discount]);
 
-  useEffect(() => {
-    console.log("diskon tidak", discountOrNot);
-    console.log("jenis diskon", discountRpPercentage);
-  }, [discountOrNot, discountRpPercentage]);
+  // useEffect(() => {
+  //   console.log("diskon tidak", discountOrNot);
+  //   console.log("jenis diskon", discountRpPercentage);
+  // }, [discountOrNot, discountRpPercentage]);
 
   const defaultRadioValue = () => {
     return data?.discount ? "1" : "2";
@@ -154,6 +155,11 @@ export const CartDrawer = ({
     return `Rp ${formatNumber(total)}`;
   };
 
+  useEffect(() => {
+    // console.log("diskon rakkk", discountOrNot);
+    showTotal();
+  }, [inputDiscount]);
+
   const showTotal = () => {
     let total = 0;
 
@@ -163,12 +169,22 @@ export const CartDrawer = ({
         data.variants.map((variant) => {
           const variantPrice = variant.variantPrice * totalItem;
           if (data.discountType && data.discountType.id === 1) {
-            total = variantPrice - parseInt(inputDiscount);
+            total = variantPrice - parseInt(inputDiscount, 10) || 0;
+            return `Rp ${formatNumber(total)}`;
+          } else if (inputDiscount) {
+            total = variantPrice - parseInt(inputDiscount, 10) || 0;
             return `Rp ${formatNumber(total)}`;
           }
 
           total = variantPrice;
         });
+      } else if (data.discountType && data.discountType.id === 1) {
+        total = data.price - parseInt(inputDiscount, 10) || 0;
+        return `Rp ${formatNumber(total)}`;
+      } else if (inputDiscount) {
+        total = data.price - parseInt(inputDiscount, 10) || 0;
+
+        return `Rp ${formatNumber(total)}`;
       }
     }
 
@@ -192,11 +208,8 @@ export const CartDrawer = ({
   };
 
   const handleInputDiscount = (event: any, discCategory: number) => {
-    if (discCategory === 1) {
-      setInputDiscount(event);
-    } else {
-      setInputDiscount(event.replace(/[^0-9]/g, ""));
-    }
+    let newDiscount = discCategory === 1 ? event : event.replace(/[^0-9]/g, "");
+    setInputDiscount(newDiscount);
   };
 
   const handleChangeQty = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,6 +232,10 @@ export const CartDrawer = ({
     }
   };
 
+  useEffect(() => {
+    console.log("isi products", products);
+  }, [products]);
+
   const handleBlurQty = () => {
     if (totalItem < 1) {
       setTotalItem(1);
@@ -230,29 +247,37 @@ export const CartDrawer = ({
       (product) => product._id === (data as ProductCartInterface)._id
     );
 
-    const variantInStore =
-      productInStore &&
-      productInStore.variants?.find(
-        (variant) => variant._id === selectedVariant?._id
-      );
+    let update: Partial<ProductCartInterface> = {
+      qty: totalItem,
+    };
 
-    const findVariant = products.find((item) =>
-      item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
-    );
-
-    if (variantInStore) {
-      updateProduct(productInStore.indexProduct, {
-        qty: (productInStore.qty ?? 0) + totalItem,
-        discountType: discountRpPercentage,
-        discount: inputDiscount,
-      });
-    } else if (!!findVariant) {
-      updateProduct(findVariant.indexProduct, {
-        qty: (findVariant.qty ?? 0) + totalItem,
-        discountType: discountRpPercentage,
-        discount: inputDiscount,
-      });
+    console.log(discountOrNot);
+    if (discountOrNot === "1") {
+      Object.assign(update, { discountType: discountRpPercentage });
+    } else {
+      if (productInStore && "discountType" in productInStore) {
+        delete (productInStore as any).discountType;
+      }
     }
+
+    if (discountOrNot === "1") {
+      Object.assign(update, { discount: inputDiscount });
+    } else {
+      if (productInStore && "discount" in productInStore) {
+        delete (productInStore as any).discount;
+      }
+    }
+
+    console.log(update);
+    if (data && data.variants && data?.variants.length > 0) {
+      updateProduct(data.indexProduct, update);
+    } else {
+      if (data) {
+        updateProduct(data.indexProduct, update);
+      }
+    }
+
+    onClose();
   };
 
   return (

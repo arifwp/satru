@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { Heading, Image, Text, VStack } from "@chakra-ui/react";
+import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 import { useTextPrimaryColor } from "../../constant/colors";
 import { getDataUser } from "../../utils/helperFunction";
-import { Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { CButton } from "../CButton";
-import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 
 interface Props {
   children?: any;
@@ -11,14 +10,19 @@ interface Props {
 
 export const RequiredOwner = ({ children, ...rest }: Props) => {
   const txtColor = useTextPrimaryColor();
-  const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/login");
+    window.history.back();
   };
   if (!getDataUser().owner) {
     return (
-      <VStack w={"100%"} h={"100vh"} position={"relative"} justify={"center"}>
+      <VStack
+        w={"100%"}
+        h={"100vh"}
+        position={"relative"}
+        justify={"center"}
+        {...rest}
+      >
         <Image
           w={"100%"}
           maxW={"350px"}
@@ -41,7 +45,7 @@ export const RequiredOwner = ({ children, ...rest }: Props) => {
             fontWeight={"normal"}
             onClick={handleClick}
           >
-            {`Kembali ke halaman login >>`}
+            {`Kembali ke halaman sebelumnya >>`}
           </CButton>
         </VStack>
 

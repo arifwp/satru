@@ -22,7 +22,7 @@ export const useErrorColor = () => {
 };
 
 export const useBorderColorInput = () => {
-  return useColorModeValue("RGBA(0, 0, 0, 0.08)", "RGBA(255, 255, 255, 0.16)");
+  return useColorModeValue("gray.200", "RGBA(255, 255, 255, 0.16)");
 };
 
 export const useGreyColor = () => {

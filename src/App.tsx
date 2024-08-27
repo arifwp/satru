@@ -20,6 +20,7 @@ import { FillData } from "./pages/FillDataPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
 import { CartPage } from "./pages/dashboard/transaction/CartPage";
 import { DiscountPage } from "./pages/dashboard/discount/DiscountPage";
+import { AddDiscountPage } from "./pages/dashboard/discount/AddDiscountPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -185,6 +186,19 @@ export const App = () => (
               <RequiredOwner>
                 <ContentContainer label="Diskon" isSubPage={false}>
                   <DiscountPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/discount/add-discount"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Diskon" isSubPage={true}>
+                  <AddDiscountPage />
                 </ContentContainer>
               </RequiredOwner>
             </RequiredAuth>

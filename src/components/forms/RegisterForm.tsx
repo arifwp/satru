@@ -206,9 +206,7 @@ export const RegisterForm = () => {
             borderWidth={!!formik.errors.bornDate ? "2px" : "1px"}
             borderColor={"rgba(255, 255, 255, 0.24)"}
             color={
-              formik.values.bornDate
-                ? "fieldtext !important"
-                : "rgba(255, 255, 255, 0.24)"
+              formik.values.bornDate ? "fieldtext !important" : "#96969691"
             }
             fontWeight={"normal"}
             fontSize={"sm"}

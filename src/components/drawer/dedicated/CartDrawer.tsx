@@ -231,10 +231,6 @@ export const CartDrawer = ({
     }
   };
 
-  useEffect(() => {
-    console.log("isi products", products);
-  }, [products]);
-
   const handleBlurQty = () => {
     if (totalItem < 1) {
       setTotalItem(1);

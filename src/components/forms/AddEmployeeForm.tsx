@@ -18,7 +18,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
-import { useBgBaseColor } from "../../constant/colors";
+import { useBgBaseColor, useBorderColorInput } from "../../constant/colors";
 import { getDataUser } from "../../utils/helperFunction";
 import { CButton } from "../CButton";
 import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
@@ -38,6 +38,7 @@ export const AddEmployeeForm = () => {
   const [toggle, setToggle] = useState<string>("hide");
   const toast = useToast();
   const bgBase = useBgBaseColor();
+  const borderColor = useBorderColorInput();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -238,13 +239,9 @@ export const AddEmployeeForm = () => {
             w={"100%"}
             h={"40px"}
             borderWidth={!!formik.errors.bornDate ? "2px" : "1px"}
-            borderColor={
-              !!formik.errors.bornDate ? "red.300" : "rgba(255, 255, 255, 0.24)"
-            }
+            borderColor={!!formik.errors.bornDate ? "red.300" : borderColor}
             color={
-              formik.values.bornDate
-                ? "fieldtext !important"
-                : "rgba(255, 255, 255, 0.24)"
+              formik.values.bornDate ? "fieldtext !important" : "#96969691"
             }
             fontWeight={"normal"}
             fontSize={"sm"}

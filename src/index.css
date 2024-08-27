@@ -17,7 +17,7 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-    color: #96969691;
+    color: #96969691 !important;
 }
 
 input:focus,

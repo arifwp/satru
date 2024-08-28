@@ -39,3 +39,9 @@ export const debounce = (func: Function, wait: number) => {
     timeout = setTimeout(() => func(...args), wait);
   };
 };
+
+export const getUserOrAdminId = () => {
+  const id = getDataUser().ownerId ? getDataUser().ownerId : getDataUser()._id;
+
+  return id;
+};

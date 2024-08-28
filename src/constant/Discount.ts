@@ -5,5 +5,6 @@ export interface DiscountInterface {
   name: string;
   discountType: number;
   discount: number;
+  expiredDate: Date;
   createdAt: Date;
 }

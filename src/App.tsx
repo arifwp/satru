@@ -7,6 +7,8 @@ import customTheme from "./customTheme";
 import "./index.css";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
+import { AddDiscountPage } from "./pages/dashboard/discount/AddDiscountPage";
+import { DiscountPage } from "./pages/dashboard/discount/DiscountPage";
 import { AddEmployeePage } from "./pages/dashboard/employee/AddEmployeePage";
 import { EmployeePage } from "./pages/dashboard/employee/EmployeePage";
 import { HomePage } from "./pages/dashboard/HomePage";
@@ -15,12 +17,11 @@ import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
 import { EditProductPage } from "./pages/dashboard/product/edit/EditProductPage";
 import { AddProductPage } from "./pages/dashboard/product/productroot/AddProductPage";
 import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
+import { TaxPage } from "./pages/dashboard/product/tax/TaxPage";
+import { CartPage } from "./pages/dashboard/transaction/CartPage";
 import { TransactionContainer } from "./pages/dashboard/transaction/TransactionContainer";
 import { FillData } from "./pages/FillDataPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
-import { CartPage } from "./pages/dashboard/transaction/CartPage";
-import { DiscountPage } from "./pages/dashboard/discount/DiscountPage";
-import { AddDiscountPage } from "./pages/dashboard/discount/AddDiscountPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -117,6 +118,19 @@ export const App = () => (
         />
 
         <Route
+          path="/product/tax"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Pajak" isSubPage={false}>
+                  <TaxPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
           path="/transaction"
           element={
             <RequiredAuth>
@@ -125,6 +139,7 @@ export const App = () => (
                 w={"100%"}
                 overflowY={"auto"}
                 align={"start"}
+                spacing={0}
               >
                 <ContentContainer
                   label="Tranksasi"

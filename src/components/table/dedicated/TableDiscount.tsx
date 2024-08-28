@@ -1,7 +1,8 @@
-import { TableProps, useToast } from "@chakra-ui/react";
-import { RiDeleteBin2Line } from "@remixicon/react";
+import { Link as ChakraLink, TableProps, useToast } from "@chakra-ui/react";
+import { RiDeleteBin2Line, RiEdit2Line } from "@remixicon/react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import { Link as ReactRouterLink } from "react-router-dom";
 import { getCookie } from "typescript-cookie";
 import { DiscountInterface } from "../../../constant/Discount";
 import { SelectOption } from "../../../constant/SelectOption";
@@ -10,6 +11,7 @@ import {
   formatDateToId,
   getUserOrAdminId,
 } from "../../../utils/helperFunction";
+import { CButton } from "../../CButton";
 import { Empty } from "../../Empty";
 import { Confirmation } from "../../modal/Confirmation";
 import { TableSkeleton } from "../../TableSkeleton";
@@ -133,6 +135,26 @@ export const TableDiscount = ({
           props: { textAlign: "end" },
         },
         {
+          id: "actionEdit",
+          name: (
+            <ChakraLink
+              as={ReactRouterLink}
+              to={`edit-discount/${item._id}`}
+              textDecoration={"none"}
+              _hover={{ textDecoration: "none" }}
+            >
+              <CButton
+                variant={"ghost"}
+                size={"xs"}
+                colorScheme={"yellow"}
+                icon={RiEdit2Line}
+              >
+                Edit
+              </CButton>
+            </ChakraLink>
+          ),
+        },
+        {
           id: "actionDelete",
           name: (
             <Confirmation
@@ -210,6 +232,13 @@ export const TableDiscount = ({
       name: "Tanggal Dibuat",
       sortable: true,
       onClick: () => sortByColumn("createdAt"),
+    },
+    {
+      id: "actionEdit",
+      name: "Edit",
+      sortable: false,
+      onClick: undefined,
+      props: { justifyContent: "center" },
     },
     {
       id: "actionDelete",

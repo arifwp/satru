@@ -15,7 +15,7 @@ import { EditEmailForm } from "../../../components/forms/EditEmailForm";
 import { EditPasswordForm } from "../../../components/forms/EditPasswordForm";
 import { EditProfileForm } from "../../../components/forms/EditProfileForm";
 import { EditWhatsappForm } from "../../../components/forms/EditWhatsappForm";
-import { useBgBaseColor, useBgHover } from "../../../constant/colors";
+import { useBgHover } from "../../../constant/colors";
 import { UserInterface } from "../../../constant/User";
 import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 import { getDataUser } from "../../../utils/helperFunction";
@@ -29,11 +29,8 @@ const tabList = [
 
 export const ProfilePage = () => {
   const [loaded, setLoaded] = useState<boolean>(false);
-  // const location = useLocation();
-  // const paramsId = location.state.userId;
   const bgHover = useBgHover();
   const { statusData } = useTriggerRenderStore();
-  const bgBase = useBgBaseColor();
   const [data, setData] = useState<UserInterface | undefined>(undefined);
   const toast = useToast();
 

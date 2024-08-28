@@ -1,25 +1,22 @@
 import {
-  Link as ChakraLink,
-  Button,
   ButtonProps,
-  useDisclosure,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
   ModalBody,
+  ModalCloseButton,
+  ModalContent,
   ModalFooter,
-  useToast,
+  ModalHeader,
+  ModalOverlay,
   Text,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { Link as ReactRouterLink } from "react-router-dom";
-import { CButton } from "../CButton";
-import { RemixiconComponentType, RiAddCircleLine } from "@remixicon/react";
-import { useBgComponentBaseColor } from "../../constant/colors";
-import { useState } from "react";
+import { RemixiconComponentType } from "@remixicon/react";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { useState } from "react";
 import { getCookie } from "typescript-cookie";
+import { useBgComponentBaseColor } from "../../constant/colors";
+import { CButton } from "../CButton";
 
 interface Props extends ButtonProps {
   colorScheme?: string;
@@ -93,6 +90,7 @@ export const Confirmation = ({
         size={"xs"}
         colorScheme={colorScheme}
         icon={icon}
+        {...rest}
       >
         {btnText}
       </CButton>
@@ -107,7 +105,7 @@ export const Confirmation = ({
           </ModalBody>
 
           <ModalFooter>
-            <CButton variant="solid" onClick={onClose}>
+            <CButton variant="ghost" onClick={onClose}>
               Batal
             </CButton>
 
@@ -125,31 +123,6 @@ export const Confirmation = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
-      {/* <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="5px" />
-        <ModalContent bg={bgComponent}></ModalContent>
-        <ModalHeader>{modalHeader ? modalHeader : "Konfirmasi"}</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Text>{message}</Text>
-        </ModalBody>
-        <ModalFooter>
-          <CButton variant="solid" onClick={onClose}>
-            Close
-          </CButton>
-
-          <CButton
-            ml={4}
-            variant="solid"
-            isLoading={loading}
-            loadingText="Loading"
-            spinnerPlacement="start"
-            onClick={handleClick}
-          >
-            {btnText}
-          </CButton>
-        </ModalFooter>
-      </Modal> */}
     </>
   );
 };

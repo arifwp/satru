@@ -142,6 +142,7 @@ export const EditProfileForm = ({ data, loaded, ...rest }: Props) => {
                 value={formik.values.name || ""}
                 onChange={formik.handleChange}
                 fontSize={"xs"}
+                borderColor={borderColorInput}
                 placeholder="Nama"
               />
             </Skeleton>
@@ -193,14 +194,12 @@ export const EditProfileForm = ({ data, loaded, ...rest }: Props) => {
             mt={2}
             form="editProfileForm"
             type="submit"
-            borderRadius={"md"}
             size={"sm"}
             spinnerPlacement="start"
             loadingText={"Loading..."}
             isLoading={loading}
             alignSelf={"start"}
             colorScheme="teal"
-            variant="outline"
             fontSize={[12, null, 14]}
           >
             Ganti Profil

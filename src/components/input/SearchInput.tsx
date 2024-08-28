@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { RiCloseCircleLine, RiSearch2Line } from "@remixicon/react";
 import { useState } from "react";
+import { useBorderColorInput } from "../../constant/colors";
 
 interface Props extends InputProps {
   placeholder: string;
@@ -17,6 +18,7 @@ interface Props extends InputProps {
 
 export const SearchInput = ({ placeholder, onConfirm, ...rest }: Props) => {
   const [data, setData] = useState<string>("");
+  const borderColor = useBorderColorInput();
 
   const handleChange = (event: any) => {
     setData(event.target.value);
@@ -29,7 +31,12 @@ export const SearchInput = ({ placeholder, onConfirm, ...rest }: Props) => {
   };
 
   return (
-    <InputGroup size={"sm"} borderRadius={"xs"} {...rest}>
+    <InputGroup
+      size={"sm"}
+      borderRadius={"xs"}
+      borderColor={borderColor}
+      {...rest}
+    >
       <InputLeftElement pointerEvents="none">
         <Icon as={RiSearch2Line} color={"teal.400"} />
       </InputLeftElement>

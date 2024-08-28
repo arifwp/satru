@@ -17,6 +17,7 @@ import { UserInterface } from "../../constant/User";
 import { useTempValueStore } from "../../store/useTempValueStore";
 import { getDataUser } from "../../utils/helperFunction";
 import { OtpForm } from "./OtpForm";
+import { useBorderColorInput } from "../../constant/colors";
 
 interface Props {
   data: UserInterface | undefined;
@@ -27,6 +28,7 @@ export const EditEmailForm = ({ data, loaded, ...rest }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
+  const borderColor = useBorderColorInput();
   const { setTempValue } = useTempValueStore();
 
   const initialValues = {
@@ -50,6 +52,7 @@ export const EditEmailForm = ({ data, loaded, ...rest }: Props) => {
         oldEmail: values.oldEmail,
         newEmail: values.newEmail,
       };
+
       const token = getCookie("token");
 
       axios
@@ -104,6 +107,7 @@ export const EditEmailForm = ({ data, loaded, ...rest }: Props) => {
                 fontSize={"xs"}
                 onChange={formik.handleChange}
                 value={formik.values.oldEmail || ""}
+                borderColor={borderColor}
                 readOnly
               />
             </Skeleton>
@@ -121,6 +125,7 @@ export const EditEmailForm = ({ data, loaded, ...rest }: Props) => {
               fontSize={"xs"}
               onChange={formik.handleChange}
               value={formik.values.newEmail || ""}
+              borderColor={borderColor}
             />
             <FormErrorMessage>{formik.errors.newEmail}</FormErrorMessage>
           </FormControl>
@@ -128,14 +133,13 @@ export const EditEmailForm = ({ data, loaded, ...rest }: Props) => {
           <Button
             form="editEmailForm"
             type="submit"
-            borderRadius={"md"}
+            size={"sm"}
             fontSize={[12, null, 14]}
             spinnerPlacement="start"
             loadingText={"Loading..."}
             isLoading={loading}
             alignSelf={"start"}
             colorScheme="teal"
-            variant="outline"
           >
             Ganti Email
           </Button>

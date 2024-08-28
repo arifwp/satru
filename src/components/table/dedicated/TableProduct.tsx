@@ -7,7 +7,7 @@ import { ProductInterface } from "../../../constant/Product";
 import { SelectOption } from "../../../constant/SelectOption";
 import formatNumber from "../../../lib/formatNumber";
 import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
-import { getDataUser } from "../../../utils/helperFunction";
+import { getDataUser, getUserOrAdminId } from "../../../utils/helperFunction";
 import { DetailProduct } from "../../drawer/dedicated/DetailProduct";
 import { Empty } from "../../Empty";
 import { Confirmation } from "../../modal/Confirmation";
@@ -40,9 +40,8 @@ export const TableProduct = ({
 
   useEffect(() => {
     const token = getCookie("token");
-    const ownerId = getDataUser().ownerId
-      ? getDataUser().ownerId
-      : getDataUser()._id;
+    const ownerId = getUserOrAdminId();
+
     let url;
     let outletIds;
     let categoryIds;

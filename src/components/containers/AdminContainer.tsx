@@ -7,10 +7,9 @@ import {
   VStack,
   keyframes,
 } from "@chakra-ui/react";
-import { RiUser2Line } from "@remixicon/react";
 import { useRef } from "react";
 import { useBgComponentBaseColor } from "../../constant/colors";
-import { navs } from "../../constant/navs";
+import { navs } from "../../constant/pageNavs";
 import { getDataUser } from "../../utils/helperFunction";
 import NavButton from "../navbar/NavButton";
 
@@ -36,16 +35,10 @@ export const AdminContainer = ({ children, ...props }: Props) => {
   const ref = useRef<any>(null);
   const bgComp = useBgComponentBaseColor();
 
-  let navigations = [...navs];
-
-  if (getDataUser().owner) {
-    navigations.push({
-      id: 9,
-      icon: RiUser2Line,
-      label: "Karyawan",
-      to: "/employee",
-    });
-  }
+  const filteredNavs =
+    getDataUser().owner === true
+      ? navs
+      : navs.filter((nav) => !nav.adminRequired);
 
   return (
     <HStack
@@ -90,7 +83,7 @@ export const AdminContainer = ({ children, ...props }: Props) => {
         </HStack>
 
         <VStack w={"100%"}>
-          {navigations.map((item, index) => (
+          {filteredNavs.map((item, index) => (
             <NavButton to={item.to} key={index}>
               <HStack whiteSpace={"nowrap"}>
                 <Icon

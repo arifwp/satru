@@ -14,6 +14,7 @@ import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
 import { UserInterface } from "../../constant/User";
 import { getDataUser } from "../../utils/helperFunction";
+import { useBorderColorInput } from "../../constant/colors";
 
 interface Props {
   data: UserInterface | undefined;
@@ -23,7 +24,7 @@ interface Props {
 export const EditPasswordForm = ({ data, loaded, ...rest }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
-
+  const borderColor = useBorderColorInput();
   const formik = useFormik({
     initialValues: {
       oldPass: undefined,
@@ -96,6 +97,7 @@ export const EditPasswordForm = ({ data, loaded, ...rest }: Props) => {
             fontSize={"xs"}
             onChange={formik.handleChange}
             value={formik.values.oldPass || ""}
+            borderColor={borderColor}
           />
           <FormErrorMessage>{formik.errors.oldPass}</FormErrorMessage>
         </FormControl>
@@ -112,6 +114,7 @@ export const EditPasswordForm = ({ data, loaded, ...rest }: Props) => {
             fontSize={"xs"}
             onChange={formik.handleChange}
             value={formik.values.newPass || ""}
+            borderColor={borderColor}
           />
           <FormErrorMessage>{formik.errors.newPass}</FormErrorMessage>
         </FormControl>
@@ -119,14 +122,12 @@ export const EditPasswordForm = ({ data, loaded, ...rest }: Props) => {
         <Button
           form="editPasswordForm"
           type="submit"
-          borderRadius={"md"}
           size={"sm"}
           spinnerPlacement="start"
           loadingText={"Loading..."}
           isLoading={loading}
           alignSelf={"start"}
           colorScheme="teal"
-          variant="outline"
           fontSize={[12, null, 14]}
         >
           Ganti Password

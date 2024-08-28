@@ -18,6 +18,7 @@ import { UserInterface } from "../../constant/User";
 import { useTempValueStore } from "../../store/useTempValueStore";
 import { getDataUser } from "../../utils/helperFunction";
 import { OtpForm } from "./OtpForm";
+import { useBorderColorInput } from "../../constant/colors";
 
 interface Props {
   data: UserInterface | undefined;
@@ -28,6 +29,7 @@ export const EditWhatsappForm = ({ data, loaded, ...rest }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
+  const borderColor = useBorderColorInput();
   const { setTempValue } = useTempValueStore();
 
   const initialValues = {
@@ -104,6 +106,7 @@ export const EditWhatsappForm = ({ data, loaded, ...rest }: Props) => {
                 fontSize={"xs"}
                 onChange={formik.handleChange}
                 value={formik.values.oldWa || ""}
+                borderColor={borderColor}
                 readOnly
               />
             </Skeleton>
@@ -117,6 +120,7 @@ export const EditWhatsappForm = ({ data, loaded, ...rest }: Props) => {
               fontSize={"xs"}
               onChange={formik.handleChange}
               value={formik.values.newWa || ""}
+              borderColor={borderColor}
             />
             <FormHelperText fontSize={[12, null, 14]}>
               Format nomor harus diawali dengan 62
@@ -129,13 +133,11 @@ export const EditWhatsappForm = ({ data, loaded, ...rest }: Props) => {
             type="submit"
             fontSize={[12, null, 14]}
             size={"sm"}
-            borderRadius={"md"}
             isLoading={loading}
             spinnerPlacement="start"
             loadingText={"Loading..."}
             alignSelf={"start"}
             colorScheme="teal"
-            variant="outline"
           >
             Ganti Whatsapp
           </Button>

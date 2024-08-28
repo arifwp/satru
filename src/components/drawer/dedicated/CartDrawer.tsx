@@ -16,9 +16,12 @@ import {
   Radio,
   RadioGroup,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import { getCookie } from "typescript-cookie";
 import {
   useBgComponentBaseColor,
   useBorderColorInput,
@@ -26,6 +29,7 @@ import {
 import { ProductCartInterface } from "../../../constant/Transaction";
 import formatNumber from "../../../lib/formatNumber";
 import { useTransactionStore } from "../../../store/useTransactionStore";
+import { getUserOrAdminId } from "../../../utils/helperFunction";
 import { TransactionOutlineCard } from "../../card/TransactionOutlineCard";
 import { NumberInput } from "../../input/NumberInput";
 import { DiscountTypeInterface } from "./DetailItemDrawer";
@@ -49,9 +53,6 @@ export const CartDrawer = ({
   data,
   ...rest
 }: Props) => {
-  // const [selectedVariant, setSelectedVariant] = useState<
-  //   ProductVariantInterface | undefined
-  // >(undefined);
   const [totalItem, setTotalItem] = useState<number>(1);
   const [discountOrNot, setDiscountOrNot] = useState<string>("2");
   const [inputDiscount, setInputDiscount] = useState<string>(
@@ -107,11 +108,6 @@ export const CartDrawer = ({
     }
   }, [data?.discount]);
 
-  // useEffect(() => {
-  //   console.log("diskon tidak", discountOrNot);
-  //   console.log("jenis diskon", discountRpPercentage);
-  // }, [discountOrNot, discountRpPercentage]);
-
   const defaultRadioValue = () => {
     return data?.discount ? "1" : "2";
   };
@@ -154,10 +150,6 @@ export const CartDrawer = ({
 
     return `Rp ${formatNumber(total)}`;
   };
-
-  // useEffect(() => {
-  //   showTotal();
-  // }, [inputDiscount]);
 
   const showTotal = () => {
     let total = 0;

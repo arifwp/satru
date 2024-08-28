@@ -23,6 +23,7 @@ export const CategoryCard = ({ onConfirm, ...rest }: Props) => {
     const userId = getDataUser().ownerId
       ? getDataUser().ownerId
       : getDataUser()._id;
+
     const token = getCookie("token");
 
     axios

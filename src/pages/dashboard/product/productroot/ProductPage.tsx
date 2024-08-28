@@ -34,8 +34,13 @@ export const ProductPage = () => {
     debouncedSearch(inputValue);
   };
 
+  const filteredNavsProduct =
+    getDataUser().owner === true
+      ? pageNavsProduct
+      : pageNavsProduct.filter((nav) => !nav.adminRequired);
+
   return (
-    <PageContainer navs={pageNavsProduct}>
+    <PageContainer navs={filteredNavsProduct}>
       <VStack className="product-container" w={"100%"} p={4}>
         <Stack
           w={"100%"}

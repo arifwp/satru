@@ -1,12 +1,18 @@
 import {
   Button,
   HStack,
+  Icon,
+  IconButton,
   StackProps,
   Text,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
+import { RiBookmark2Line } from "@remixicon/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
+import { getCookie } from "typescript-cookie";
 import {
   useBgBaseColor,
   useBgComponentBaseColor,
@@ -18,33 +24,13 @@ import {
 } from "../../constant/Transaction";
 import formatNumber from "../../lib/formatNumber";
 import { useTransactionStore } from "../../store/useTransactionStore";
-import { getDataUser } from "../../utils/helperFunction";
+import { getDataUser, getUserOrAdminId } from "../../utils/helperFunction";
 import { CartDrawer } from "../drawer/dedicated/CartDrawer";
 
 interface Props extends StackProps {
   data: ProductCartInterface[];
   paramsTransaction?: TransactionInterface;
 }
-
-const containerAnimation = {
-  hidden: { opacity: 1, scale: 0 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const itemAnimation = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-  },
-};
 
 export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
   const borderColor = useBorderColorInput();
@@ -61,6 +47,36 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
     removeProduct,
     addTransaction,
   } = useTransactionStore();
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [tax, setTax] = useState<number | undefined>(undefined);
+  const toast = useToast();
+
+  useEffect(() => {
+    const userId = getUserOrAdminId();
+    const token = getCookie("token");
+
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/v1/outlet/getTax/${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res: AxiosResponse) => {
+        setTax(JSON.parse(res.request.response).data.tax);
+      })
+      .catch((err: AxiosError) => {
+        toast({
+          title: JSON.parse(err.request.response).data.tax,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+      })
+      .finally(() => {
+        setLoaded(true);
+      });
+  }, []);
 
   useEffect(() => {
     let total = 0;
@@ -196,7 +212,7 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
           <VStack
             className="cart-body scrollY"
             w={"100%"}
-            px={2}
+            px={4}
             py={6}
             h={"calc(100vh - 270px)"}
             overflowY={"auto"}
@@ -277,6 +293,7 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
             className="footer-item-cart"
             w={"100%"}
             p={4}
+            fontSize={[10, null, 12]}
             bg={bgComp}
             align={"stretch"}
             bottom={0}
@@ -289,7 +306,7 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
               bg={bgBase}
               align={"stretch"}
             >
-              <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+              <HStack justify={"space-between"}>
                 <Text variant={"secondary"}>Sub Total</Text>
 
                 <Text>
@@ -298,23 +315,27 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
                 </Text>
               </HStack>
 
-              <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+              <HStack justify={"space-between"}>
                 <Text variant={"secondary"}>Total Diskon</Text>
 
                 <Text>Rp 12.000</Text>
               </HStack>
 
-              <HStack justify={"space-between"} fontSize={[10, null, 12]}>
+              <HStack
+                justify={"space-between"}
+                borderBottomColor={borderColor}
+                borderBottomWidth={"1px"}
+              >
                 <Text variant={"secondary"}>Pajak</Text>
 
-                <Text>5%</Text>
+                <Text>{`${tax}%`}</Text>
               </HStack>
 
-              <HStack
+              {/* <HStack
                 w={"100%"}
                 borderBottomColor={borderColor}
                 borderBottomWidth={"1px"}
-              ></HStack>
+              ></HStack> */}
 
               <HStack
                 justify={"space-between"}
@@ -323,18 +344,31 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
               >
                 <Text>Total Harga</Text>
 
-                <Text>{paramsTransaction?.totalPrice}</Text>
+                <Text>
+                  {paramsTransaction?.totalPrice &&
+                    formatNumber(paramsTransaction.totalPrice)}
+                </Text>
               </HStack>
             </VStack>
 
-            <Button
-              w={"100%"}
-              size={["sm", "md"]}
-              colorScheme="teal"
-              variant={"solid"}
-            >
-              Bayar
-            </Button>
+            <HStack>
+              <IconButton
+                size="md"
+                variant="outline"
+                // onClick={toggleColorMode}
+                icon={<Icon as={RiBookmark2Line} />}
+                aria-label={`Save Transaction`}
+              />
+
+              <Button
+                w={"100%"}
+                size={["sm", "md"]}
+                colorScheme="teal"
+                variant={"solid"}
+              >
+                Bayar
+              </Button>
+            </HStack>
           </VStack>
         </VStack>
       </VStack>

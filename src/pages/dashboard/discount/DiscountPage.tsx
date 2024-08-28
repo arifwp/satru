@@ -1,73 +1,19 @@
-import {
-  HStack,
-  SimpleGrid,
-  Stack,
-  VStack,
-  Link as ChakraLink,
-  Wrap,
-  useToast,
-} from "@chakra-ui/react";
-import { DiscountCard } from "../../../components/card/DiscountCard";
-import { SearchInput } from "../../../components/input/SearchInput";
-import { useCallback, useEffect, useState } from "react";
-import { debounce, getDataUser } from "../../../utils/helperFunction";
-import { CButton } from "../../../components/CButton";
-import { RiAddCircleLine } from "@remixicon/react";
+import { Link as ChakraLink, HStack, VStack } from "@chakra-ui/react";
+import { RiAddCircleLine, RiShoppingBag2Line } from "@remixicon/react";
+import { useCallback, useState } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { DiscountInterface } from "../../../constant/Discount";
-import { getCookie } from "typescript-cookie";
+import { CButton } from "../../../components/CButton";
+import { SearchInput } from "../../../components/input/SearchInput";
+import { SelectButtonOutlet } from "../../../components/modal/dedicated/SelectButtonOutlet";
+import { TableDiscount } from "../../../components/table/dedicated/TableDiscount";
 import { SelectOption } from "../../../constant/SelectOption";
+import { debounce, getDataUser } from "../../../utils/helperFunction";
 
 export const DiscountPage = () => {
   const [filterSearch, setfilterSearch] = useState<string>("");
   const [filterOutlet, setFilterOutlet] = useState<SelectOption[] | undefined>(
     undefined
   );
-  const [loaded, setLoaded] = useState<boolean>(false);
-  const [data, setData] = useState<DiscountInterface | undefined>(undefined);
-  const toast = useToast();
-
-  useEffect(() => {
-    const token = getCookie("token");
-    const userId = getDataUser().ownerId
-      ? getDataUser().ownerId
-      : getDataUser()._id;
-
-    const request = {
-      ownerId: userId,
-      page: 1,
-      limit: 10,
-      search: filterSearch,
-      outletIds: filterOutlet,
-    };
-
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/v1/discount/getAllDiscount`,
-        request,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response: AxiosResponse) => {
-        setData(JSON.parse(response.request.response).data);
-      })
-      .catch((error: AxiosError) => {
-        toast({
-          title: JSON.parse(error.request.response).message,
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
-      })
-      .finally(() => {
-        setLoaded(true);
-      });
-  }, [toast]);
 
   const debouncedSearch = useCallback(
     debounce((searchQuery: string) => setfilterSearch(searchQuery), 500),
@@ -86,6 +32,16 @@ export const DiscountPage = () => {
           placeholder="Cari diskon..."
           onConfirm={(inputValue) => {
             handleSearch(inputValue);
+          }}
+        />
+
+        <SelectButtonOutlet
+          name="outlet"
+          placeholder="Filter Outlet"
+          withSearch={true}
+          icon={RiShoppingBag2Line}
+          onConfirm={(inputValue) => {
+            setFilterOutlet(inputValue);
           }}
         />
 
@@ -108,14 +64,11 @@ export const DiscountPage = () => {
         )}
       </HStack>
 
-      <Wrap w={"100%"}></Wrap>
-
-      {/* <SimpleGrid columns={[1, 2, 4, 5, 7]} spacing={4} mt={4}>
-        <DiscountCard />
-        <DiscountCard />
-        <DiscountCard />
-        <DiscountCard />
-      </SimpleGrid> */}
+      <TableDiscount
+        filterSearch={filterSearch}
+        filterOutlet={filterOutlet}
+        mt={4}
+      />
     </VStack>
   );
 };

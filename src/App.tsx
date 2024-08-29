@@ -22,6 +22,7 @@ import { CartPage } from "./pages/dashboard/transaction/CartPage";
 import { TransactionContainer } from "./pages/dashboard/transaction/TransactionContainer";
 import { FillData } from "./pages/FillDataPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
+import { EditDiscountPage } from "./pages/dashboard/discount/EditDiscountPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -214,6 +215,19 @@ export const App = () => (
               <RequiredOwner>
                 <ContentContainer label="Diskon" isSubPage={true}>
                   <AddDiscountPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/discount/edit-discount/:discountId"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Diskon" isSubPage={true}>
+                  <EditDiscountPage />
                 </ContentContainer>
               </RequiredOwner>
             </RequiredAuth>

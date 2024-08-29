@@ -1,11 +1,11 @@
 import {
   RemixiconComponentType,
+  RiBuilding4Line,
   RiDiscountPercentLine,
   RiExchangeDollarLine,
   RiHistoryLine,
   RiHome3Line,
   RiMoneyCnyBoxLine,
-  RiOutlet2Line,
   RiProductHuntLine,
   RiUser2Line,
   RiUserAddLine,
@@ -78,7 +78,7 @@ export const navs: Array<PageIconNavsProps> = [
   },
   {
     id: 8,
-    icon: RiOutlet2Line,
+    icon: RiBuilding4Line,
     label: "Outlet",
     to: "/outlet",
     adminRequired: false,
@@ -93,9 +93,9 @@ export const navs: Array<PageIconNavsProps> = [
 ];
 
 export const pageNavsProduct: PageNavsProps[] = [
-  { id: 1, name: "Product", to: "/product", adminRequired: false },
-  { id: 2, name: "Kategori", to: "/product/category", adminRequired: false },
-  { id: 3, name: "Merk", to: "/product/brand", adminRequired: false },
+  { id: 1, name: "Product", to: "/product" },
+  { id: 2, name: "Kategori", to: "/product/category" },
+  { id: 3, name: "Merk", to: "/product/brand" },
   { id: 4, name: "Pajak", to: "/product/tax", adminRequired: true },
 ];
 

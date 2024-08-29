@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { getDataUser } from "../../utils/helperFunction";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { getCookie } from "typescript-cookie";
+import { useBorderColorInput } from "../../constant/colors";
 
 const initialValues = {
   businessName: undefined,
@@ -28,6 +29,7 @@ const initialValues = {
 export const FillDataForm = ({ ...rest }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
+  const borderColor = useBorderColorInput();
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -41,6 +43,17 @@ export const FillDataForm = ({ ...rest }) => {
     }),
     onSubmit: (values) => {
       setLoading(true);
+
+      if (getDataUser().owner !== true) {
+        toast({
+          title: "Menambah diskon hanya bisa dilakukan oleh akun pemilik toko",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        setLoading(false);
+        return;
+      }
 
       const type = JSON.stringify(values.businessType);
       const estEmployee = JSON.stringify(values.totalEmployees);
@@ -108,6 +121,7 @@ export const FillDataForm = ({ ...rest }) => {
             placeholder="Xiaomi Coffe"
             onChange={formik.handleChange}
             fontSize={"xs"}
+            borderColor={borderColor}
           />
           <FormErrorMessage>{formik.errors.businessName}</FormErrorMessage>
         </FormControl>
@@ -155,6 +169,7 @@ export const FillDataForm = ({ ...rest }) => {
             placeholder="lorem ipsum dolor sit amet"
             onChange={formik.handleChange}
             value={formik.values.businessAddress || ""}
+            borderColor={borderColor}
           />
           <FormErrorMessage>{formik.errors.businessAddress}</FormErrorMessage>
         </FormControl>

@@ -31,36 +31,42 @@ export const SelectInputBrand = ({
   const toast = useToast();
 
   useEffect(() => {
-    const ownerId = getDataUser()._id;
-    const token = getCookie("token");
+    if (isOpen) {
+      const ownerId = getDataUser()._id;
+      const token = getCookie("token");
 
-    const request = {
-      ownerId: ownerId,
-      page: 0,
-      limit: 0,
-    };
+      const request = {
+        ownerId: ownerId,
+        page: 0,
+        limit: 0,
+      };
 
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/v1/brand/getAllBrand`, request, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response: AxiosResponse) => {
-        setData(JSON.parse(response.request.response).data);
-      })
-      .catch((error: AxiosError) => {
-        toast({
-          title: JSON.parse(error.request.response).message,
-          status: "error",
-          isClosable: true,
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/v1/brand/getAllBrand`,
+          request,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response: AxiosResponse) => {
+          setData(JSON.parse(response.request.response).data);
+        })
+        .catch((error: AxiosError) => {
+          toast({
+            title: JSON.parse(error.request.response).message,
+            status: "error",
+            isClosable: true,
+          });
+        })
+        .finally(() => {
+          setLoaded(true);
         });
-      })
-      .finally(() => {
-        setLoaded(true);
-      });
-  }, []);
+    }
+  }, [isOpen, toast]);
 
   return (
     <PickerInput

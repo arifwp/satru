@@ -77,6 +77,17 @@ export const AddDiscountForm = () => {
     onSubmit: (values, { resetForm }) => {
       setLoading(true);
 
+      if (getDataUser().owner !== true) {
+        toast({
+          title: "Menambah diskon hanya bisa dilakukan oleh akun pemilik toko",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        setLoading(false);
+        return;
+      }
+
       const token = getCookie("token");
       const formattedDate = values.expiredDate
         ? (values.expiredDate as unknown as string)

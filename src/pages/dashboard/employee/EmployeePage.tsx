@@ -42,7 +42,7 @@ export const EmployeePage = () => {
           }}
         />
 
-        {getDataUser().owner && (
+        {getDataUser().owner === true && (
           <ChakraLink
             as={ReactRouterLink}
             to={"/employee/add-employee"}

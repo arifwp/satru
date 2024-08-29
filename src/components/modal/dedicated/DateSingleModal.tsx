@@ -176,7 +176,7 @@ export const DateSingleModal: React.FC<DatePickerModalProps> = ({
                 ? "white"
                 : currentMonth === date.getMonth()
                 ? "gray.500"
-                : ""
+                : "gray.500"
             }
           >
             {i}

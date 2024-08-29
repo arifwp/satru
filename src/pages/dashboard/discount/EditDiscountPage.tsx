@@ -118,7 +118,7 @@ export const EditDiscountPage = () => {
 
       if (getDataUser().owner !== true) {
         toast({
-          title: "Merubah pajak hanya bisa dilakukan oleh akun pemilik toko",
+          title: "Merubah diskon hanya bisa dilakukan oleh akun pemilik toko",
           status: "error",
           duration: 2000,
           isClosable: true,

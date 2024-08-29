@@ -252,7 +252,7 @@ export const TableDiscount = ({
   if (!loaded) {
     return <TableSkeleton row={5} column={10} />;
   } else if (loaded && value && value.length < 1) {
-    return <Empty title="Produk tidak ditemukan" mt={6} />;
+    return <Empty title="Diskon tidak ditemukan" mt={6} />;
   }
 
   return (

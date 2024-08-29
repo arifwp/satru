@@ -12,12 +12,12 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
 import {
-  useBgBaseColor,
   useBgComponentBaseColor,
   useBorderColorInput,
 } from "../../constant/colors";
@@ -26,7 +26,6 @@ import { DiscountTypeInterface } from "../drawer/dedicated/DetailItemDrawer";
 import { NumberInput } from "../input/NumberInput";
 import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
 import { SelectInputOutlet } from "../modal/dedicated/SelectInputOutlet";
-import axios, { AxiosError, AxiosResponse } from "axios";
 
 const initialValues = {
   ownerId: undefined,
@@ -48,7 +47,6 @@ export const AddDiscountForm = () => {
     DiscountTypeInterface | undefined
   >(undefined);
   const bgComp = useBgComponentBaseColor();
-  const bgBase = useBgBaseColor();
   const borderColor = useBorderColorInput();
   const toast = useToast();
 
@@ -86,6 +84,7 @@ export const AddDiscountForm = () => {
             .reverse()
             .join("-")
         : "";
+
       const arrOutletId =
         values.outlet && (values.outlet as any[]).map((item: any) => item._id);
 

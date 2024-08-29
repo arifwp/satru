@@ -9,9 +9,12 @@ import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { AddDiscountPage } from "./pages/dashboard/discount/AddDiscountPage";
 import { DiscountPage } from "./pages/dashboard/discount/DiscountPage";
+import { EditDiscountPage } from "./pages/dashboard/discount/EditDiscountPage";
 import { AddEmployeePage } from "./pages/dashboard/employee/AddEmployeePage";
 import { EmployeePage } from "./pages/dashboard/employee/EmployeePage";
 import { HomePage } from "./pages/dashboard/HomePage";
+import { AddOutletPage } from "./pages/dashboard/outlet/AddOutletPage";
+import { OutletPage } from "./pages/dashboard/outlet/OutletPage";
 import { BrandPage } from "./pages/dashboard/product/brand/BrandPage";
 import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
 import { EditProductPage } from "./pages/dashboard/product/edit/EditProductPage";
@@ -22,7 +25,7 @@ import { CartPage } from "./pages/dashboard/transaction/CartPage";
 import { TransactionContainer } from "./pages/dashboard/transaction/TransactionContainer";
 import { FillData } from "./pages/FillDataPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
-import { EditDiscountPage } from "./pages/dashboard/discount/EditDiscountPage";
+import { DetailOutletPage } from "./pages/dashboard/outlet/DetailOutletPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -228,6 +231,45 @@ export const App = () => (
               <RequiredOwner>
                 <ContentContainer label="Diskon" isSubPage={true}>
                   <EditDiscountPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/outlet"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Outlet" isSubPage={false}>
+                  <OutletPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/outlet/add-outlet"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Tambah Outlet" isSubPage={true}>
+                  <AddOutletPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/outlet/detail-outlet/:outletId"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Detail Outlet" isSubPage={true}>
+                  <DetailOutletPage />
                 </ContentContainer>
               </RequiredOwner>
             </RequiredAuth>

@@ -184,13 +184,14 @@ export const PickerInput = ({
               : skeleton()}
           </ModalBody>
           <ModalFooter>
-            <CButton variant="solid" onClick={onClose}>
+            <CButton variant="ghost" onClick={onClose}>
               Close
             </CButton>
 
             <CButton
               ml={4}
               variant="solid"
+              colorScheme="teal"
               isLoading={loading}
               loadingText="Loading"
               spinnerPlacement="start"

@@ -1,19 +1,28 @@
 import {
+  Button,
+  Link as ChakraLink,
+  Icon,
   Stack,
   VStack,
-  Link as ChakraLink,
-  Button,
-  Icon,
 } from "@chakra-ui/react";
-import { SearchInput } from "../../../components/input/SearchInput";
-import { useState } from "react";
-import { Link as ReactRouterLink } from "react-router-dom";
 import { RiAddCircleLine } from "@remixicon/react";
-import { getDataUser } from "../../../utils/helperFunction";
+import { useCallback, useState } from "react";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { SearchInput } from "../../../components/input/SearchInput";
 import { TableOutlet } from "../../../components/table/dedicated/TableOutlet";
+import { debounce, getDataUser } from "../../../utils/helperFunction";
 
 export const OutletPage = () => {
   const [filterSearch, setfilterSearch] = useState<string>("");
+
+  const debouncedSearch = useCallback(
+    debounce((searchQuery: string) => setfilterSearch(searchQuery), 500),
+    []
+  );
+
+  const handleSearch = (inputValue: string) => {
+    debouncedSearch(inputValue);
+  };
 
   return (
     <VStack className="outlet-container" w={"100%"} p={4}>
@@ -22,7 +31,7 @@ export const OutletPage = () => {
           w={"fit-content"}
           placeholder="Cari outlet..."
           onConfirm={(inputValue) => {
-            setfilterSearch(inputValue);
+            handleSearch(inputValue);
           }}
         />
 

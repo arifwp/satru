@@ -64,7 +64,11 @@ export const EmployeePage = () => {
         )}
       </Stack>
 
-      <TableEmployee filterOutlet={filterOutlet} filterSearch={filterSearch} />
+      <TableEmployee
+        filterOutlet={filterOutlet}
+        filterSearch={filterSearch}
+        mt={4}
+      />
     </VStack>
   );
 };

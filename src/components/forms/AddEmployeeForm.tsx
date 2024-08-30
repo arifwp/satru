@@ -239,7 +239,11 @@ export const AddEmployeeForm = () => {
             w={"100%"}
             h={"40px"}
             borderWidth={!!formik.errors.bornDate ? "2px" : "1px"}
-            borderColor={!!formik.errors.bornDate ? "red.300" : borderColor}
+            borderColor={
+              !!formik.errors.bornDate && formik.touched.bornDate
+                ? "red.300"
+                : borderColor
+            }
             color={
               formik.values.bornDate ? "fieldtext !important" : "#96969691"
             }

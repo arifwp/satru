@@ -155,7 +155,7 @@ export const PickerButton = ({
               : skeleton()}
           </ModalBody>
           <ModalFooter>
-            <CButton variant="outline" onClick={onClose}>
+            <CButton variant="ghost" onClick={onClose}>
               Tutup
             </CButton>
 

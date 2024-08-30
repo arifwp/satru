@@ -193,13 +193,14 @@ export const MultiPickerInput = ({
               : skeleton()}
           </ModalBody>
           <ModalFooter>
-            <CButton variant="solid" onClick={onClose}>
-              Close
+            <CButton variant="ghost" onClick={onClose}>
+              Tutup
             </CButton>
 
             <CButton
               ml={4}
               variant="solid"
+              colorScheme="teal"
               isLoading={loading}
               loadingText="Loading"
               spinnerPlacement="start"

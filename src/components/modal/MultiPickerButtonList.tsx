@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   HStack,
   Image,
   Modal,
@@ -13,8 +14,6 @@ import {
   Select,
   Text,
   VStack,
-  Wrap,
-  WrapItem,
 } from "@chakra-ui/react";
 import { RemixiconComponentType } from "@remixicon/react";
 import { useCallback, useState } from "react";
@@ -45,7 +44,7 @@ interface Props {
   onLimitChange?: (limit: number) => void;
 }
 
-export const MultiPickerButton = ({
+export const MultiPickerButtonList = ({
   name,
   placeholder,
   withSearch,
@@ -92,6 +91,14 @@ export const MultiPickerButton = ({
     );
   };
 
+  const handleSelectAll = () => {
+    if (selected.length === options?.length) {
+      setSelected([]);
+    } else {
+      setSelected(options || []);
+    }
+  };
+
   const handleSubmit = () => {
     if (selected) {
       setDisplay(selected);
@@ -107,31 +114,31 @@ export const MultiPickerButton = ({
   const skeleton = () => <TableSkeleton row={3} column={3} />;
 
   const component = () => (
-    <Wrap spacing={2}>
+    <VStack w={"100%"} spacing={2}>
       {options &&
         options.map((item, i) => (
-          <WrapItem key={item._id}>
-            <Box
-              as="button"
-              px={4}
-              py={2}
-              textAlign={"start"}
-              borderWidth={"1px"}
-              borderRadius={"md"}
-              fontSize="xs"
-              _hover={{ bg: bgHover }}
-              borderColor={
-                selected.find((selectedItem) => selectedItem._id === item._id)
-                  ? "teal.400"
-                  : undefined
-              }
-              onClick={() => handleSelect(item)}
-            >
-              {item.name}
-            </Box>
-          </WrapItem>
+          <Box
+            key={item._id}
+            w={"100%"}
+            as="button"
+            px={4}
+            py={2}
+            textAlign={"start"}
+            borderWidth={"1px"}
+            borderRadius={"md"}
+            fontSize="xs"
+            _hover={{ bg: bgHover }}
+            borderColor={
+              selected.find((selectedItem) => selectedItem._id === item._id)
+                ? "teal.400"
+                : undefined
+            }
+            onClick={() => handleSelect(item)}
+          >
+            {item.name}
+          </Box>
         ))}
-    </Wrap>
+    </VStack>
   );
 
   const empty = () => (
@@ -141,7 +148,7 @@ export const MultiPickerButton = ({
         w={"100%"}
         maxW={"100px"}
       />
-      <Text>Data tidak ada</Text>
+      <Text>Data tidak ditemukan</Text>
     </VStack>
   );
 
@@ -176,6 +183,14 @@ export const MultiPickerButton = ({
                 mb={4}
               />
             )}
+            <Checkbox
+              isChecked={selected.length === options?.length}
+              onChange={handleSelectAll}
+              mb={4}
+              size={"sm"}
+            >
+              Pilih Semua
+            </Checkbox>
             {loaded
               ? options?.length === 0
                 ? empty()

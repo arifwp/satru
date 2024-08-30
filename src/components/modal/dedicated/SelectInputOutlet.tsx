@@ -3,8 +3,8 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import { SelectOption } from "../../../constant/SelectOption";
-import { getDataUser } from "../../../utils/helperFunction";
-import { MultiPickerInput } from "../MultiPickerInput";
+import { getUserOrAdminId } from "../../../utils/helperFunction";
+import { MultiPickerInputList } from "../MultiPickerInputList";
 
 interface Props extends ButtonProps {
   name: string;
@@ -29,18 +29,28 @@ export const SelectInputOutlet = ({
   const [loaded, setLoaded] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState<SelectOption[] | undefined>(undefined);
+  const [search, setSearch] = useState<string>("");
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalItems, setTotalItems] = useState<number | undefined>(undefined);
+  const [limitPagination, setLimitPagination] = useState<number>(2);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const toast = useToast();
 
   useEffect(() => {
     if (isOpen) {
-      const ownerId = getDataUser().ownerId
-        ? getDataUser().ownerId
-        : getDataUser()._id;
       const token = getCookie("token");
 
+      const request = {
+        ownerId: getUserOrAdminId(),
+        page: currentPage,
+        limit: limitPagination,
+        search: search,
+      };
+
       axios
-        .get(
-          `${process.env.REACT_APP_API_URL}/v1/outlet/getAllOutlet/${ownerId}`,
+        .post(
+          `${process.env.REACT_APP_API_URL}/v1/outlet/getAllOutlet`,
+          request,
           {
             headers: {
               "Content-Type": "application/json",
@@ -49,6 +59,12 @@ export const SelectInputOutlet = ({
           }
         )
         .then((response: AxiosResponse) => {
+          setTotalItems(
+            JSON.parse(response.request.response).pagination.totalItems
+          );
+          setTotalPages(
+            JSON.parse(response.request.response).pagination.totalPages
+          );
           setData(JSON.parse(response.request.response).data);
         })
         .catch((error: AxiosError) => {
@@ -62,10 +78,10 @@ export const SelectInputOutlet = ({
           setLoaded(true);
         });
     }
-  }, [isOpen, toast]);
+  }, [isOpen, search, toast, currentPage, limitPagination]);
 
   return (
-    <MultiPickerInput
+    <MultiPickerInputList
       name={name}
       options={data}
       placeholder={placeholder}
@@ -77,6 +93,17 @@ export const SelectInputOutlet = ({
       onOpen={onOpen}
       onClose={onClose}
       loaded={loaded}
+      filterSearch={(inputValue) => {
+        setSearch(inputValue);
+      }}
+      totalPages={totalPages}
+      totalItems={totalItems}
+      onPageChange={(inputValue) => {
+        setCurrentPage(inputValue);
+      }}
+      onLimitChange={(inputValue) => {
+        setLimitPagination(inputValue);
+      }}
       {...rest}
     />
   );

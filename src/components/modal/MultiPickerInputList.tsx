@@ -1,7 +1,9 @@
 import {
   Box,
   Button,
+  Checkbox,
   HStack,
+  Icon,
   Image,
   Modal,
   ModalBody,
@@ -13,26 +15,28 @@ import {
   Select,
   Text,
   VStack,
-  Wrap,
-  WrapItem,
 } from "@chakra-ui/react";
-import { RemixiconComponentType } from "@remixicon/react";
-import { useCallback, useState } from "react";
+import { RiArrowDownSLine } from "@remixicon/react";
+import { useCallback, useEffect, useState } from "react";
 import { SelectOption } from "../../constant/SelectOption";
-import { useBgComponentBaseColor, useBgHover } from "../../constant/colors";
-import { rowOptions } from "../../constant/utilsConstant";
-import { debounce } from "../../utils/helperFunction";
+import {
+  useBgComponentBaseColor,
+  useBgHover,
+  useBorderColorInput,
+} from "../../constant/colors";
 import { CButton } from "../CButton";
 import { TableSkeleton } from "../TableSkeleton";
 import { SearchInput } from "../input/SearchInput";
+import { debounce } from "../../utils/helperFunction";
+import { rowOptions } from "../../constant/utilsConstant";
 
 interface Props {
   name: string;
   placeholder: string;
   withSearch: boolean;
-  withSkeleton: boolean;
-  icon: RemixiconComponentType;
+  isError?: boolean;
   options: SelectOption[] | undefined;
+  inputValue: SelectOption[] | undefined;
   onConfirm: (inputValue: SelectOption[] | undefined) => void;
   isOpen: boolean;
   onOpen: () => void;
@@ -45,13 +49,13 @@ interface Props {
   onLimitChange?: (limit: number) => void;
 }
 
-export const MultiPickerButton = ({
+export const MultiPickerInputList = ({
   name,
   placeholder,
   withSearch,
-  withSkeleton,
+  isError,
   options,
-  icon,
+  inputValue,
   onConfirm,
   isOpen,
   onOpen,
@@ -64,11 +68,16 @@ export const MultiPickerButton = ({
   onLimitChange,
   ...rest
 }: Props) => {
-  const [selected, setSelected] = useState<SelectOption[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selected, setSelected] = useState<SelectOption[]>(inputValue || []);
   const bgComponent = useBgComponentBaseColor();
   const bgHover = useBgHover();
-  const [display, setDisplay] = useState<SelectOption[] | undefined>([]);
+  const borderColorInput = useBorderColorInput();
   const pagesArr = Array.from({ length: totalPages as any }, (_, i) => i + 1);
+
+  useEffect(() => {
+    setSelected(inputValue || []);
+  }, [inputValue]);
 
   const selectLimit = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
@@ -86,52 +95,53 @@ export const MultiPickerButton = ({
 
   const handleSelect = (val: SelectOption) => {
     setSelected((prevSelected) =>
-      prevSelected && prevSelected.find((item: any) => item._id === val._id)
-        ? prevSelected.filter((item: any) => item._id !== val._id)
+      prevSelected.find((item) => item._id === val._id)
+        ? prevSelected.filter((item) => item._id !== val._id)
         : [...prevSelected, val]
     );
   };
 
-  const handleSubmit = () => {
-    if (selected) {
-      setDisplay(selected);
-      onConfirm(selected);
+  const handleSelectAll = () => {
+    if (selected.length === options?.length) {
+      setSelected([]);
     } else {
-      setDisplay(undefined);
-      onConfirm(undefined);
+      setSelected(options || []);
     }
+  };
 
+  const handleSubmit = () => {
+    onConfirm(selected);
     onClose();
   };
 
   const skeleton = () => <TableSkeleton row={3} column={3} />;
 
   const component = () => (
-    <Wrap spacing={2}>
+    <VStack w={"100%"} spacing={2}>
       {options &&
         options.map((item, i) => (
-          <WrapItem key={item._id}>
-            <Box
-              as="button"
-              px={4}
-              py={2}
-              textAlign={"start"}
-              borderWidth={"1px"}
-              borderRadius={"md"}
-              fontSize="xs"
-              _hover={{ bg: bgHover }}
-              borderColor={
-                selected.find((selectedItem) => selectedItem._id === item._id)
-                  ? "teal.400"
-                  : undefined
-              }
-              onClick={() => handleSelect(item)}
-            >
-              {item.name}
-            </Box>
-          </WrapItem>
+          <Box
+            key={item._id}
+            w={"100%"}
+            as="button"
+            px={4}
+            py={2}
+            textAlign={"start"}
+            borderWidth={"1px"}
+            borderRadius={"md"}
+            fontSize="xs"
+            _hover={{ bg: bgHover }}
+            borderColor={
+              selected.find((selectedItem) => selectedItem._id === item._id)
+                ? "teal.400"
+                : undefined
+            }
+            onClick={() => handleSelect(item)}
+          >
+            {item.name}
+          </Box>
         ))}
-    </Wrap>
+    </VStack>
   );
 
   const empty = () => (
@@ -148,17 +158,28 @@ export const MultiPickerButton = ({
   return (
     <>
       <CButton
+        height={"40px"}
         variant="outline"
-        colorScheme="teal"
-        icon={icon}
+        borderColor={isError ? "red.300" : borderColorInput}
+        borderWidth={isError ? "2px" : ""}
         onClick={onOpen}
+        justifyContent={"space-between"}
         {...rest}
       >
-        <Text overflow={"hidden"} textOverflow={"ellipsis"} maxW={"100px"}>
-          {display && display.length > 0
-            ? display.map((item) => item.name).join(", ")
+        <Text
+          opacity={inputValue && inputValue.length > 0 ? 1 : 0.3}
+          overflow={"hidden"}
+          textOverflow={"ellipsis"}
+          maxW={"200px"}
+          fontSize={"13px"}
+          fontWeight={"normal"}
+        >
+          {inputValue && inputValue.length > 0
+            ? inputValue.map((item) => item.name).join(", ")
             : placeholder}
         </Text>
+
+        <Icon as={RiArrowDownSLine} fontSize={18} />
       </CButton>
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -176,6 +197,14 @@ export const MultiPickerButton = ({
                 mb={4}
               />
             )}
+            <Checkbox
+              isChecked={selected.length === options?.length}
+              onChange={handleSelectAll}
+              mb={4}
+              size={"sm"}
+            >
+              Pilih Semua
+            </Checkbox>
             {loaded
               ? options?.length === 0
                 ? empty()
@@ -238,6 +267,9 @@ export const MultiPickerButton = ({
                   ml={4}
                   variant="solid"
                   colorScheme="teal"
+                  isLoading={loading}
+                  loadingText="Loading"
+                  spinnerPlacement="start"
                   onClick={handleSubmit}
                 >
                   Terapkan

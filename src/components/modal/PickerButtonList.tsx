@@ -10,8 +10,6 @@ import {
   ModalOverlay,
   Text,
   VStack,
-  Wrap,
-  WrapItem,
 } from "@chakra-ui/react";
 import { RemixiconComponentType } from "@remixicon/react";
 import { useState } from "react";

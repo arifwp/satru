@@ -71,7 +71,7 @@ export const TableOutlet = ({ filterSearch, ...rest }: Props) => {
   }, [toast, filterSearch, statusData, currentPage, limitPagination]);
 
   useEffect(() => {
-    if (data && data.length > 0) {
+    if (data) {
       const formattedData = data.map((item, i) => [
         {
           id: "index",

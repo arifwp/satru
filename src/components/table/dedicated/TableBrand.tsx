@@ -71,7 +71,7 @@ export const TableBrand = ({ filterSearch, ...rest }: Props) => {
   }, [statusData, toast, currentPage, limitPagination, filterSearch]);
 
   useEffect(() => {
-    if (data && data.length > 0) {
+    if (data) {
       const formattedData = data.map((item, i) => [
         {
           id: "index",

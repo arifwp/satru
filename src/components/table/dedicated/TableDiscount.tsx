@@ -87,16 +87,16 @@ export const TableDiscount = ({
         setLoaded(true);
       });
   }, [
-    toast,
     filterSearch,
     filterOutlet,
+    toast,
     statusData,
     currentPage,
     limitPagination,
   ]);
 
   useEffect(() => {
-    if (data && data.length > 0) {
+    if (data) {
       const formattedData = data.map((item, i) => [
         {
           id: "index",

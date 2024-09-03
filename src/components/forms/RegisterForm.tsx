@@ -17,6 +17,7 @@ import axios, { AxiosError } from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
+import { useBorderColorInput } from "../../constant/colors";
 import { SelectDateSingle } from "../modal/dedicated/SelectDateSingle";
 
 const initialValues = {
@@ -31,6 +32,7 @@ export const RegisterForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<string>("hide");
   const toast = useToast();
+  const borderColor = useBorderColorInput();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -203,8 +205,12 @@ export const RegisterForm = () => {
             }}
             w={"100%"}
             h={"40px"}
-            borderWidth={!!formik.errors.bornDate ? "2px" : "1px"}
-            borderColor={"rgba(255, 255, 255, 0.24)"}
+            borderWidth={!!formik.errors.bornDate ? "3px" : "1px"}
+            borderColor={
+              !!formik.errors.bornDate && formik.touched.bornDate
+                ? "red.300"
+                : borderColor
+            }
             color={
               formik.values.bornDate ? "fieldtext !important" : "#96969691"
             }

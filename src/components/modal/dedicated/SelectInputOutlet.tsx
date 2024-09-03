@@ -32,7 +32,7 @@ export const SelectInputOutlet = ({
   const [search, setSearch] = useState<string>("");
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number | undefined>(undefined);
-  const [limitPagination, setLimitPagination] = useState<number>(2);
+  const [limitPagination, setLimitPagination] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const toast = useToast();
 

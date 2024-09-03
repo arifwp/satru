@@ -161,7 +161,7 @@ export const MultiPickerInputList = ({
         height={"40px"}
         variant="outline"
         borderColor={isError ? "red.300" : borderColorInput}
-        borderWidth={isError ? "2px" : ""}
+        borderWidth={isError ? "3px" : ""}
         onClick={onOpen}
         justifyContent={"space-between"}
         {...rest}

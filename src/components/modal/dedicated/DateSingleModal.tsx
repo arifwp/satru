@@ -23,6 +23,7 @@ import {
 } from "@remixicon/react";
 import React, { useEffect, useState } from "react";
 import { CButton } from "../../CButton";
+import { useBorderColorInput } from "../../../constant/colors";
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const months = [
@@ -62,6 +63,7 @@ export const DateSingleModal: React.FC<DatePickerModalProps> = ({
   const [currentMonth, setCurrentMonth] = useState<number | null>(null);
   const [currentYear, setCurrentYear] = useState<number | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const borderColor = useBorderColorInput();
 
   useEffect(() => {
     if (initialDate) {
@@ -240,6 +242,7 @@ export const DateSingleModal: React.FC<DatePickerModalProps> = ({
                     type="number"
                     value={currentMonth !== null ? currentMonth + 1 : ""}
                     onChange={handleMonthChange}
+                    borderColor={borderColor}
                     mr={2}
                     placeholder="Month"
                     min={1}
@@ -253,6 +256,7 @@ export const DateSingleModal: React.FC<DatePickerModalProps> = ({
                     size="sm"
                     type="number"
                     value={currentYear !== null ? currentYear : ""}
+                    borderColor={borderColor}
                     onChange={handleYearChange}
                     placeholder="Year"
                     min={0}

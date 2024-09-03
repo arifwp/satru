@@ -26,6 +26,9 @@ import { TransactionContainer } from "./pages/dashboard/transaction/TransactionC
 import { FillData } from "./pages/FillDataPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
 import { DetailOutletPage } from "./pages/dashboard/outlet/DetailOutletPage";
+import { MemberPage } from "./pages/dashboard/member/MemberPage";
+import { AddMemberPage } from "./pages/dashboard/member/AddMemberPage";
+import { DetailMemberPage } from "./pages/dashboard/member/DetailMemberPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -270,6 +273,45 @@ export const App = () => (
               <RequiredOwner>
                 <ContentContainer label="Detail Outlet" isSubPage={true}>
                   <DetailOutletPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/member"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Member" isSubPage={false}>
+                  <MemberPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/member/add-member"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Tambah Member" isSubPage={true}>
+                  <AddMemberPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/member/detail-member/:memberId"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Detail Member" isSubPage={true}>
+                  <DetailMemberPage />
                 </ContentContainer>
               </RequiredOwner>
             </RequiredAuth>

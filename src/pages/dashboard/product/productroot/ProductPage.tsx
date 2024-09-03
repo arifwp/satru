@@ -54,14 +54,13 @@ export const ProductPage = () => {
           align={{ base: "stretch", md: "start" }}
           flexWrap={"wrap"}
         >
-          <HStack>
-            <SearchInput
-              placeholder="Cari nama..."
-              onConfirm={(inputValue) => {
-                handleSearch(inputValue);
-              }}
-            />
-          </HStack>
+          <SearchInput
+            w={"fit-content"}
+            placeholder="Cari nama..."
+            onConfirm={(inputValue) => {
+              handleSearch(inputValue);
+            }}
+          />
 
           <SelectButtonOutlet
             name="outlet"

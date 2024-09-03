@@ -1,22 +1,20 @@
-import { TableProps, useToast, Link as ChakraLink } from "@chakra-ui/react";
-import { SelectOption } from "../../../constant/SelectOption";
+import { Link as ChakraLink, TableProps, useToast } from "@chakra-ui/react";
+import { RiArrowLeftDoubleLine, RiDeleteBin2Line } from "@remixicon/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
-import { DiscountInterface } from "../../../constant/Discount";
-import { MemberInterface } from "../../../constant/Member";
+import { Link as ReactRouterLink } from "react-router-dom";
 import { getCookie } from "typescript-cookie";
+import { MemberInterface } from "../../../constant/Member";
+import { SelectOption } from "../../../constant/SelectOption";
+import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 import {
   formatDateToId,
-  getDataUser,
   getUserOrAdminId,
 } from "../../../utils/helperFunction";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { Link as ReactRouterLink } from "react-router-dom";
 import { CButton } from "../../CButton";
-import { RiArrowLeftDoubleLine, RiDeleteBin2Line } from "@remixicon/react";
+import { Empty } from "../../Empty";
 import { Confirmation } from "../../modal/Confirmation";
 import { TableSkeleton } from "../../TableSkeleton";
-import { Empty } from "../../Empty";
 import { CTable } from "../CTable";
 
 interface Props extends TableProps {
@@ -24,7 +22,7 @@ interface Props extends TableProps {
   filterSearch: string;
 }
 
-export const TableMember = ({ filterOutlet, filterSearch }: Props) => {
+export const TableMember = ({ filterOutlet, filterSearch, ...rest }: Props) => {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [data, setData] = useState<MemberInterface[] | undefined>(undefined);
   const [value, setValue] = useState<any[]>([]);
@@ -104,28 +102,25 @@ export const TableMember = ({ filterOutlet, filterSearch }: Props) => {
           props: { textAlign: "start" },
         },
         {
-          id: "email",
-          name: item.email,
-          props: { textAlign: "start" },
-        },
-        {
           id: "phone",
           name: item.phone,
           props: { textAlign: "start" },
         },
         {
           id: "bornDate",
-          name: formatDateToId(item.bornDate as any),
+          name: formatDateToId({ dateString: item.bornDate.toString() }),
           props: { textAlign: "start" },
         },
         {
           id: "totalTransaction",
           name: item.totalTransaction,
-          props: { textAlign: "start" },
+          props: { textAlign: "end" },
         },
         {
           id: "createdAt",
-          name: formatDateToId(item.createdAt as any),
+          name: formatDateToId({
+            dateString: item.createdAt.toString(),
+          }),
           props: { textAlign: "start" },
         },
         {
@@ -200,48 +195,51 @@ export const TableMember = ({ filterOutlet, filterSearch }: Props) => {
       id: "index",
       name: "No.",
       onClick: () => sortByColumn("index"),
+      sortable: true,
       props: { justifyContent: "center" },
     },
     {
       id: "name",
       name: "Nama",
+      sortable: true,
       onClick: () => sortByColumn("name"),
-    },
-    {
-      id: "email",
-      name: "Email",
-      onClick: undefined,
     },
     {
       id: "phone",
       name: "Phone",
       onClick: undefined,
+      sortable: false,
     },
     {
       id: "bornDate",
       name: "Tanggal Lahir",
+      sortable: true,
       onClick: () => sortByColumn("bornDate"),
     },
     {
       id: "totalTransaction",
       name: "Tranksasi",
+      sortable: true,
       onClick: () => sortByColumn("totalTransaction"),
     },
     {
       id: "createdAt",
       name: "Dibuat Tanggal",
+      sortable: true,
       onClick: () => sortByColumn("createdAt"),
     },
     {
       id: "actionDetail",
       name: "Detail",
       onClick: undefined,
+      sortable: false,
       props: { justifyContent: "center" },
     },
     {
       id: "actionDelete",
       name: "Hapus",
       onClick: undefined,
+      sortable: false,
       props: { justifyContent: "center" },
     },
   ];
@@ -266,6 +264,7 @@ export const TableMember = ({ filterOutlet, filterSearch }: Props) => {
       onLimitChange={(inputValue) => {
         setLimitPagination(inputValue);
       }}
+      {...rest}
     />
   );
 };

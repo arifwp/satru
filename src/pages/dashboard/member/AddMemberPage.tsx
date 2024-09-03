@@ -3,27 +3,24 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  HStack,
   Input,
   InputGroup,
   InputLeftElement,
-  Text,
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
 import { SelectDateSingle } from "../../../components/modal/dedicated/SelectDateSingle";
-import { SelectInputOutlet } from "../../../components/modal/dedicated/SelectInputOutlet";
 import {
   useBgComponentBaseColor,
   useBorderColorInput,
 } from "../../../constant/colors";
 import { getDataUser, getUserOrAdminId } from "../../../utils/helperFunction";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { getCookie } from "typescript-cookie";
-import { useNavigate } from "react-router-dom";
 
 const initialValues = {
   name: undefined,

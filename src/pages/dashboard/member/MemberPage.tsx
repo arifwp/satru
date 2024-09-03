@@ -1,13 +1,13 @@
-import { Heading, Stack, VStack, Link as ChakraLink } from "@chakra-ui/react";
+import { Link as ChakraLink, Stack, VStack } from "@chakra-ui/react";
+import { RiAddCircleLine, RiShoppingBag2Line } from "@remixicon/react";
 import { useCallback, useState } from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { SelectOption } from "../../../constant/SelectOption";
-import { debounce, getDataUser } from "../../../utils/helperFunction";
+import { CButton } from "../../../components/CButton";
 import { SearchInput } from "../../../components/input/SearchInput";
 import { SelectButtonOutlet } from "../../../components/modal/dedicated/SelectButtonOutlet";
-import { RiAddCircleLine, RiShoppingBag2Line } from "@remixicon/react";
-import { CButton } from "../../../components/CButton";
 import { TableMember } from "../../../components/table/dedicated/TableMember";
+import { SelectOption } from "../../../constant/SelectOption";
+import { debounce, getDataUser } from "../../../utils/helperFunction";
 
 export const MemberPage = () => {
   const [filterOutlet, setFilterOutlet] = useState<SelectOption[] | undefined>(

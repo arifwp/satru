@@ -7,9 +7,9 @@ interface Props extends StackProps {
 
 export const Empty = ({ title, subTitle, ...rest }: Props) => {
   return (
-    <VStack {...rest}>
+    <VStack className="empty-container" {...rest}>
       <Image src="/assets/svg/illustration_empty.svg" />
-      <Text as={"b"}>{title}</Text>
+      <Text fontWeight={"semibold"}>{title}</Text>
       <Text variant={"secondary"}>{subTitle}</Text>
     </VStack>
   );

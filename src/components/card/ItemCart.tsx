@@ -26,6 +26,7 @@ import formatNumber from "../../lib/formatNumber";
 import { useTransactionStore } from "../../store/useTransactionStore";
 import { getDataUser, getUserOrAdminId } from "../../utils/helperFunction";
 import { CartDrawer } from "../drawer/dedicated/CartDrawer";
+import { Empty } from "../Empty";
 
 interface Props extends StackProps {
   data: ProductCartInterface[];
@@ -217,74 +218,82 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
             h={"calc(100vh - 270px)"}
             overflowY={"auto"}
           >
-            {data.map((item, i) => (
-              <VStack
-                key={item.indexProduct}
-                w={"100%"}
-                p={2}
-                borderRadius={"md"}
-                borderWidth={"2px"}
-                borderColor={borderColor}
-                fontSize={[10, null, 12]}
-                align={"stretch"}
-                cursor={"pointer"}
-                onClick={() => {
-                  setSelectedData(item);
-                  onOpen();
-                }}
-              >
-                <Text
-                  fontSize={[12, null, 14]}
-                  noOfLines={2}
-                  textOverflow={"ellipsis"}
-                  fontWeight={"semibold"}
+            {data && data.length < 1 ? (
+              <Empty
+                title="Buat tranksasi anda sekarang!"
+                h={"100%"}
+                justify={"center"}
+              />
+            ) : (
+              data.map((item, i) => (
+                <VStack
+                  key={item.indexProduct}
+                  w={"100%"}
+                  p={2}
+                  borderRadius={"md"}
+                  borderWidth={"2px"}
+                  borderColor={borderColor}
+                  fontSize={[10, null, 12]}
+                  align={"stretch"}
+                  cursor={"pointer"}
+                  onClick={() => {
+                    setSelectedData(item);
+                    onOpen();
+                  }}
                 >
-                  {item.name}
-                </Text>
+                  <Text
+                    fontSize={[12, null, 14]}
+                    noOfLines={2}
+                    textOverflow={"ellipsis"}
+                    fontWeight={"semibold"}
+                  >
+                    {item.name}
+                  </Text>
 
-                {(item.variants as any)?.length > 0 && (
+                  {(item.variants as any)?.length > 0 && (
+                    <HStack justify={"space-between"}>
+                      <Text variant={"secondary"}>Varian</Text>
+
+                      {item.variants?.map((variant) => (
+                        <Text
+                          key={variant._id}
+                          w={"100%"}
+                          align={"end"}
+                          noOfLines={1}
+                          textOverflow={"ellipsis"}
+                        >
+                          {variant.variantName}
+                        </Text>
+                      ))}
+                    </HStack>
+                  )}
+
                   <HStack justify={"space-between"}>
-                    <Text variant={"secondary"}>Varian</Text>
+                    <Text variant={"secondary"}>Qty</Text>
 
-                    {item.variants?.map((variant) => (
-                      <Text
-                        key={variant._id}
-                        w={"100%"}
-                        align={"end"}
-                        noOfLines={1}
-                        textOverflow={"ellipsis"}
-                      >
-                        {variant.variantName}
+                    <Text>{item.qty}</Text>
+                  </HStack>
+
+                  {item.discountType && (
+                    <HStack justify={"space-between"}>
+                      <Text variant={"secondary"}>Diskon</Text>
+
+                      <Text>
+                        {item.discountType.id === 1
+                          ? `Rp ${formatNumber(item.discount)}`
+                          : `${item.discount}%`}
                       </Text>
-                    ))}
-                  </HStack>
-                )}
+                    </HStack>
+                  )}
 
-                <HStack justify={"space-between"}>
-                  <Text variant={"secondary"}>Qty</Text>
-
-                  <Text>{item.qty}</Text>
-                </HStack>
-
-                {item.discountType && (
                   <HStack justify={"space-between"}>
-                    <Text variant={"secondary"}>Diskon</Text>
+                    <Text variant={"secondary"}>Total</Text>
 
-                    <Text>
-                      {item.discountType.id === 1
-                        ? `Rp ${formatNumber(item.discount)}`
-                        : `${item.discount}%`}
-                    </Text>
+                    <Text>{showPrice(item)}</Text>
                   </HStack>
-                )}
-
-                <HStack justify={"space-between"}>
-                  <Text variant={"secondary"}>Total</Text>
-
-                  <Text>{showPrice(item)}</Text>
-                </HStack>
-              </VStack>
-            ))}
+                </VStack>
+              ))
+            )}
           </VStack>
         </VStack>
 

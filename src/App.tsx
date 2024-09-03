@@ -29,6 +29,7 @@ import { DetailOutletPage } from "./pages/dashboard/outlet/DetailOutletPage";
 import { MemberPage } from "./pages/dashboard/member/MemberPage";
 import { AddMemberPage } from "./pages/dashboard/member/AddMemberPage";
 import { DetailMemberPage } from "./pages/dashboard/member/DetailMemberPage";
+import { EditMemberPage } from "./pages/dashboard/member/EditMemberPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -312,6 +313,19 @@ export const App = () => (
               <RequiredOwner>
                 <ContentContainer label="Detail Member" isSubPage={true}>
                   <DetailMemberPage />
+                </ContentContainer>
+              </RequiredOwner>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/member/edit-member/:memberId"
+          element={
+            <RequiredAuth>
+              <RequiredOwner>
+                <ContentContainer label="Detail Member" isSubPage={true}>
+                  <EditMemberPage />
                 </ContentContainer>
               </RequiredOwner>
             </RequiredAuth>

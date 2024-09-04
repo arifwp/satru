@@ -21,11 +21,13 @@ import {
   useBorderColorInput,
 } from "../../../constant/colors";
 import { getDataUser, getUserOrAdminId } from "../../../utils/helperFunction";
+import { GenderInput } from "../../../components/input/GenderInput";
 
 const initialValues = {
   name: undefined,
   phone: undefined,
   bornDate: undefined,
+  gender: undefined,
 };
 
 export const AddMemberPage = () => {
@@ -48,6 +50,7 @@ export const AddMemberPage = () => {
             return value !== undefined && value[0] !== "8" ? false : true;
           },
         }),
+      gender: Yup.string().required("Jenis kelamin harus diisi"),
       bornDate: Yup.string().required("Tanggal lahir harus diisi"),
     }),
     onSubmit: (values) => {
@@ -58,11 +61,14 @@ export const AddMemberPage = () => {
         ? (values.bornDate as unknown as string).split("/").reverse().join("-")
         : "";
 
+      const genderToInt = values.gender && parseInt(values.gender);
+
       const request = {
         ownerId: getUserOrAdminId(),
         userId: getDataUser()._id,
         name: values.name,
         phone: values.phone,
+        gender: genderToInt,
         bornDate: formattedDate,
       };
 
@@ -155,6 +161,19 @@ export const AddMemberPage = () => {
               />
             </InputGroup>
             <FormErrorMessage>{formik.errors.phone}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl
+            isInvalid={
+              formik.errors.gender && formik.touched.gender ? true : false
+            }
+          >
+            <FormLabel htmlFor="gender">Jenis Kelamin</FormLabel>
+            <GenderInput
+              onConfirm={(inputValue) => {
+                formik.setFieldValue("gender", inputValue);
+              }}
+            />
           </FormControl>
 
           <FormControl

@@ -206,11 +206,9 @@ export const App = () => (
           path="/discount"
           element={
             <RequiredAuth>
-              <RequiredOwner>
-                <ContentContainer label="Diskon" isSubPage={false}>
-                  <DiscountPage />
-                </ContentContainer>
-              </RequiredOwner>
+              <ContentContainer label="Diskon" isSubPage={false}>
+                <DiscountPage />
+              </ContentContainer>
             </RequiredAuth>
           }
         />
@@ -284,11 +282,9 @@ export const App = () => (
           path="/member"
           element={
             <RequiredAuth>
-              <RequiredOwner>
-                <ContentContainer label="Member" isSubPage={false}>
-                  <MemberPage />
-                </ContentContainer>
-              </RequiredOwner>
+              <ContentContainer label="Member" isSubPage={false}>
+                <MemberPage />
+              </ContentContainer>
             </RequiredAuth>
           }
         />
@@ -297,11 +293,9 @@ export const App = () => (
           path="/member/add-member"
           element={
             <RequiredAuth>
-              <RequiredOwner>
-                <ContentContainer label="Tambah Member" isSubPage={true}>
-                  <AddMemberPage />
-                </ContentContainer>
-              </RequiredOwner>
+              <ContentContainer label="Tambah Member" isSubPage={true}>
+                <AddMemberPage />
+              </ContentContainer>
             </RequiredAuth>
           }
         />
@@ -310,11 +304,9 @@ export const App = () => (
           path="/member/detail-member/:memberId"
           element={
             <RequiredAuth>
-              <RequiredOwner>
-                <ContentContainer label="Detail Member" isSubPage={true}>
-                  <DetailMemberPage />
-                </ContentContainer>
-              </RequiredOwner>
+              <ContentContainer label="Detail Member" isSubPage={true}>
+                <DetailMemberPage />
+              </ContentContainer>
             </RequiredAuth>
           }
         />
@@ -323,11 +315,9 @@ export const App = () => (
           path="/member/edit-member/:memberId"
           element={
             <RequiredAuth>
-              <RequiredOwner>
-                <ContentContainer label="Detail Member" isSubPage={true}>
-                  <EditMemberPage />
-                </ContentContainer>
-              </RequiredOwner>
+              <ContentContainer label="Detail Member" isSubPage={true}>
+                <EditMemberPage />
+              </ContentContainer>
             </RequiredAuth>
           }
         />

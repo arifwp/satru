@@ -56,23 +56,21 @@ export const MemberPage = () => {
           }}
         />
 
-        {getDataUser().owner === true && (
-          <ChakraLink
-            as={ReactRouterLink}
-            to={"/member/add-member"}
-            textDecoration={"none"}
-            _hover={{ textDecoration: "none" }}
+        <ChakraLink
+          as={ReactRouterLink}
+          to={"/member/add-member"}
+          textDecoration={"none"}
+          _hover={{ textDecoration: "none" }}
+        >
+          <CButton
+            w={"100%"}
+            variant={"outline"}
+            colorScheme="teal"
+            icon={RiAddCircleLine}
           >
-            <CButton
-              w={"100%"}
-              variant={"outline"}
-              colorScheme="teal"
-              icon={RiAddCircleLine}
-            >
-              Tambah Member
-            </CButton>
-          </ChakraLink>
-        )}
+            Tambah Member
+          </CButton>
+        </ChakraLink>
       </Stack>
 
       <TableMember

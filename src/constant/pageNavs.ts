@@ -81,7 +81,7 @@ export const navs: Array<PageIconNavsProps> = [
     icon: RiBuilding4Line,
     label: "Outlet",
     to: "/outlet",
-    adminRequired: false,
+    adminRequired: true,
   },
   {
     id: 9,

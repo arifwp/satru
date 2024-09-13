@@ -9,35 +9,36 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { RiBookmark2Line } from "@remixicon/react";
+import { RiArrowRightSLine, RiBookmark2Line } from "@remixicon/react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import {
   useBgBaseColor,
   useBgComponentBaseColor,
   useBorderColorInput,
 } from "../../constant/colors";
-import {
-  ProductCartInterface,
-  TransactionInterface,
-} from "../../constant/Transaction";
+import { SelectOption } from "../../constant/SelectOption";
+import { ProductCartInterface } from "../../constant/Transaction";
 import formatNumber from "../../lib/formatNumber";
 import { useTransactionStore } from "../../store/useTransactionStore";
 import { getDataUser, getUserOrAdminId } from "../../utils/helperFunction";
 import { CartDrawer } from "../drawer/dedicated/CartDrawer";
+import { SelectApplyDiscount } from "../drawer/dedicated/SelectApplyDiscount";
 import { Empty } from "../Empty";
 
 interface Props extends StackProps {
   data: ProductCartInterface[];
-  paramsTransaction?: TransactionInterface;
 }
 
-export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
+export const ItemCart = ({ data, ...rest }: Props) => {
   const borderColor = useBorderColorInput();
   const bgBase = useBgBaseColor();
   const bgComp = useBgComponentBaseColor();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [applyDiscount, setApplyDiscount] = useState<SelectOption | undefined>(
+    undefined
+  );
   const [selectedData, setSelectedData] = useState<
     ProductCartInterface | undefined
   >(undefined);
@@ -81,9 +82,6 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
 
   useEffect(() => {
     let total = 0;
-    // products.map((item, i) => {
-    //   total += item.price;
-    // });
 
     products.map((item) => {
       total += item.price * item.qty;
@@ -114,45 +112,12 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
     addTransaction(val);
   }, [products]);
 
-  // useEffect(() => {
-  //   console.log(transaction);
-  // }, [transaction]);
-
-  const increment = (item: ProductCartInterface) => {
-    if (item.qty < item.stock) {
-      updateProduct(item.indexProduct, { qty: (item?.qty ?? 0) + 1 });
-    }
-  };
-
-  const decrement = (item: ProductCartInterface) => {
-    if (item.qty > 1) {
-      updateProduct(item.indexProduct, { qty: (item?.qty ?? 0) - 1 });
-    }
-  };
-
-  // const showPrice = (item: ProductCartInterface) => {
-  //   let total = 0;
-
-  //   total += item.price * item.qty;
-  //   if (item.variants && item.variants.length > 0) {
-  //     item.variants.map((variant) => {
-  //       const variantPrice = variant.variantPrice * item.qty;
-  //       if (item.discountType && item.discountType.id === 1) {
-  //         total = variantPrice - item.discount;
-  //         return `Rp ${formatNumber(total)}`;
-  //       }
-
-  //       total = variantPrice;
-  //     });
-  //   }
-
-  //   return `Rp ${formatNumber(total)}`;
-  // };
-
   const showPrice = (item: ProductCartInterface) => {
     let total = 0;
 
     total += item.price * item.qty;
+
+    // cek apakah ada variant
     if (item && item.variants && item.variants.length > 0) {
       item.variants.map((variant) => {
         const variantPrice = variant.variantPrice * item.qty;
@@ -166,6 +131,8 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
 
         total = variantPrice;
       });
+
+      //jika tidak ada variant
     } else if (item.discountType && item.discountType.id === 1) {
       total = item.price - item.discount || 0;
       return `Rp ${formatNumber(total)}`;
@@ -178,21 +145,16 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
     return `Rp ${formatNumber(total)}`;
   };
 
-  const handleChangeQty = (
-    item: ProductCartInterface,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    let newQty = parseInt(event.target.value, 10) || 0;
-
-    if (!isNaN(newQty)) {
-      updateProduct(item.indexProduct, { qty: newQty });
-    }
+  const showSubTotal = () => {
+    return `asd`;
   };
 
-  const handleBlurQty = (item: ProductCartInterface) => {
-    if (item.qty < 1) {
-      updateProduct(item.indexProduct, { qty: 1 });
-    }
+  const showTotalDiscount = () => {
+    return `total discount`;
+  };
+
+  const showTotalPrice = () => {
+    return `total price nih`;
   };
 
   return (
@@ -215,7 +177,7 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
             w={"100%"}
             px={4}
             py={6}
-            h={"calc(100vh - 270px)"}
+            h={"calc(100vh - 307px)"}
             overflowY={"auto"}
           >
             {data && data.length < 1 ? (
@@ -308,6 +270,16 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
             bottom={0}
             position={"absolute"}
           >
+            <SelectApplyDiscount
+              name="Pilihan Diskon"
+              placeholder="Terapkan Diskon"
+              withSearch={true}
+              icon={RiArrowRightSLine}
+              color={applyDiscount ? undefined : "gray.100"}
+              onConfirm={(inputValue) => {
+                setApplyDiscount(inputValue);
+              }}
+            />
             <VStack
               p={2}
               borderRadius={"md"}
@@ -319,32 +291,29 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
                 <Text variant={"secondary"}>Sub Total</Text>
 
                 <Text>
-                  {paramsTransaction &&
-                    formatNumber(paramsTransaction.totalPrice)}
+                  {showSubTotal()}
+                  {/* {paramsTransaction &&
+                    formatNumber(paramsTransaction.totalPrice)} */}
                 </Text>
               </HStack>
 
               <HStack justify={"space-between"}>
                 <Text variant={"secondary"}>Total Diskon</Text>
 
-                <Text>Rp 12.000</Text>
+                <Text>{showTotalDiscount()}</Text>
               </HStack>
 
-              <HStack
-                justify={"space-between"}
-                borderBottomColor={borderColor}
-                borderBottomWidth={"1px"}
-              >
+              <HStack justify={"space-between"}>
                 <Text variant={"secondary"}>Pajak</Text>
 
                 <Text>{`${tax}%`}</Text>
               </HStack>
 
-              {/* <HStack
+              <HStack
                 w={"100%"}
                 borderBottomColor={borderColor}
                 borderBottomWidth={"1px"}
-              ></HStack> */}
+              ></HStack>
 
               <HStack
                 justify={"space-between"}
@@ -353,10 +322,7 @@ export const ItemCart = ({ data, paramsTransaction, ...rest }: Props) => {
               >
                 <Text>Total Harga</Text>
 
-                <Text>
-                  {paramsTransaction?.totalPrice &&
-                    formatNumber(paramsTransaction.totalPrice)}
-                </Text>
+                <Text>{showTotalPrice()}</Text>
               </HStack>
             </VStack>
 

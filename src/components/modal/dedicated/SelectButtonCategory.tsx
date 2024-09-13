@@ -4,7 +4,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import { SelectOption } from "../../../constant/SelectOption";
-import { getDataUser } from "../../../utils/helperFunction";
+import { getDataUser, getUserOrAdminId } from "../../../utils/helperFunction";
 import { MultiPickerButtonList } from "../MultiPickerButtonList";
 
 interface Props extends ButtonProps {
@@ -35,9 +35,7 @@ export const SelectButtonCategory = ({
 
   useEffect(() => {
     if (isOpen) {
-      const ownerId = getDataUser().ownerId
-        ? getDataUser().ownerId
-        : getDataUser()._id;
+      const ownerId = getUserOrAdminId();
       const token = getCookie("token");
 
       const request = {

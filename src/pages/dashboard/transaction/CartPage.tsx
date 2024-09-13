@@ -7,7 +7,7 @@ interface Props extends StackProps {
 }
 
 export const CartPage = ({ children, ...rest }: Props) => {
-  const { products, transaction } = useTransactionStore();
+  const { products } = useTransactionStore();
 
   return (
     <VStack
@@ -20,7 +20,7 @@ export const CartPage = ({ children, ...rest }: Props) => {
         {`Keranjang (${products.length})`}
       </Text>
 
-      <ItemCart mt={4} data={products} paramsTransaction={transaction} />
+      <ItemCart mt={4} data={products} />
     </VStack>
   );
 };

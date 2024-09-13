@@ -218,6 +218,8 @@ export const DetailItemDrawer = ({
           }
         }
 
+        console.log(finalPrice);
+
         const newProduct = {
           indexProduct: idx,
           qty: totalItem,
@@ -250,6 +252,8 @@ export const DetailItemDrawer = ({
         }
       }
 
+      console.log(finalPrice);
+
       const newProduct = {
         indexProduct: idx,
         qty: totalItem,
@@ -265,6 +269,10 @@ export const DetailItemDrawer = ({
 
     onClose();
   };
+
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
 
   return (
     <Drawer
@@ -286,40 +294,6 @@ export const DetailItemDrawer = ({
             {data &&
               data.variants &&
               finalData.map((item, i) => (
-                // <HStack
-                //   key={item._id}
-                //   w={"100%"}
-                //   as="button"
-                //   px={4}
-                //   py={2}
-                //   textAlign={"start"}
-                //   borderWidth={"1px"}
-                //   borderRadius={"md"}
-                //   fontSize={[12, null, 14]}
-                //   align={"stretch"}
-                //   _hover={{ bg: bgHover }}
-                //   borderColor={
-                //     selectedVariant && selectedVariant._id === item?._id
-                //       ? "teal.400"
-                //       : undefined
-                //   }
-                //   onClick={() => handleSelect(item)}
-                //   justify={"space-between"}
-                // >
-                //   <VStack align={"stretch"}>
-                //     <Text fontSize={[14, null, 16]} fontWeight={"semibold"}>
-                //       {item?.variantName}
-                //     </Text>
-                //     <Text variant={"secondary"} fontSize={[12, null, 14]}>
-                //       {formatNumber(item?.variantPrice)}
-                //     </Text>
-                //   </VStack>
-
-                //   <Text alignSelf={"center"} fontSize={[14, null, 16]}>
-                //     {`${item?.variantStock} Stok`}
-                //   </Text>
-                // </HStack>
-
                 <TransactionOutlineCard
                   key={item._id}
                   title={item?.variantName}

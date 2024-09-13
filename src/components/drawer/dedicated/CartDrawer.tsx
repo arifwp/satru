@@ -16,12 +16,9 @@ import {
   Radio,
   RadioGroup,
   Text,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
-import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { getCookie } from "typescript-cookie";
 import {
   useBgComponentBaseColor,
   useBorderColorInput,
@@ -29,7 +26,6 @@ import {
 import { ProductCartInterface } from "../../../constant/Transaction";
 import formatNumber from "../../../lib/formatNumber";
 import { useTransactionStore } from "../../../store/useTransactionStore";
-import { getUserOrAdminId } from "../../../utils/helperFunction";
 import { TransactionOutlineCard } from "../../card/TransactionOutlineCard";
 import { NumberInput } from "../../input/NumberInput";
 import { DiscountTypeInterface } from "./DetailItemDrawer";

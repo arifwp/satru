@@ -15,6 +15,7 @@ export interface ProductCartInterface {
   discount: number;
   discountType: DiscountTypeInterface;
   variants?: Array<ProductVariantInterface>;
+  finalPrice?: number;
 }
 
 interface ManualTransactionInterface {

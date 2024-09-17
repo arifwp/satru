@@ -120,32 +120,38 @@ export const ItemCart = ({ data, ...rest }: Props) => {
     // cek apakah ada variant
     if (item && item.variants && item.variants.length > 0) {
       item.variants.map((variant) => {
-        const variantPrice = variant.variantPrice * item.qty;
-        if (item.discountType && item.discountType.id === 1) {
-          total = variantPrice - item.discount || 0;
-          return `Rp ${formatNumber(total)}`;
-        } else if (item.discount) {
-          total = variantPrice - item.discount || 0;
-          return `Rp ${formatNumber(total)}`;
-        }
-
+        const variantPrice = variant.variantPrice;
         total = variantPrice;
+
+        if (item.discount && item.discountType.id === 1) {
+          total = variantPrice * item.qty - item.discount || 0;
+        } else if (item.discount && item.discountType.id === 2) {
+          // total = variantPrice - item.discount || 0;
+          let countDiscountVariant = (variantPrice * item.discount) / 100;
+          let checkQtyVariant = countDiscountVariant * item.qty;
+          total = variantPrice * item.qty - checkQtyVariant;
+        }
       });
 
       //jika tidak ada variant
-    } else if (item.discountType && item.discountType.id === 1) {
-      total = item.price - item.discount || 0;
-      return `Rp ${formatNumber(total)}`;
-    } else if (item.discount) {
+    } else if (item.discount && item.discountType.id === 1) {
       total = item.price * item.qty - item.discount || 0;
 
-      return `Rp ${formatNumber(total)}`;
+      // return `Rp ${formatNumber(total)}`;
+    } else if (item.discount && item.discountType.id === 2) {
+      // total = item.price * item.qty - item.discount || 0;
+      let countDiscount = (item.price * item.discount) / 100;
+      let checkQty = countDiscount * item.qty;
+      total = item.price * item.qty - checkQty;
     }
 
     return `Rp ${formatNumber(total)}`;
   };
 
   const showSubTotal = () => {
+    // products.map((item) => {
+    //   console.log(item);
+    // });
     return `asd`;
   };
 

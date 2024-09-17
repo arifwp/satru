@@ -165,11 +165,14 @@ export const ProductCard = ({
       if (existingProduct.length > 0) {
         updateProduct(itemProduct && itemProduct.indexProduct, {
           qty: (itemProduct?.qty ?? 0) + 1,
+          finalPrice:
+            itemProduct && itemProduct?.price * ((itemProduct?.qty ?? 0) + 1),
         });
       } else {
         const dataProduct: ProductCartInterface = {
           indexProduct: products.length + 1,
           qty: 1,
+          finalPrice: item.price,
           ...item,
         };
 

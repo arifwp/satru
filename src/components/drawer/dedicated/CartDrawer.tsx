@@ -61,6 +61,7 @@ export const CartDrawer = ({
   const bgComp = useBgComponentBaseColor();
   const { products, addProduct, updateProduct, removeProduct } =
     useTransactionStore();
+  let finalPriceStore: any = { indexProduct: undefined, finalPrice: undefined };
 
   useEffect(() => {
     if (isOpen) {
@@ -154,38 +155,62 @@ export const CartDrawer = ({
       total += data.price * totalItem;
       if (data && data.variants && data.variants.length > 0) {
         data.variants.map((variant) => {
-          const variantPrice = variant.variantPrice * totalItem;
-          if (data.discountType && data.discountType.id === 1) {
-            total = variantPrice - parseInt(inputDiscount, 10) || 0;
-            return `Rp ${formatNumber(total)}`;
-          } else if (inputDiscount) {
-            total = variantPrice - parseInt(inputDiscount, 10) || 0;
-            return `Rp ${formatNumber(total)}`;
+          const variantPrice = variant.variantPrice;
+          total = variantPrice;
+
+          if (discountRpPercentage && discountRpPercentage.id === 1) {
+            if (!!inputDiscount) {
+              total = variantPrice * totalItem - parseInt(inputDiscount) || 0;
+            } else {
+              total = variantPrice;
+            }
+          } else if (discountRpPercentage && discountRpPercentage.id === 2) {
+            if (!!inputDiscount) {
+              const countDiscountVariant =
+                (variantPrice * parseInt(inputDiscount)) / 100;
+              const checkQty = countDiscountVariant * totalItem;
+              total = variantPrice * totalItem - checkQty;
+            } else {
+              total = variantPrice;
+            }
+          }
+        });
+      } else if (discountOrNot === "1") {
+        if (discountRpPercentage && discountRpPercentage?.id === 1) {
+          if (!!inputDiscount) {
+            total = data.price * totalItem - parseInt(inputDiscount);
+          } else {
+            total = data.price * totalItem;
           }
 
-          total = variantPrice;
-        });
-      } else if (data.discountType && data.discountType.id === 1) {
-        total = data.price - parseInt(inputDiscount, 10) || 0;
-        return `Rp ${formatNumber(total)}`;
-      } else if (inputDiscount) {
-        total = data.price * totalItem - parseInt(inputDiscount, 10) || 0;
+          return `Rp ${formatNumber(total)}`;
+        } else if (discountRpPercentage?.id === 2) {
+          if (!!inputDiscount) {
+            const countDiscount = (data.price * parseInt(inputDiscount)) / 100;
+            const checkQty = countDiscount * totalItem;
+            total = data.price * totalItem - checkQty;
+          } else {
+            total = data.price;
+          }
 
-        return `Rp ${formatNumber(total)}`;
+          return `Rp ${formatNumber(total)}`;
+        }
       }
     }
+
+    finalPriceStore = { indexProduct: data?.indexProduct, finalPrice: total };
 
     return `Rp ${formatNumber(total)}`;
   };
 
   const increment = () => {
-    if (data && data.qty < data.stock) {
+    if (data && totalItem < data.stock) {
       setTotalItem(totalItem + 1);
     }
   };
 
   const decrement = () => {
-    if (data && data.qty > 1) {
+    if (totalItem > 1) {
       setTotalItem(totalItem - 1);
     }
   };
@@ -210,7 +235,6 @@ export const CartDrawer = ({
         stock = data.variants[0].variantStock;
       }
 
-      console.log(stock);
       if (!isNaN(newQty) && newQty <= stock) {
         setTotalItem(newQty);
       } else if (newQty > stock) {
@@ -251,7 +275,6 @@ export const CartDrawer = ({
       }
     }
 
-    console.log(update);
     if (data && data.variants && data?.variants.length > 0) {
       updateProduct(data.indexProduct, update);
     } else {
@@ -259,6 +282,10 @@ export const CartDrawer = ({
         updateProduct(data.indexProduct, update);
       }
     }
+
+    updateProduct(finalPriceStore.indexProduct, {
+      finalPrice: finalPriceStore.finalPrice,
+    });
 
     onClose();
   };

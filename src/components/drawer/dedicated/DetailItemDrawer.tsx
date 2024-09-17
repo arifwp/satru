@@ -184,41 +184,84 @@ export const DetailItemDrawer = ({
         item.variants?.some((itemVar) => itemVar._id === selectedVariant?._id)
       );
 
+      let totalPriceStore = 0;
+      let totalPriceVariantStore = 0;
+      const totalItemStore = (productInStore.qty ?? 0) + totalItem;
+      const totalItemVariantStore = (findVariant?.qty ?? 0) + totalItem;
+
       if (variantInStore) {
         // Jika varian ada, update kuantitasnya
+        if (discountRpPercentage && discountRpPercentage.id === 1) {
+          totalPriceStore =
+            productInStore.price * totalItemStore - parseInt(inputDiscount);
+        } else if (discountRpPercentage && discountRpPercentage.id === 2) {
+          // totalPriceStore = productInStore.price * totalItemStore - parseInt(inputDiscount)
+          const countDiscount =
+            (productInStore.price * parseInt(inputDiscount)) / 100;
+          const checkQty = countDiscount * totalItemStore;
+          totalPriceStore = productInStore.price * totalItemStore - checkQty;
+        }
+
         updateProduct(productInStore.indexProduct, {
           qty: (productInStore.qty ?? 0) + totalItem,
           discountType: discountRpPercentage,
           discount: inputDiscount,
+          finalPrice: totalPriceStore,
         });
       } else if (!!findVariant) {
         // Jika produk ada tetapi tidak memiliki varian, tambah kuantitasnya
+
+        if (discountRpPercentage && discountRpPercentage.id === 1) {
+          totalPriceVariantStore =
+            findVariant.price * totalItemVariantStore - parseInt(inputDiscount);
+        } else if (discountRpPercentage && discountRpPercentage.id === 2) {
+          const countDiscountVariant =
+            (findVariant.price * parseInt(inputDiscount)) / 100;
+          const checkQtyVariant = countDiscountVariant * totalItemVariantStore;
+          totalPriceVariantStore =
+            findVariant.price * totalItemVariantStore - checkQtyVariant;
+        }
+
         updateProduct(findVariant.indexProduct, {
           qty: (findVariant.qty ?? 0) + totalItem,
           discountType: discountRpPercentage,
           discount: inputDiscount,
+          finalPrice: totalPriceVariantStore,
         });
       } else {
         // Jika produk ada, tetapi varian baru, tambahkan produk baru dengan varian ini
         const idx = newestData && (newestData as any).length + 1;
-        let finalPrice = totalItem * (data as ProductCartInterface).price;
+        let finalPrice = 0;
+        finalPrice = totalItem * (data as ProductCartInterface).price;
+
         if (discountOrNot === "1") {
           if (discountRpPercentage?.id === 1) {
-            finalPrice =
-              totalItem * (data as ProductCartInterface).price -
-              parseInt(inputDiscount);
-          } else {
-            const discountAmount =
-              (totalItem *
-                (data as ProductCartInterface).price *
-                parseInt(inputDiscount)) /
-              100;
-            finalPrice =
-              totalItem * (data as ProductCartInterface).price - discountAmount;
+            if (!!selectedVariant) {
+              finalPrice =
+                totalItem * selectedVariant.variantPrice -
+                parseInt(inputDiscount);
+            } else {
+              finalPrice =
+                totalItem * (data as ProductCartInterface).price -
+                parseInt(inputDiscount);
+            }
+          } else if (discountRpPercentage?.id === 2) {
+            if (!!selectedVariant) {
+              const countDiscount =
+                (selectedVariant.variantPrice * parseInt(inputDiscount)) / 100;
+              const checkQty = countDiscount * totalItem;
+              finalPrice = selectedVariant.variantPrice * totalItem - checkQty;
+            } else {
+              const countDiscount =
+                ((data as ProductCartInterface).price *
+                  parseInt(inputDiscount)) /
+                100;
+              const checkQty = countDiscount * totalItem;
+              finalPrice =
+                (data as ProductCartInterface).price * totalItem - checkQty;
+            }
           }
         }
-
-        console.log(finalPrice);
 
         const newProduct = {
           indexProduct: idx,
@@ -228,6 +271,7 @@ export const DetailItemDrawer = ({
           price: finalPrice,
           ...data,
           variants: [selectedVariant],
+          finalPrice: finalPrice,
         };
 
         addProduct(newProduct as ProductCartInterface);
@@ -235,24 +279,36 @@ export const DetailItemDrawer = ({
     } else {
       // Jika produk tidak ada, tambahkan produk baru
       const idx = newestData && (newestData as any).length + 1;
-      let finalPrice = totalItem * (data as ProductCartInterface).price;
+      let finalPrice = 0;
+      finalPrice = totalItem * (data as ProductCartInterface).price;
+
       if (discountOrNot === "1") {
         if (discountRpPercentage?.id === 1) {
-          finalPrice =
-            totalItem * (data as ProductCartInterface).price -
-            parseInt(inputDiscount);
-        } else {
-          const discountAmount =
-            (totalItem *
-              (data as ProductCartInterface).price *
-              parseInt(inputDiscount)) /
-            100;
-          finalPrice =
-            totalItem * (data as ProductCartInterface).price - discountAmount;
+          if (!!selectedVariant) {
+            finalPrice =
+              totalItem * selectedVariant.variantPrice -
+              parseInt(inputDiscount);
+          } else {
+            finalPrice =
+              totalItem * (data as ProductCartInterface).price -
+              parseInt(inputDiscount);
+          }
+        } else if (discountRpPercentage?.id === 2) {
+          if (!!selectedVariant) {
+            const countDiscount =
+              (selectedVariant.variantPrice * parseInt(inputDiscount)) / 100;
+            const checkQty = countDiscount * totalItem;
+            finalPrice = selectedVariant.variantPrice * totalItem - checkQty;
+          } else {
+            const countDiscount =
+              ((data as ProductCartInterface).price * parseInt(inputDiscount)) /
+              100;
+            const checkQty = countDiscount * totalItem;
+            finalPrice =
+              (data as ProductCartInterface).price * totalItem - checkQty;
+          }
         }
       }
-
-      console.log(finalPrice);
 
       const newProduct = {
         indexProduct: idx,
@@ -262,6 +318,7 @@ export const DetailItemDrawer = ({
         price: finalPrice,
         ...data,
         variants: selectedVariant ? [selectedVariant] : [],
+        finalPrice: finalPrice,
       };
 
       addProduct(newProduct as ProductCartInterface);

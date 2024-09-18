@@ -26,7 +26,7 @@ interface ManualTransactionInterface {
 
 export interface TransactionInterface {
   _id?: any;
-  userId: any;
+  assignedBy: any;
   ownerId: any;
   code?: string;
   customerName?: string;

@@ -232,7 +232,11 @@ export const DetailItemDrawer = ({
         // Jika produk ada, tetapi varian baru, tambahkan produk baru dengan varian ini
         const idx = newestData && (newestData as any).length + 1;
         let finalPrice = 0;
-        finalPrice = totalItem * (data as ProductCartInterface).price;
+        if (!!selectedVariant) {
+          finalPrice = totalItem * selectedVariant.variantPrice;
+        } else {
+          finalPrice = totalItem * (data as ProductCartInterface).price;
+        }
 
         if (discountOrNot === "1") {
           if (discountRpPercentage?.id === 1) {

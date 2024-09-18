@@ -156,13 +156,13 @@ export const CartDrawer = ({
       if (data && data.variants && data.variants.length > 0) {
         data.variants.map((variant) => {
           const variantPrice = variant.variantPrice;
-          total = variantPrice;
+          total = variantPrice * totalItem;
 
           if (discountRpPercentage && discountRpPercentage.id === 1) {
             if (!!inputDiscount) {
               total = variantPrice * totalItem - parseInt(inputDiscount) || 0;
             } else {
-              total = variantPrice;
+              total = variantPrice * totalItem;
             }
           } else if (discountRpPercentage && discountRpPercentage.id === 2) {
             if (!!inputDiscount) {
@@ -171,7 +171,7 @@ export const CartDrawer = ({
               const checkQty = countDiscountVariant * totalItem;
               total = variantPrice * totalItem - checkQty;
             } else {
-              total = variantPrice;
+              total = variantPrice * totalItem;
             }
           }
         });

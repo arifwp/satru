@@ -100,10 +100,8 @@ export const ItemCart = ({ data, ...rest }: Props) => {
 
     const val = {
       _id: "",
-      userId: getDataUser()._id,
-      ownerId: getDataUser().ownerId
-        ? getDataUser().ownerId
-        : getDataUser()._id,
+      assignedBy: getDataUser()._id,
+      ownerId: getUserOrAdminId(),
       totalPrice: total,
       product: products,
       createdAt: new Date(Date.now()),
@@ -121,7 +119,7 @@ export const ItemCart = ({ data, ...rest }: Props) => {
     if (item && item.variants && item.variants.length > 0) {
       item.variants.map((variant) => {
         const variantPrice = variant.variantPrice;
-        total = variantPrice;
+        total = variantPrice * item.qty;
 
         if (item.discount && item.discountType.id === 1) {
           total = variantPrice * item.qty - item.discount || 0;
@@ -149,14 +147,21 @@ export const ItemCart = ({ data, ...rest }: Props) => {
   };
 
   const showSubTotal = () => {
-    // products.map((item) => {
-    //   console.log(item);
-    // });
-    return `asd`;
+    let total: number = 0;
+
+    if (products.length > 0) {
+      products.map((item) => {
+        if (item.finalPrice) {
+          total += item.finalPrice;
+        }
+      });
+    }
+
+    return `Rp ${products.length > 0 ? formatNumber(total) : 0}`;
   };
 
   const showTotalDiscount = () => {
-    return `total discount`;
+    return `total diskon`;
   };
 
   const showTotalPrice = () => {
@@ -195,7 +200,7 @@ export const ItemCart = ({ data, ...rest }: Props) => {
             ) : (
               data.map((item, i) => (
                 <VStack
-                  key={item.indexProduct}
+                  key={i}
                   w={"100%"}
                   p={2}
                   borderRadius={"md"}
@@ -294,19 +299,19 @@ export const ItemCart = ({ data, ...rest }: Props) => {
               align={"stretch"}
             >
               <HStack justify={"space-between"}>
-                <Text variant={"secondary"}>Sub Total</Text>
-
-                <Text>
-                  {showSubTotal()}
-                  {/* {paramsTransaction &&
-                    formatNumber(paramsTransaction.totalPrice)} */}
+                <Text variant={"secondary"} whiteSpace={"nowrap"}>
+                  Sub Total
                 </Text>
+
+                <Text textAlign={"end"}>{showSubTotal()}</Text>
               </HStack>
 
               <HStack justify={"space-between"}>
-                <Text variant={"secondary"}>Total Diskon</Text>
+                <Text variant={"secondary"} whiteSpace={"nowrap"}>
+                  Total Diskon
+                </Text>
 
-                <Text>{showTotalDiscount()}</Text>
+                <Text textAlign={"end"}>{showTotalDiscount()}</Text>
               </HStack>
 
               <HStack justify={"space-between"}>

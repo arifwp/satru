@@ -7,6 +7,7 @@ import { SelectButtonCategory } from "../../../components/modal/dedicated/Select
 import { SelectButtonOutlet } from "../../../components/modal/dedicated/SelectButtonOutlet";
 import { SelectOption } from "../../../constant/SelectOption";
 import { debounce } from "../../../utils/helperFunction";
+import { ManualTransactionDrawer } from "../../../components/drawer/dedicated/ManualTransactionDrawer";
 
 export const TransactionContainer = ({ ...rest }) => {
   const [filterCategory, setFilterCategory] = useState<
@@ -78,6 +79,12 @@ export const TransactionContainer = ({ ...rest }) => {
           icon={RiBox3Line}
           onConfirm={(inputValue) => {
             setFilterCategory(inputValue);
+          }}
+        />
+
+        <ManualTransactionDrawer
+          onConfirm={(input) => {
+            console.log(input);
           }}
         />
       </Stack>

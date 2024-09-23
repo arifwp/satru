@@ -18,7 +18,7 @@ export interface ProductCartInterface {
   finalPrice?: number;
 }
 
-interface ManualTransactionInterface {
+export interface ManualTransactionInterface {
   _id?: any;
   name: string;
   price: number;
@@ -28,11 +28,13 @@ export interface TransactionInterface {
   _id?: any;
   assignedBy: any;
   ownerId: any;
-  code?: string;
   customerName?: string;
   totalPrice: number;
-  totalDiscount?: number;
+  totalDiscountRp?: number;
+  totalDiscountPercent?: number;
   product: ProductCartInterface[];
   manualTransaction?: ManualTransactionInterface[];
+  isOpen?: number;
   createdAt: Date;
+  updatedAt?: Date;
 }

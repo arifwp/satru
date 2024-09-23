@@ -105,6 +105,14 @@ export const CartDrawer = ({
     }
   }, [data?.discount]);
 
+  useEffect(() => {
+    if (isOpen) {
+      !!data?.discount
+        ? setInputDiscount(`${data.discount}`)
+        : setInputDiscount("");
+    }
+  }, [discountOrNot, discountRpPercentage, data?.discount, isOpen]);
+
   const defaultRadioValue = () => {
     return data?.discount ? "1" : "2";
   };
@@ -258,7 +266,6 @@ export const CartDrawer = ({
       qty: totalItem,
     };
 
-    console.log(discountOrNot);
     if (discountOrNot === "1") {
       Object.assign(update, { discountType: discountRpPercentage });
     } else {

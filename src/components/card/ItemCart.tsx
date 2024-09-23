@@ -18,6 +18,7 @@ import {
   useBgComponentBaseColor,
   useBorderColorInput,
 } from "../../constant/colors";
+import { DiscountInterface } from "../../constant/Discount";
 import { SelectOption } from "../../constant/SelectOption";
 import { ProductCartInterface } from "../../constant/Transaction";
 import formatNumber from "../../lib/formatNumber";
@@ -26,7 +27,7 @@ import { getDataUser, getUserOrAdminId } from "../../utils/helperFunction";
 import { CartDrawer } from "../drawer/dedicated/CartDrawer";
 import { SelectApplyDiscount } from "../drawer/dedicated/SelectApplyDiscount";
 import { Empty } from "../Empty";
-import { DiscountInterface } from "../../constant/Discount";
+import { SelectManualTransaction } from "../drawer/dedicated/SelectManualTransaction";
 
 interface Props extends StackProps {
   data: ProductCartInterface[];
@@ -46,6 +47,7 @@ export const ItemCart = ({ data, ...rest }: Props) => {
   const {
     transaction,
     products,
+    manualTransaction,
     updateProduct,
     removeProduct,
     addTransaction,
@@ -108,7 +110,7 @@ export const ItemCart = ({ data, ...rest }: Props) => {
       createdAt: new Date(Date.now()),
     };
 
-    addTransaction(val);
+    // addTransaction(val);
   }, [products]);
 
   const showPrice = (item: ProductCartInterface) => {
@@ -368,6 +370,8 @@ export const ItemCart = ({ data, ...rest }: Props) => {
             bottom={0}
             position={"absolute"}
           >
+            {manualTransaction.length > 0 && <SelectManualTransaction />}
+
             <SelectApplyDiscount
               name="Pilihan Diskon"
               placeholder="Terapkan Diskon"

@@ -305,7 +305,7 @@ export const CartDrawer = ({
       size={"full"}
       {...rest}
     >
-      <DrawerOverlay />
+      <DrawerOverlay bg="none" backdropFilter="auto" backdropBlur="5px" />
       <DrawerContent bg={bgComp}>
         <DrawerCloseButton />
         <DrawerHeader>{showHeader()}</DrawerHeader>

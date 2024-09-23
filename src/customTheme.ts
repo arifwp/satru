@@ -1,5 +1,10 @@
 import { tableAnatomy } from "@chakra-ui/anatomy";
-import { createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
+import {
+  background,
+  createMultiStyleConfigHelpers,
+  extendTheme,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(tableAnatomy.keys);
@@ -25,6 +30,9 @@ const customTheme = extendTheme({
   },
   components: {
     Text: {
+      baseStyle: {
+        fontSize: [12, null, 14],
+      },
       variants: {
         secondary: {
           opacity: 0.6,
@@ -111,6 +119,32 @@ const customTheme = extendTheme({
         text: {
           fontSize: "14px",
         },
+      },
+    },
+    Input: {
+      variants: {
+        // Customize the 'outline' variant
+        outline: (props: any) => ({
+          field: {
+            borderColor:
+              props.colorMode === "light"
+                ? "gray.300"
+                : "RGBA(255, 255, 255, 0.24)", // Default border color for normal state
+            // _hover: {
+            //   borderColor:
+            //     props.colorMode === "light" ? "gray.400" : "gray.500", // Hover state
+            // },
+            // _focus: {
+            //   borderColor:
+            //     props.colorMode === "light" ? "blue.500" : "blue.300", // Focus state
+            //   boxShadow: "0 0 0 1px",
+            // },
+          },
+        }),
+      },
+      defaultProps: {
+        size: "md", // Ensure size is set
+        variant: "outline", // Use 'outline' variant by default
       },
     },
   },

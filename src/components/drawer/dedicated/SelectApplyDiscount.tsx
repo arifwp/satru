@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import { SelectOption } from "../../../constant/SelectOption";
 import { getUserOrAdminId } from "../../../utils/helperFunction";
-import { DrawerList } from "../DrawerList";
+import { DrawerListDiscount } from "../DrawerListDiscount";
 
 interface Props extends ButtonProps {
   name: string;
@@ -76,7 +76,7 @@ export const SelectApplyDiscount = ({
   }, [isOpen, search, toast, currentPage, limitPagination]);
 
   return (
-    <DrawerList
+    <DrawerListDiscount
       name={name}
       options={data}
       icon={icon}

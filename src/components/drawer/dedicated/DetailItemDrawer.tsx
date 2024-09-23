@@ -73,7 +73,8 @@ export const DetailItemDrawer = ({
   const borderColor = useBorderColorInput();
   const bgHover = useBgHover();
   const bgComp = useBgComponentBaseColor();
-  const { products, addProduct, updateProduct } = useTransactionStore();
+  const { products, manualTransaction, addProduct, updateProduct } =
+    useTransactionStore();
   const toast = useToast();
 
   useEffect(() => {
@@ -330,8 +331,8 @@ export const DetailItemDrawer = ({
   };
 
   useEffect(() => {
-    console.log(products);
-  }, [products]);
+    console.log(manualTransaction);
+  }, [manualTransaction]);
 
   return (
     <Drawer
@@ -341,7 +342,7 @@ export const DetailItemDrawer = ({
       size={"full"}
       {...rest}
     >
-      <DrawerOverlay />
+      <DrawerOverlay bg="none" backdropFilter="auto" backdropBlur="5px" />
       <DrawerContent bg={bgComp}>
         <DrawerCloseButton />
         <DrawerHeader>{`${data?.name}, ${selectedVariant?.variantName}`}</DrawerHeader>

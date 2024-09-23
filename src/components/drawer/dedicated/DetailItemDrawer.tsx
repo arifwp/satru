@@ -108,9 +108,7 @@ export const DetailItemDrawer = ({
   }, [selectedVariant, isOpen]);
 
   useEffect(() => {
-    if (isOpen) {
-      setInputDiscount("");
-    }
+    setInputDiscount("");
   }, [discountRpPercentage, isOpen]);
 
   useEffect(() => {

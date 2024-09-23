@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  ManualTransactionInterface,
   ProductCartInterface,
   TransactionInterface,
 } from "../constant/Transaction";
@@ -7,9 +8,13 @@ import {
 interface TransactionState {
   transaction: TransactionInterface | undefined;
   products: ProductCartInterface[];
+  manualTransaction: ManualTransactionInterface[];
   addProduct: (product: ProductCartInterface) => void;
   updateProduct: (id: string, updatedFields: any) => void;
   removeProduct: (id: string) => void;
+  addManualTransaction: (trx: ManualTransactionInterface) => void;
+  updateManualTransaction: (id: string, updatedFields: any) => void;
+  removeManualTransaction: (id: string) => void;
   addTransaction: (transaction: TransactionInterface) => void;
   updateTransaction: (_id: string, updatedFields: any) => void;
   removeTransaction: (transactionId: any) => void;
@@ -19,20 +24,13 @@ interface TransactionState {
 export const useTransactionStore = create<TransactionState>((set) => ({
   transaction: undefined,
   products: [],
+  manualTransaction: [],
   addProduct: (newProduct: ProductCartInterface) =>
     set((state) => {
       const updatedProducts = [...state.products];
       const existingProductIndex = updatedProducts.findIndex(
         (product) => product._id === newProduct._id
       );
-
-      // if (existingProductIndex === -1) {
-      //   // console.log("ini zustand masuk");
-      //   updatedProducts.push({ ...newProduct, qty: 1 });
-      // } else {
-      //   // Optional: Update quantity if you want to handle existing products differently
-      //   updatedProducts.push({ ...newProduct, qty: 1 });
-      // }
 
       updatedProducts.push({ ...newProduct });
 
@@ -52,9 +50,27 @@ export const useTransactionStore = create<TransactionState>((set) => ({
         (v: any) => v.indexProduct !== indexProduct
       ),
     })),
+  addManualTransaction: (newTrx: ManualTransactionInterface) =>
+    set((state) => {
+      const updatedTrx = [...state.manualTransaction];
+      updatedTrx.push({ ...newTrx });
+
+      return { manualTransaction: updatedTrx };
+    }),
+  updateManualTransaction: (index: string, updatedFields: any) =>
+    set((state) => ({
+      manualTransaction: state.manualTransaction.map((trx) =>
+        trx._id === index ? { ...trx, ...updatedFields } : trx
+      ),
+    })),
+  removeManualTransaction: (index: string) =>
+    set((state) => ({
+      manualTransaction: state.manualTransaction.filter(
+        (v: any) => v._id !== index
+      ),
+    })),
   addTransaction: (transaction: TransactionInterface) =>
     set((state) => {
-      // Simply set or update the transaction without modifying the products
       return { transaction };
     }),
   updateTransaction: (_id: string, updatedFields: any) =>

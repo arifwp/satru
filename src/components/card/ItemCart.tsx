@@ -26,6 +26,7 @@ import { getDataUser, getUserOrAdminId } from "../../utils/helperFunction";
 import { CartDrawer } from "../drawer/dedicated/CartDrawer";
 import { SelectApplyDiscount } from "../drawer/dedicated/SelectApplyDiscount";
 import { Empty } from "../Empty";
+import { DiscountInterface } from "../../constant/Discount";
 
 interface Props extends StackProps {
   data: ProductCartInterface[];
@@ -161,11 +162,97 @@ export const ItemCart = ({ data, ...rest }: Props) => {
   };
 
   const showTotalDiscount = () => {
-    return `total diskon`;
+    let totalPercent = 0;
+    let totalRp = 0;
+
+    products.map((item, i) => {
+      if (!!item.discountType) {
+        if (item.discountType.id === 2) {
+          totalPercent += parseInt(item.discount.toString());
+        }
+
+        if (item.discountType.id === 1) {
+          totalRp += parseInt(item.discount.toString());
+        }
+      }
+    });
+
+    if (!!applyDiscount) {
+      if ((applyDiscount as DiscountInterface).discountType === 2) {
+        totalPercent += (applyDiscount as DiscountInterface).discount;
+      } else if ((applyDiscount as DiscountInterface).discountType === 1) {
+        totalRp += (applyDiscount as DiscountInterface).discount;
+      }
+    }
+
+    return `${!!totalRp ? formatNumber(totalRp) : ""} ${
+      !!totalRp && !!totalPercent ? `+` : " "
+    } ${!!totalPercent ? `${totalPercent}%` : ""}`;
   };
 
   const showTotalPrice = () => {
-    return `total price nih`;
+    let endPrice: number = 0;
+    let priceAfterTax: number = 0;
+
+    // count sub total
+    let subTotal: number = 0;
+
+    if (products.length > 0) {
+      products.map((item) => {
+        if (item.finalPrice) {
+          subTotal += item.finalPrice;
+        }
+      });
+    }
+
+    // count subTotal - tax
+    if (!!tax) {
+      const countTax = (subTotal * tax) / 100;
+      priceAfterTax = subTotal + countTax;
+    }
+
+    //count total discount
+    let totalPercent = 0;
+    let totalRp = 0;
+
+    products.map((item, i) => {
+      if (!!item.discountType) {
+        if (item.discountType.id === 2) {
+          totalPercent += parseInt(item.discount.toString());
+        }
+
+        if (item.discountType.id === 1) {
+          totalRp += parseInt(item.discount.toString());
+        }
+      }
+    });
+
+    if (!!applyDiscount) {
+      if ((applyDiscount as DiscountInterface).discountType === 2) {
+        totalPercent += (applyDiscount as DiscountInterface).discount;
+      } else if ((applyDiscount as DiscountInterface).discountType === 1) {
+        totalRp += (applyDiscount as DiscountInterface).discount;
+      }
+    }
+
+    // count final price
+    if (!!applyDiscount) {
+      if ((applyDiscount as DiscountInterface).discountType === 2) {
+        const countDiscount =
+          (priceAfterTax *
+            parseInt(
+              (applyDiscount as DiscountInterface).discount.toString()
+            )) /
+          100;
+        // const checkQty = countDiscount * products.length;
+        // endPrice = priceAfterTax * products.length - checkQty;
+        endPrice = priceAfterTax - countDiscount;
+      } else if ((applyDiscount as DiscountInterface).discountType === 1) {
+        endPrice = priceAfterTax - totalRp;
+      }
+    }
+
+    return `Rp ${formatNumber(endPrice)}`;
   };
 
   return (

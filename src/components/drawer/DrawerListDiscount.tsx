@@ -157,6 +157,7 @@ export const DrawerListDiscount = ({
         cursor={"pointer"}
         _hover={{ bg: bgHover }}
         onClick={onOpen}
+        fontWeight={"semibold"}
         {...rest}
       >
         {selected ? (

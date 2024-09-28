@@ -2,12 +2,12 @@ import { Stack, VStack } from "@chakra-ui/react";
 import { RiBox3Line, RiShoppingBag2Line } from "@remixicon/react";
 import { useCallback, useState } from "react";
 import { ProductCard } from "../../../components/card/ProductCard";
+import { ManualTransactionButton } from "../../../components/ManualTransactionButton";
 import { SearchInput } from "../../../components/input/SearchInput";
 import { SelectButtonCategory } from "../../../components/modal/dedicated/SelectButtonCategory";
 import { SelectButtonOutlet } from "../../../components/modal/dedicated/SelectButtonOutlet";
 import { SelectOption } from "../../../constant/SelectOption";
 import { debounce } from "../../../utils/helperFunction";
-import { ManualTransactionDrawer } from "../../../components/drawer/dedicated/ManualTransactionDrawer";
 
 export const TransactionContainer = ({ ...rest }) => {
   const [filterCategory, setFilterCategory] = useState<
@@ -82,11 +82,7 @@ export const TransactionContainer = ({ ...rest }) => {
           }}
         />
 
-        <ManualTransactionDrawer
-          onConfirm={(input) => {
-            console.log(input);
-          }}
-        />
+        <ManualTransactionButton />
       </Stack>
       <ProductCard
         filterOutlet={filterOutlet}

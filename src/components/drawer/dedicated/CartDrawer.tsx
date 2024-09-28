@@ -198,7 +198,7 @@ export const CartDrawer = ({
             const checkQty = countDiscount * totalItem;
             total = data.price * totalItem - checkQty;
           } else {
-            total = data.price;
+            total = data.price * totalItem;
           }
 
           return `Rp ${formatNumber(total)}`;

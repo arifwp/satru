@@ -1,12 +1,11 @@
 import moment from "moment";
-import { useTransactionStore } from "../store/useTransactionStore";
+import { DiscountInterface } from "../constant/Discount";
+import { SelectOption } from "../constant/SelectOption";
 import {
   ManualTransactionInterface,
   ProductCartInterface,
 } from "../constant/Transaction";
-import { DiscountInterface } from "../constant/Discount";
 import formatNumber from "../lib/formatNumber";
-import { SelectOption } from "../constant/SelectOption";
 
 export const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat("id-ID").format(value);

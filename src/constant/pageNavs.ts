@@ -103,3 +103,10 @@ export const pageNavsTransaction: PageNavsProps[] = [
   { id: 1, name: "Manual", to: "/transaction" },
   { id: 2, name: "Produk", to: "/transaction/product" },
 ];
+
+export const pageNavsProfile: PageNavsProps[] = [
+  { id: 1, name: "Profil", to: "/profile" },
+  { id: 2, name: "Email", to: "/profile/email" },
+  { id: 1, name: "Whatsapp", to: "/profile/whatsapp" },
+  { id: 2, name: "Password", to: "/profile/password" },
+];

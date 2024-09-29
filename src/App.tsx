@@ -1,4 +1,4 @@
-import { ChakraProvider, HStack } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ContentContainer } from "./components/containers/ContentContainer";
 import { RequiredAuth } from "./components/middleware/RequiredAuth";
@@ -13,7 +13,12 @@ import { EditDiscountPage } from "./pages/dashboard/discount/EditDiscountPage";
 import { AddEmployeePage } from "./pages/dashboard/employee/AddEmployeePage";
 import { EmployeePage } from "./pages/dashboard/employee/EmployeePage";
 import { HomePage } from "./pages/dashboard/HomePage";
+import { AddMemberPage } from "./pages/dashboard/member/AddMemberPage";
+import { DetailMemberPage } from "./pages/dashboard/member/DetailMemberPage";
+import { EditMemberPage } from "./pages/dashboard/member/EditMemberPage";
+import { MemberPage } from "./pages/dashboard/member/MemberPage";
 import { AddOutletPage } from "./pages/dashboard/outlet/AddOutletPage";
+import { DetailOutletPage } from "./pages/dashboard/outlet/DetailOutletPage";
 import { OutletPage } from "./pages/dashboard/outlet/OutletPage";
 import { BrandPage } from "./pages/dashboard/product/brand/BrandPage";
 import { CategoryPage } from "./pages/dashboard/product/category/CategoryPage";
@@ -21,15 +26,12 @@ import { EditProductPage } from "./pages/dashboard/product/edit/EditProductPage"
 import { AddProductPage } from "./pages/dashboard/product/productroot/AddProductPage";
 import { ProductPage } from "./pages/dashboard/product/productroot/ProductPage";
 import { TaxPage } from "./pages/dashboard/product/tax/TaxPage";
-import { CartPage } from "./pages/dashboard/transaction/CartPage";
-import { TransactionContainer } from "./pages/dashboard/transaction/TransactionContainer";
+import { TransactionContainer } from "./pages/dashboard/transaction/TransactionContainter";
 import { FillData } from "./pages/FillDataPage";
+import { EmailPage } from "./pages/menu/profile/EmailPage";
+import { PasswordPage } from "./pages/menu/profile/PasswordPage";
 import { ProfilePage } from "./pages/menu/profile/ProfilePage";
-import { DetailOutletPage } from "./pages/dashboard/outlet/DetailOutletPage";
-import { MemberPage } from "./pages/dashboard/member/MemberPage";
-import { AddMemberPage } from "./pages/dashboard/member/AddMemberPage";
-import { DetailMemberPage } from "./pages/dashboard/member/DetailMemberPage";
-import { EditMemberPage } from "./pages/dashboard/member/EditMemberPage";
+import { WhatsappPage } from "./pages/menu/profile/WhatsappPage";
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -65,6 +67,39 @@ export const App = () => (
             <RequiredAuth>
               <ContentContainer label="Profil" isSubPage={true}>
                 <ProfilePage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/profile/email"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Profil" isSubPage={true}>
+                <EmailPage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/profile/whatsapp"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Profil" isSubPage={true}>
+                <WhatsappPage />
+              </ContentContainer>
+            </RequiredAuth>
+          }
+        />
+
+        <Route
+          path="/profile/password"
+          element={
+            <RequiredAuth>
+              <ContentContainer label="Profil" isSubPage={true}>
+                <PasswordPage />
               </ContentContainer>
             </RequiredAuth>
           }
@@ -142,39 +177,21 @@ export const App = () => (
           path="/transaction"
           element={
             <RequiredAuth>
-              <HStack
-                className="root-transaction"
-                w={"100%"}
-                overflowY={"auto"}
-                align={"start"}
-                spacing={0}
-              >
-                <ContentContainer
-                  label="Tranksasi"
-                  isSubPage={false}
-                  w={"70%"}
-                  h={"100vh"}
-                  overflowY={"auto"}
-                  // className="scrollY"
-                >
-                  <TransactionContainer />
-                </ContentContainer>
-                <CartPage w={"30%"} overflowY={"auto"} />
-              </HStack>
+              <TransactionContainer />
             </RequiredAuth>
           }
         />
 
-        <Route
+        {/* <Route
           path="/transaction/product"
           element={
             <RequiredAuth>
               <ContentContainer label="Tranksasi" isSubPage={false}>
-                <TransactionContainer />
+                <TransactionPage />
               </ContentContainer>
             </RequiredAuth>
           }
-        />
+        /> */}
 
         <Route
           path="/employee"

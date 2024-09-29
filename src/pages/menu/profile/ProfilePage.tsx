@@ -15,10 +15,12 @@ import { EditEmailForm } from "../../../components/forms/EditEmailForm";
 import { EditPasswordForm } from "../../../components/forms/EditPasswordForm";
 import { EditProfileForm } from "../../../components/forms/EditProfileForm";
 import { EditWhatsappForm } from "../../../components/forms/EditWhatsappForm";
-import { useBgHover } from "../../../constant/colors";
+import { useBgComponentBaseColor, useBgHover } from "../../../constant/colors";
 import { UserInterface } from "../../../constant/User";
 import { useTriggerRenderStore } from "../../../store/useTriggerRenderStore";
 import { getDataUser } from "../../../utils/helperFunction";
+import { PageContainer } from "../../../components/containers/PageContainer";
+import { pageNavsProfile } from "../../../constant/pageNavs";
 
 const tabList = [
   { _id: 1, name: "Profil", key: "profile" },
@@ -33,6 +35,7 @@ export const ProfilePage = () => {
   const { statusData } = useTriggerRenderStore();
   const [data, setData] = useState<UserInterface | undefined>(undefined);
   const toast = useToast();
+  const bgComp = useBgComponentBaseColor();
 
   useEffect(() => {
     const token = getCookie("token");
@@ -69,58 +72,64 @@ export const ProfilePage = () => {
   }, [statusData, toast]);
 
   return (
-    <VStack
-      className="profile-container"
-      w={"100%"}
-      fontSize={"sm"}
-      align={"stretch"}
-    >
-      <Tabs
-        size={"sm"}
-        variant={"unstyled"}
-        position={"relative"}
-        orientation="vertical"
-        colorScheme="teal"
-        p={4}
-        borderRadius={"md"}
-      >
-        <TabIndicator
-          mt="-1.5px"
-          height="10px"
-          width={"10px"}
-          bg="blue.500"
-          borderRadius="1px"
-        />
-        <TabList>
-          {tabList.map((item, i) => (
-            <Tab
-              key={item._id}
-              w={"100%"}
-              justifyContent={"start"}
-              borderRadius={"md"}
-              _selected={{ color: "white", bg: "teal.400" }}
-              _hover={{ bg: bgHover }}
-            >
-              {item.name}
-            </Tab>
-          ))}
-        </TabList>
+    <PageContainer navs={pageNavsProfile}>
+      <VStack className="profile-container" w={"100%"} p={4}>
+        <EditProfileForm data={data} loaded={loaded} />
+      </VStack>
+    </PageContainer>
+    // <VStack
+    //   className="profile-container"
+    //   w={"100%"}
+    //   fontSize={"sm"}
+    //   align={"stretch"}
+    // >
+    //   <Tabs
+    //     size={"sm"}
+    //     variant={"unstyled"}
+    //     position={"relative"}
+    //     orientation="vertical"
+    //     colorScheme="teal"
+    //     p={4}
+    //     borderRadius={"md"}
+    //     gap={4}
+    //   >
+    //     <TabIndicator
+    //       mt="-1.5px"
+    //       height="10px"
+    //       width={"10px"}
+    //       bg="blue.500"
+    //       borderRadius="1px"
+    //     />
+    //     <TabList>
+    //       {tabList.map((item, i) => (
+    //         <Tab
+    //           key={item._id}
+    //           w={"100%"}
+    //           justifyContent={"start"}
+    //           borderRadius={"md"}
+    //           _selected={{ color: "white", bg: "teal.400" }}
+    //           _hover={{ bg: bgHover }}
+    //         >
+    //           {item.name}
+    //         </Tab>
+    //       ))}
+    //     </TabList>
 
-        <TabPanels>
-          <TabPanel>
-            <EditProfileForm data={data} loaded={loaded} />
-          </TabPanel>
-          <TabPanel>
-            <EditEmailForm data={data} loaded={loaded} />
-          </TabPanel>
-          <TabPanel>
-            <EditWhatsappForm data={data} loaded={loaded} />
-          </TabPanel>
-          <TabPanel>
-            <EditPasswordForm data={data} loaded={loaded} />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </VStack>
+    //     <TabPanels borderRadius={"md"} bg={bgComp}>
+    //       <TabPanel>
+    //         <EditProfileForm data={data} loaded={loaded} />
+    //       </TabPanel>
+    //       <TabPanel>
+    //         <EditEmailForm data={data} loaded={loaded} />
+    //       </TabPanel>
+    //       <TabPanel>
+    //         <EditWhatsappForm data={data} loaded={loaded} />
+    //       </TabPanel>
+    //       <TabPanel>
+    //         <EditPasswordForm data={data} loaded={loaded} />
+    //       </TabPanel>
+    //     </TabPanels>
+    //   </Tabs>
+    // </VStack>
   );
 };

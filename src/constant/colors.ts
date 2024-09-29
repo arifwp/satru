@@ -6,7 +6,8 @@ import { useColorModeValue } from "@chakra-ui/react";
 export const useBgBaseColor = () => {
   // return useColorModeValue("#F0F0F0", "#121212");
 
-  return useColorModeValue("#F0F0F0", "#151515");
+  // return useColorModeValue("#F0F0F0", "#151515");
+  return useColorModeValue("#F7FAFC", "#151515");
 };
 
 export const useBgComponentBaseColor = () => {

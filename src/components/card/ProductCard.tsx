@@ -3,6 +3,7 @@ import {
   HStack,
   Image,
   Select,
+  SimpleGrid,
   StackProps,
   Text,
   useDisclosure,
@@ -198,76 +199,53 @@ export const ProductCard = ({
         className="product-card"
         w={"100%"}
         h={"100vh"}
-        mt={2}
         overflowY={"auto"}
         {...rest}
       >
-        <Wrap
-          h={"calc(100vh - 16px)"}
-          className="scrollY"
-          overflowY={"auto"}
-          align={"center"}
-          justify={"center"}
-          mb={10}
-        >
+        <SimpleGrid px={4} columns={[2, 3]} spacing={[2, 4]}>
           {finalData?.map((item) => (
-            <WrapItem key={item._id} onClick={() => selectItem(item)}>
-              <VStack
-                className="product-card"
-                w={"140px"}
+            <VStack
+              className="product-card"
+              // w={"140px"}
+              borderRadius={"md"}
+              bg={bgComp}
+              textAlign={"center"}
+              p={2}
+              cursor={"pointer"}
+              overflow={"hidden"}
+              key={item._id}
+              onClick={() => selectItem(item)}
+            >
+              <Image
+                src={`http://localhost:3000/uploads/products/${item?.imageProduct}`}
+                fallbackSrc="https://placehold.co/600x400"
                 borderRadius={"md"}
-                bg={bgComp}
-                textAlign={"center"}
-                p={2}
-                cursor={"pointer"}
+                overflow={"clip"}
+                objectFit={"cover"}
+                w={"100%"}
+                h={"120px"}
+              />
+
+              <Text
+                fontSize={[12, null, 14]}
+                fontWeight={"semibold"}
+                // mt={2}
+                maxW={"200px"}
+                noOfLines={1}
                 overflow={"hidden"}
+                textOverflow={"ellipsis"}
               >
-                <Image
-                  src={`http://localhost:3000/uploads/products/${item?.imageProduct}`}
-                  fallbackSrc="https://placehold.co/600x400"
-                  borderRadius={"md"}
-                  overflow={"clip"}
-                  objectFit={"cover"}
-                  w={"120px"}
-                  h={"120px"}
-                />
-
-                <Text
-                  fontSize={[12, null, 14]}
-                  fontWeight={"semibold"}
-                  mt={2}
-                  maxW={"200px"}
-                  noOfLines={1}
-                  overflow={"hidden"}
-                  textOverflow={"ellipsis"}
-                >
-                  {item?.name}
-                </Text>
-                <Text fontSize={[10, null, 12]} mb={1}>
-                  Rp {item && formatNumber(item?.price)}
-                </Text>
-              </VStack>
-            </WrapItem>
+                {item?.name}
+              </Text>
+              <Text fontSize={[10, null, 12]}>
+                Rp {item && formatNumber(item?.price)}
+              </Text>
+            </VStack>
           ))}
-        </Wrap>
+        </SimpleGrid>
 
-        <HStack
-          className="footer"
-          w={"100%"}
-          position={"relative"}
-          justify={"center"}
-        >
-          <HStack
-            w={"100%"}
-            px={4}
-            py={1}
-            // bg="rgba(0, 0 ,0 ,0.5)"
-            backdropFilter="auto"
-            backdropBlur={"2px"}
-            position={"absolute"}
-            bottom={0}
-            justify={"space-between"}
-          >
+        <HStack className="footer" w={"100%"} justify={"center"}>
+          <HStack w={"100%"} px={4} py={1} justify={"space-between"}>
             {totalItems && (
               <HStack>
                 <Select

@@ -14,11 +14,11 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
+import { useBgComponentBaseColor } from "../../constant/colors";
 import { UserInterface } from "../../constant/User";
 import { useTempValueStore } from "../../store/useTempValueStore";
 import { getDataUser } from "../../utils/helperFunction";
 import { OtpForm } from "./OtpForm";
-import { useBorderColorInput } from "../../constant/colors";
 
 interface Props {
   data: UserInterface | undefined;
@@ -29,8 +29,8 @@ export const EditWhatsappForm = ({ data, loaded, ...rest }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
-  const borderColor = useBorderColorInput();
   const { setTempValue } = useTempValueStore();
+  const bgComp = useBgComponentBaseColor();
 
   const initialValues = {
     oldWa: data && data.phone,
@@ -92,7 +92,7 @@ export const EditWhatsappForm = ({ data, loaded, ...rest }: Props) => {
         style={{ width: "100%" }}
         onSubmit={formik.handleSubmit}
       >
-        <VStack w={"100%"} spacing={6}>
+        <VStack w={"100%"} spacing={6} borderRadius={"md"} p={4} bg={bgComp}>
           <FormControl>
             <FormLabel htmlFor="oldWa">Nomor Whatsapp</FormLabel>
             <Skeleton
@@ -106,7 +106,6 @@ export const EditWhatsappForm = ({ data, loaded, ...rest }: Props) => {
                 fontSize={"xs"}
                 onChange={formik.handleChange}
                 value={formik.values.oldWa || ""}
-                borderColor={borderColor}
                 readOnly
               />
             </Skeleton>
@@ -120,7 +119,6 @@ export const EditWhatsappForm = ({ data, loaded, ...rest }: Props) => {
               fontSize={"xs"}
               onChange={formik.handleChange}
               value={formik.values.newWa || ""}
-              borderColor={borderColor}
             />
             <FormHelperText fontSize={[12, null, 14]}>
               Format nomor harus diawali dengan 62

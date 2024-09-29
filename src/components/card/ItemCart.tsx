@@ -1,15 +1,13 @@
 import {
   Button,
   HStack,
-  Icon,
-  IconButton,
   Skeleton,
   StackProps,
   Text,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { RiArrowRightSLine, RiBookmark2Line } from "@remixicon/react";
+import { RiArrowRightSLine } from "@remixicon/react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { getCookie } from "typescript-cookie";
@@ -27,10 +25,12 @@ import {
   showTotalDiscount,
   showTotalPrice,
 } from "../../utils/helperFunction";
+import { SaveTransactionButton } from "../button/SaveTransactionButton";
 import { SelectApplyDiscount } from "../drawer/dedicated/SelectApplyDiscount";
 import { Empty } from "../Empty";
 import { CardItemCart } from "./CardItemCart";
 import { CardManualTransaction } from "./CardManualTransaction";
+import { CheckoutButton } from "../button/CheckoutButton";
 
 interface Props extends StackProps {
   data: ProductCartInterface[];
@@ -227,22 +227,13 @@ export const ItemCart = ({ data, ...rest }: Props) => {
             </VStack>
 
             <HStack>
-              <IconButton
-                size="md"
-                variant="outline"
-                // onClick={toggleColorMode}
-                icon={<Icon as={RiBookmark2Line} />}
-                aria-label={`Save Transaction`}
+              <SaveTransactionButton
+                isDisable={products.length < 1 && manualTransaction.length < 1}
               />
 
-              <Button
-                w={"100%"}
-                size={["sm", "md"]}
-                colorScheme="teal"
-                variant={"solid"}
-              >
-                Bayar
-              </Button>
+              <CheckoutButton
+                isDisable={products.length < 1 && manualTransaction.length < 1}
+              />
             </HStack>
           </VStack>
         </VStack>

@@ -14,7 +14,10 @@ import { useFormik } from "formik";
 import { useRef, useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
-import { useBorderColorInput } from "../../constant/colors";
+import {
+  useBgComponentBaseColor,
+  useBorderColorInput,
+} from "../../constant/colors";
 import { UserInterface } from "../../constant/User";
 import { useTriggerRenderStore } from "../../store/useTriggerRenderStore";
 import { getDataUser } from "../../utils/helperFunction";
@@ -32,6 +35,7 @@ export const EditProfileForm = ({ data, loaded, ...rest }: Props) => {
   const fileInputRef = useRef<{ reset: () => void }>(null);
   const borderColorInput = useBorderColorInput();
   const { setStatusData } = useTriggerRenderStore();
+  const bgComp = useBgComponentBaseColor();
 
   const initialValues = {
     name: data && data.name,
@@ -110,6 +114,9 @@ export const EditProfileForm = ({ data, loaded, ...rest }: Props) => {
         className="form-container"
         w={"100%"}
         spacing={6}
+        borderRadius={"md"}
+        p={4}
+        bg={bgComp}
         {...rest}
       >
         <VStack w={"100%"} spacing={6}>
@@ -142,7 +149,6 @@ export const EditProfileForm = ({ data, loaded, ...rest }: Props) => {
                 value={formik.values.name || ""}
                 onChange={formik.handleChange}
                 fontSize={"xs"}
-                borderColor={borderColorInput}
                 placeholder="Nama"
               />
             </Skeleton>

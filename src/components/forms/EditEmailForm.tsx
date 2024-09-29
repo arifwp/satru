@@ -17,7 +17,10 @@ import { UserInterface } from "../../constant/User";
 import { useTempValueStore } from "../../store/useTempValueStore";
 import { getDataUser } from "../../utils/helperFunction";
 import { OtpForm } from "./OtpForm";
-import { useBorderColorInput } from "../../constant/colors";
+import {
+  useBgComponentBaseColor,
+  useBorderColorInput,
+} from "../../constant/colors";
 
 interface Props {
   data: UserInterface | undefined;
@@ -30,6 +33,7 @@ export const EditEmailForm = ({ data, loaded, ...rest }: Props) => {
   const toast = useToast();
   const borderColor = useBorderColorInput();
   const { setTempValue } = useTempValueStore();
+  const bgComp = useBgComponentBaseColor();
 
   const initialValues = {
     oldEmail: data && data.email,
@@ -93,7 +97,7 @@ export const EditEmailForm = ({ data, loaded, ...rest }: Props) => {
         style={{ width: "100%" }}
         onSubmit={formik.handleSubmit}
       >
-        <VStack w={"100%"} spacing={6}>
+        <VStack w={"100%"} spacing={6} bg={bgComp} borderRadius={"md"} p={4}>
           <FormControl>
             <FormLabel htmlFor="oldEmail">Email</FormLabel>
             <Skeleton

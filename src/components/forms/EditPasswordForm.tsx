@@ -12,9 +12,9 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { getCookie } from "typescript-cookie";
 import * as Yup from "yup";
+import { useBgComponentBaseColor } from "../../constant/colors";
 import { UserInterface } from "../../constant/User";
 import { getDataUser } from "../../utils/helperFunction";
-import { useBorderColorInput } from "../../constant/colors";
 
 interface Props {
   data: UserInterface | undefined;
@@ -24,7 +24,8 @@ interface Props {
 export const EditPasswordForm = ({ data, loaded, ...rest }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
-  const borderColor = useBorderColorInput();
+  const bgComp = useBgComponentBaseColor();
+
   const formik = useFormik({
     initialValues: {
       oldPass: undefined,
@@ -84,7 +85,7 @@ export const EditPasswordForm = ({ data, loaded, ...rest }: Props) => {
       style={{ width: "100%" }}
       onSubmit={formik.handleSubmit}
     >
-      <VStack w={"100%"} spacing={6}>
+      <VStack w={"100%"} spacing={6} bg={bgComp} borderRadius={"md"} p={4}>
         <FormControl
           isInvalid={
             formik.touched.oldPass && formik.errors.oldPass ? true : false
@@ -97,7 +98,6 @@ export const EditPasswordForm = ({ data, loaded, ...rest }: Props) => {
             fontSize={"xs"}
             onChange={formik.handleChange}
             value={formik.values.oldPass || ""}
-            borderColor={borderColor}
           />
           <FormErrorMessage>{formik.errors.oldPass}</FormErrorMessage>
         </FormControl>
@@ -114,7 +114,6 @@ export const EditPasswordForm = ({ data, loaded, ...rest }: Props) => {
             fontSize={"xs"}
             onChange={formik.handleChange}
             value={formik.values.newPass || ""}
-            borderColor={borderColor}
           />
           <FormErrorMessage>{formik.errors.newPass}</FormErrorMessage>
         </FormControl>

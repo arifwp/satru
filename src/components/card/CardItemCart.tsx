@@ -17,11 +17,11 @@ interface Props extends StackProps {
 }
 
 export const CardItemCart = ({ item, ...rest }: Props) => {
-  const borderColor = useBorderColorInput();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedData, setSelectedData] = useState<
     ProductCartInterface | undefined
   >(undefined);
+  const borderColor = useBorderColorInput();
 
   return (
     <>

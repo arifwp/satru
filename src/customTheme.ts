@@ -1,10 +1,5 @@
 import { tableAnatomy } from "@chakra-ui/anatomy";
-import {
-  background,
-  createMultiStyleConfigHelpers,
-  extendTheme,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { createMultiStyleConfigHelpers, extendTheme } from "@chakra-ui/react";
 
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(tableAnatomy.keys);
@@ -19,6 +14,7 @@ const customTheme = extendTheme({
     wt: "#eeeeee",
     // dark: '#191919'
     dark: "#000000",
+    bordercolor: "#CBD5E0",
   },
   styles: {
     global: (props: any) => ({

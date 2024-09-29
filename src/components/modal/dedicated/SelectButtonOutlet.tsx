@@ -93,14 +93,14 @@ export const SelectButtonOutlet = ({
       filterSearch={(inputValue) => {
         setSearch(inputValue);
       }}
-      totalPages={totalPages}
-      totalItems={totalItems}
-      onPageChange={(inputValue) => {
-        setCurrentPage(inputValue);
-      }}
-      onLimitChange={(inputValue) => {
-        setLimitPagination(inputValue);
-      }}
+      // totalPages={totalPages}
+      // totalItems={totalItems}
+      // onPageChange={(inputValue) => {
+      //   setCurrentPage(inputValue);
+      // }}
+      // onLimitChange={(inputValue) => {
+      //   setLimitPagination(inputValue);
+      // }}
       {...rest}
     />
   );

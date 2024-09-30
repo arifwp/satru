@@ -34,7 +34,8 @@ export interface TransactionInterface {
   totalDiscountPercent?: number;
   product: ProductCartInterface[];
   manualTransaction?: ManualTransactionInterface[];
-  isOpen?: number;
+  isFinished?: number;
+  paymentType: string;
   createdAt: Date;
   updatedAt?: Date;
 }

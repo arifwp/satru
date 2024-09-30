@@ -34,7 +34,13 @@ export const BaseModal = ({
   const bgComp = useBgComponentBaseColor();
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} {...rest}>
+    <Modal
+      closeOnOverlayClick={false}
+      isCentered
+      isOpen={isOpen}
+      onClose={onClose}
+      {...rest}
+    >
       <ModalOverlay bg="none" backdropFilter="auto" backdropBlur="5px" />
       <ModalContent bg={bgComp}>
         <ModalHeader>{title}</ModalHeader>
